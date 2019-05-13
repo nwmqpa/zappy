@@ -1,4 +1,4 @@
-# TODO
+# Zappy :zap:
 
 This is the `TODO` file tracking what we have to do and what we have done.
 
