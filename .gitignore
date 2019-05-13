@@ -1,0 +1,9 @@
+zappy_ai
+zappy_server
+*.o
+*.a
+*.so
+*.pyc
+__pycache__
+.vscode/*
+
