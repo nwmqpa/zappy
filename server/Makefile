@@ -1,7 +1,7 @@
 
 NAME		=	zappy_server
 
-CXX		=	gcc
+CC		=	gcc
 
 LD		=	gcc
 
@@ -15,7 +15,7 @@ SRC_DIR 	=	$(ROOT)/sources
 
 INCLUDE_DIR	=	$(ROOT)/includes
 
-MODULES		=	
+MODULES		=
 
 SOURCES		=	main.c
 
@@ -78,12 +78,12 @@ $(BUILD_DIR)/$(NAME):	$(PATSUBST_OBJS) $(PATSUBST_MODULS) echo_build_parts
 			$(V)printf "$(WHITE)Linking $(BLUE)objects $(WHITE)into $(GREEN)$(NAME)$(DEFAULT)\n"
 			$(V)$(LD) -o $(BUILD_DIR)/$(NAME) $(PATSUBST_OBJS) $(LDFLAGS)
 
-$(BUILD_DIR)/%.o:	$(SRC_DIR)/%.cpp
+$(BUILD_DIR)/%.o:	$(SRC_DIR)/%.c
 			$(V)printf "$(WHITE)Compiling $(RED)$<$(WHITE) => $(BLUE)$@$(DEFAULT)\n"
 			$(V)$(CXX) -o $@ -c $< $(CFLAGS)
 
 $(BUILD_DIR)/lib%.a:	$(SRC_DIR)/%
 			$(V)printf "$(WHITE)Compiling module $(MAGENTA)$<$(DEFAULT)\n"
 			$(V)make --no-print-directory -C $<
-			
+
 .PHONY:			all clean re echo_build_parts
