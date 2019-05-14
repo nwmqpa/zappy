@@ -2,14 +2,14 @@ import sys
 import verif
 import getopt
 
-class My_Arguments:
+class Options:
     def __init__(self, port, name, machine):
         self.port = port
         self.name = name
         self.machine = machine
 
     def __str__(self):
-        ret = "My_Arguments -> <port: {} name: {} machine: {}>".format(
+        ret = "Options -> <port: {} name: {} machine: {}>".format(
             self.port,
             self.name,
             self.machine
@@ -31,15 +31,12 @@ def fill_my_args(optlist):
         occ = 0
     for x in optlist:
         if (x[0] == "-p"):
-            # print("-p -> ", x[1])
             _port = x[1]
         if (x[0] == "-n"):
-            # print("-n -> ", x[1])
             _name = x[1]
         if (x[0] == "-h"):
-            # print("-h -> ", x[1])
             _machine = x[1]
-    args = My_Arguments(_port, _name, _machine)
+    args = Options(_port, _name, _machine)
     return (args)
 
 def get_arguments():

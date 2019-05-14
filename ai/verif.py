@@ -15,18 +15,18 @@ def basic_verif():
         display_help()
         sys.exit(84)
 
-def verif_args_values(My_args):
+def verif_args_values(my_opt):
     try:
-        My_args.port = int(My_args.port)
+        my_opt.port = int(my_opt.port)
     except:
         print("Port should be an integer")
         display_help()
         sys.exit(0)
-    if (My_args.port > 65535 or My_args.port <= 1023):
+    if (my_opt.port > 65535 or my_opt.port <= 1023):
         print("Invalid port")
         display_help()
         sys.exit(0)
-    HOST_UP  = True if os.system("ping -c 1 " + My_args.machine + " > /dev/null") is 0 else False
+    HOST_UP  = True if os.system("ping -c 1 " + my_opt.machine + " > /dev/null") is 0 else False
     if (HOST_UP == False):
         print("Invalid host")
         sys.exit(0)
