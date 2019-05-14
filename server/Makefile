@@ -17,7 +17,9 @@ INCLUDE_DIR	=	$(ROOT)/includes
 
 MODULES		=
 
-SOURCES		=	main.c
+SOURCES		=	main.c \
+				options.c \
+				logger.c
 
 PREFIXED_SRCS 	=	$(addprefix $(SRC_DIR)/, $(SOURCES))
 PATSUBST_OBJS	=	$(patsubst  $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(PREFIXED_SRCS))
@@ -80,7 +82,7 @@ $(BUILD_DIR)/$(NAME):	$(PATSUBST_OBJS) $(PATSUBST_MODULS) echo_build_parts
 
 $(BUILD_DIR)/%.o:	$(SRC_DIR)/%.c
 			$(V)printf "$(WHITE)Compiling $(RED)$<$(WHITE) => $(BLUE)$@$(DEFAULT)\n"
-			$(V)$(CXX) -o $@ -c $< $(CFLAGS)
+			$(V)$(CC) -o $@ -c $< $(CFLAGS)
 
 $(BUILD_DIR)/lib%.a:	$(SRC_DIR)/%
 			$(V)printf "$(WHITE)Compiling module $(MAGENTA)$<$(DEFAULT)\n"
