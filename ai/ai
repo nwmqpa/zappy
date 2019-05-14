@@ -13,13 +13,13 @@ from get_args import *
 
 def main():
     basic_verif()
-    My_args = get_arguments()
-    verif_args_values(My_args)
+    my_opt = get_arguments()
+    verif_args_values(my_opt)
 
-    print(My_args)
-    print(My_args.port)
-    print(My_args.name)
-    print(My_args.machine)
+    print(my_opt)
+    print(my_opt.port)
+    print(my_opt.name)
+    print(my_opt.machine)
 
 if __name__ == '__main__':
     # try :
