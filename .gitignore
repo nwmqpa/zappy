@@ -1,9 +1,9 @@
 zappy_ai
 zappy_server
+*/.vscode
 *.o
 *.a
 *.so
 *.pyc
 __pycache__
 .vscode/*
-
