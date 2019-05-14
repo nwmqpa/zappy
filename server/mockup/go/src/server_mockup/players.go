@@ -11,8 +11,6 @@ const (
 
 type Item int
 
-
-
 type Inventory struct {
     Items []Item
 }
@@ -20,8 +18,4 @@ type Inventory struct {
 type Player struct {
     Direction int
     Inventory Inventory
-}
-
-func (player Player) Strings() {
-
 }

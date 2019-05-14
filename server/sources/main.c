@@ -6,6 +6,7 @@
 */
 
 #include "options.h"
+#include "zappy.h"
 
 int main(int argc, char *argv[])
 {
