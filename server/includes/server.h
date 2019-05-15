@@ -14,7 +14,13 @@
 #include <errno.h>
 #include "options.h"
 
+typedef struct server_s {
+    int listener_client;
+    int listener_graphic;
+    char **teams;
+} server_t;
+
 int create_listener(options_t *options);
-int setup_server(options_t *options);
+server_t *setup_server(options_t *options);
 
 #endif /* SERVER_H_ */

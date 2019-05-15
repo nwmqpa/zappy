@@ -5,6 +5,7 @@
 ** parsing options file.
 */
 
+#include "logger.h"
 #include "options.h"
 
 static const char *USAGE = "USAGE: ./zappy_server -p port -x width -y height\
@@ -16,16 +17,32 @@ nameX       is the name of the team X\n\
 clientsNb   is the number of authorized clients per team\n\
 freq        is the reciprocal of time unit for execution of actions\n";
 
-// TODO: Calculate the number of name.
+static int get_names(options_t *options, char *argv[], int argc)
+{
+    int i = 0;
+
+    for (int oldind = optind - 1;
+            argc != oldind && argv[oldind][0] != '-'; oldind++)
+        i++;
+    options->name = malloc(sizeof(char *) * (i + 1));
+    if (!options->name)
+        return -1;
+    i = 0;
+    for (int oldind = optind - 1;
+            argc != oldind && argv[oldind][0] != '-'; oldind++) {
+        options->name[i] = strdup(argv[oldind]);
+        i++;
+    }
+    options->name[i] = 0;
+    return 0;
+}
+
 options_t *create_opt(int argc, char *argv[])
 {
-    int flags = 0;
     int opt = 0;
-    int nsecs = 0;
-    int tfnd = 0;
-    options_t *options = malloc(sizeof(options_t));
-    options->name = malloc(sizeof(char *));
-
+    options_t *options = calloc(sizeof(options_t), 1);
+    if (!options)
+        return NULL;
     while ((opt = getopt(argc, argv, "p:x:y:n:c:f:")) != -1) {
         switch (opt) {
             case 'p':
@@ -38,7 +55,7 @@ options_t *create_opt(int argc, char *argv[])
                 options->height = atoi(optarg);
                 break;
             case 'n':
-                options->name[0] = strdup(optarg);
+                get_names(options, argv, argc);
                 break;
             case 'c':
                 options->freq = atoi(optarg);
@@ -63,8 +80,10 @@ void print_opt(options_t *options)
             "    port: %hd,\n"
             "    width: %d,\n"
             "    height: %d,\n"
-            "    name: %s,\n"
+            "    name: [", options->port, options->width, options->height);
+    for (int i = 0; options->name[i]; i++)
+        printf("%s, ", options->name[i]);
+    printf("]\n"
             "    freq: %d\n"
-            "}\n", options->port, options->width, options->height,
-            options->name[0], options->freq);
+            "}\n", options->freq);
 }
