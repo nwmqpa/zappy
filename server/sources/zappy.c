@@ -6,8 +6,10 @@
 */
 
 #include "zappy.h"
+#include "logger.h"
 
 int zappy_server(options_t *options)
 {
+    infol("Launching Zappy server.\n");
     return 0;
 }

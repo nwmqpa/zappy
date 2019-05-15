@@ -20,7 +20,8 @@ MODULES		=
 SOURCES		=	main.c \
 				options.c \
 				logger.c \
-				zappy.c
+				zappy.c \
+				create_server.c
 
 PREFIXED_SRCS 	=	$(addprefix $(SRC_DIR)/, $(SOURCES))
 PATSUBST_OBJS	=	$(patsubst  $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(PREFIXED_SRCS))
