@@ -16,7 +16,7 @@ extern "C" {
 #endif
 
 /*
- * DANGLING_HANDLER -> Handler function is NULL
+** DANGLING_HANDLER -> Handler function is NULL
 */
 enum HANDLING_ERRORS {
     NO_ERROR                = 0,
@@ -27,17 +27,17 @@ enum HANDLING_ERRORS {
 };
 
 /*
- * Enumeration of all base messages
- * for the Graphic Protocol
+** Enumeration of all base messages
+** for the Graphic Protocol
 */
 
 enum GRAPHIC_PACKETS_FROM_CLIENT {
 /*
- * Usable to determine the degree of change of a client.
+** Usable to determine the degree of change of a client.
 */
     CLT_PROTOCOL_ADDONS     = 1,
 /*
- * Base Zappy commands.
+** Base Zappy commands.
 */
     CLT_MAP_SIZE            = 2,
     CLT_TILE_CONTENT        = 3,
@@ -49,18 +49,18 @@ enum GRAPHIC_PACKETS_FROM_CLIENT {
     CLT_TIME_UNIT_REQUEST   = 9,
     CLT_TIME_UNIT_CHANGE    = 10,
 /*
- * Special commands reserved for addons.
+** Special commands reserved for addons.
 */
     CLT_CUSTOM              = 11
 };
 
 enum GRAPHIC_PACKETS_FROM_SERVER {
 /*
- * Usable to determine the degree of change of a server.
+** Usable to determine the degree of change of a server.
 */
     SRV_PROTOCOL_ADDONS     = 12,
 /*
- * Base Zappy commands.
+** Base Zappy commands.
 */
     SRV_MAP_SIZE            = 13,
     SRV_TILE_CONTENT        = 14,
@@ -89,27 +89,27 @@ enum GRAPHIC_PACKETS_FROM_SERVER {
     SRV_UNKNOWN_COMMAND     = 37,
     SRV_COMMAND_PARAMETER   = 38,
 /*
- * Special command reserved for addons.
+** Special command reserved for addons.
 */
     SRV_CUSTOM              = 40
 };
 
 
 /*
- * Each change to this document will need an incrementation of this value.
+** Each change to this document will need an incrementation of this value.
 */
 #define PROTOCOL_VERSION    0x1
 
 
 /*
- * Will be present before each data transfer
- * -> id is the ID of the packet transfered
- * (report to GRAPHIC_PACKETS_FROM_CLIENT or GRAPHIC_PACKETS_FROM_SERVER)
- * -> version is the protocol version (fallback to PROTOCOL_VERSION)
- * -> size is the size of the chunk of data transfered. Doesn't include the
- * packet header.
- * -> subid is only used when id is set on SRV_CUSTOM or CLT_CUSTOM.
- *  Indicate the handler to use for a custom packet.
+** Will be present before each data transfer
+** -> id is the ID of the packet transfered
+** (report to GRAPHIC_PACKETS_FROM_CLIENT or GRAPHIC_PACKETS_FROM_SERVER)
+** -> version is the protocol version (fallback to PROTOCOL_VERSION)
+** -> size is the size of the chunk of data transfered. Doesn't include the
+** packet header.
+** -> subid is only used when id is set on SRV_CUSTOM or CLT_CUSTOM.
+**  Indicate the handler to use for a custom packet.
 */
 struct packet_header {
     uint8_t  id;
@@ -121,17 +121,17 @@ struct packet_header {
 typedef struct packet_header pkt_header_t;
 
 /*
- * Handle a const payload. Must be const for subsequent treatment.
- * Return an error flag in case of error (HANDLING_ERRORS).
+** Handle a const payload. Must be const for subsequent treatment.
+** Return an error flag in case of error (HANDLING_ERRORS).
 */
 typedef int (*data_handler)(const char *data);
 
 /*
- * Will be used to handle a const char *, representing the size sized data
- * to be handled.
- * -> id is the ID of the packets to handle.
- * -> subid is the subID of the packets to handle if ID is (SRV|CLT)_CUSTOM
- * -> handler is a function pointer to the handler.
+** Will be used to handle a const char *, representing the size sized data
+** to be handled.
+** -> id is the ID of the packets to handle.
+** -> subid is the subID of the packets to handle if ID is (SRV|CLT)_CUSTOM
+** -> handler is a function pointer to the handler.
 */
 struct packet_handler {
     uint8_t  id;
@@ -142,8 +142,8 @@ struct packet_handler {
 typedef struct packet_handler pkt_handler_t;
 
 /*
- * Monolithic structure used to register packet handlers.
- * handlers must be NULL-terminated;
+** Monolithic structure used to register packet handlers.
+** handlers must be NULL-terminated;
 */
 struct packet_handler_register {
     pkt_handler_t **handlers;
@@ -152,14 +152,14 @@ struct packet_handler_register {
 typedef struct packet_handler_register phr_t;
 
 /*
- * Subsequent call for the same ID (or subid) will add the packet handler
- * to the list of packet handler for this specific packet.
+** Subsequent call for the same ID (or subid) will add the packet handler
+** to the list of packet handler for this specific packet.
 */
 void register_pkt_handler(phr_t *registrar, pkt_handler_t *handler);
 
 /*
- * Will unregister the specific packet handler based on the function pointer
- * and the id/subid.
+** Will unregister the specific packet handler based on the function pointer
+** and the id/subid.
 */
 void unregister_pkt_handler(phr_t *registrat, pkt_handler_t *handler);
 
