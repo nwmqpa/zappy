@@ -21,7 +21,8 @@ SOURCES		=	main.c \
 				options.c \
 				logger.c \
 				zappy.c \
-				create_server.c
+				server.c \
+				generic_linked_list.c
 
 PREFIXED_SRCS 	=	$(addprefix $(SRC_DIR)/, $(SOURCES))
 PATSUBST_OBJS	=	$(patsubst  $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(PREFIXED_SRCS))
