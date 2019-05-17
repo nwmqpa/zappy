@@ -9,7 +9,7 @@ import socket
 import sys
 
 def main():
-    """Main wesh"""
+    """Main"""
     basic_verif()
     opt = get_arguments()
     verif_args_values(opt)
@@ -22,7 +22,8 @@ def main():
 
 
 if __name__ == '__main__':
-    try :
+    try:
         main()
-    except :
+    except Exception as e:
+        sys.stderr.write(str(e))
         sys.exit(84)

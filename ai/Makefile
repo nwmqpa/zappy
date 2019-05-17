@@ -32,6 +32,7 @@ $(NAME):
 clean:
 		@printf "$(RED)[Cleaning binary]\n$(WHITE)"
 		$(V)rm -rf $(NAME)
+		$(V)rm -rf __pycache__/
 
 fclean: clean
 		@printf "$(RED)[Cleaning repository]\n$(WHITE)"
