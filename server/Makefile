@@ -18,11 +18,13 @@ INCLUDE_DIR	=	$(ROOT)/includes
 MODULES		=
 
 SOURCES		=	main.c \
-				options.c \
-				logger.c \
 				zappy.c \
-				server.c \
-				generic_linked_list.c
+				server/options.c \
+				server/server.c \
+				server/server_init.c \
+				gen_list/generic_list.c \
+				utils/logger.c \
+				client/client.c
 
 PREFIXED_SRCS 	=	$(addprefix $(SRC_DIR)/, $(SOURCES))
 PATSUBST_OBJS	=	$(patsubst  $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(PREFIXED_SRCS))
@@ -33,7 +35,7 @@ LINK_MODULES	=	$(addprefix -l, $(MODULES))
 
 
 WARNINGS	=	-Wall -Wextra
-CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) -fdiagnostics-color=always -D _GNU_SOURCE -g
+CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) -fdiagnostics-color=always -D _GNU_SOURCE
 LDFLAGS		=	-L $(BUILD_DIR) $(LINK_MODULES)
 
 DEFAULT		=	\e[0m
@@ -47,7 +49,11 @@ CYAN		=	\e[1;96m
 
 V		=	@
 
+debug: CFLAGS += -g -D LOG_LEVEL=5
+
 all:			$(ROOT)/$(NAME)
+
+debug: re
 
 clean:
 			$(Vprintf "$(WHITE)Cleaning $(BLUE)objects $(WHITE)files$(DEFAULT)\n"
@@ -85,10 +91,11 @@ $(BUILD_DIR)/$(NAME):	$(PATSUBST_OBJS) $(PATSUBST_MODULS) echo_build_parts
 
 $(BUILD_DIR)/%.o:	$(SRC_DIR)/%.c
 			$(V)printf "$(WHITE)Compiling $(RED)$<$(WHITE) => $(BLUE)$@$(DEFAULT)\n"
+			$(V)mkdir -p $(dir $@)
 			$(V)$(CC) -o $@ -c $< $(CFLAGS)
 
 $(BUILD_DIR)/lib%.a:	$(SRC_DIR)/%
 			$(V)printf "$(WHITE)Compiling module $(MAGENTA)$<$(DEFAULT)\n"
 			$(V)make --no-print-directory -C $<
 
-.PHONY:			all clean re echo_build_parts
+.PHONY:			all clean re echo_build_parts fclean
