@@ -90,3 +90,20 @@ void print_list(list_t *list, print_func function)
         function(entry);
     }
 }
+
+int is_empty_list(list_t *list)
+{
+    return LIST_EMPTY(&list->head);
+}
+
+void empty_list(list_t *list, print_func dtor)
+{
+    entry_t *entry;
+
+    while (!LIST_EMPTY(&list->head)) {
+        entry = LIST_FIRST(&list->head);
+        LIST_REMOVE(entry, next);
+        dtor(entry);
+    }
+    LIST_INIT(&list->head);
+}
