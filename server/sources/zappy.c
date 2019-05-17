@@ -11,5 +11,6 @@
 int zappy_server(server_t *server)
 {
     infol("Launching Zappy server.\n");
+    print_server(server);
     return 0;
 }
