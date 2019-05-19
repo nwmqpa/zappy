@@ -80,14 +80,14 @@ int check_opt(options_t *options)
 
 void print_opt(options_t *options)
 {
-    printf("Option {\n"
+    debugl("Option {\n"
             "    port: %hd,\n"
             "    width: %d,\n"
             "    height: %d,\n"
             "    name: [", options->port, options->width, options->height);
     for (int i = 0; options->name[i]; i++)
-        printf("%s%s", options->name[i], options->name[i + 1] ? ", " : "]\n" );
-    printf("    client_nb: %d\n"
+        debugl("%s%s", options->name[i], options->name[i + 1] ? ", " : "]\n" );
+    debugl("    client_nb: %d\n"
             "    freq: %d\n"
             "}\n", options->client_nb, options->freq);
 }

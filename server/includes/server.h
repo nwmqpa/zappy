@@ -28,6 +28,8 @@ server_t *create_server(options_t *options);
 int create_client_listener(options_t *options);
 int create_graphic_listener(options_t *options);
 
+void print_server(server_t *server);
+
 /*
 ** Client commands.
 */

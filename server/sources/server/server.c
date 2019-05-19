@@ -30,11 +30,11 @@ server_t *create_server(options_t *options)
 
 void print_server(server_t *server)
 {
-    printf("Server {\n"
+    debugl("Server {\n"
             "    listener_client: %hd,\n"
             "    listener_graphic: %hd,\n"
             "    teams: [", server->listener_client, server->listener_graphic);
     for (int i = 0; server->teams[i]; ++i)
-        printf("%s%s", server->teams[i], server->teams[i + 1] ? ", " : "]\n" );
-    printf("}\n");
+        debugl("%s%s", server->teams[i], server->teams[i + 1] ? ", " : "]\n" );
+    debugl("}\n");
 }

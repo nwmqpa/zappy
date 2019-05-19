@@ -5,6 +5,7 @@
 ** main client file.
 */
 
+#include "logger.h"
 #include "client.h"
 
 client_t *client_create(size_t id)
@@ -18,7 +19,7 @@ client_t *client_create(size_t id)
 
 void print_client(const client_t *client)
 {
-    printf("Client {"
+    debugl("Client {"
             "   id: %ld\n"
             "}\n"
             , client->id);
