@@ -23,15 +23,12 @@ def verif_args_values(opt):
     """Verif if options correspond to good types"""
     try:
         opt.port = int(opt.port)
-    except:
-        print("Port should be an integer")
+    except ValueError:
         display_help()
-        sys.exit(0)
+        raise Exception("Port should be an integer")
     if (opt.port > 65535 or opt.port <= 1023):
-        print("Invalid port")
         display_help()
-        sys.exit(0)
+        raise Exception("Invalid port")
     HOST_UP  = True if os.system("ping -c 1 " + opt.machine + " > /dev/null") is 0 else False
     if (HOST_UP == False):
-        print("Invalid host")
-        sys.exit(0)
+        raise Exception("Invalid host")

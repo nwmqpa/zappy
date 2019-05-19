@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+
+from verif import basic_verif
+from verif import verif_args_values
+from get_args import get_arguments
+from first_connection import connect_socket
+from first_connection import get_client_nb_and_world_size
+from clear_received_message import clean_received_message
+import socket
+import sys
+
+def test(server_socket):
+    print("In test\n")
+
+    server_socket.send(("Inventory" + "\n").encode())
+    new_data = server_socket.recv(1024)     # Recv Welcome message
+    print('Received ->', repr(new_data))    # print welcome message
+
+    ok = clean_received_message(repr(new_data))
+    print("====> ", ok)
+
+def main():
+    """Main"""
+    basic_verif()
+    opt = get_arguments()
+    verif_args_values(opt)
+
+    print(repr(opt) )
+    server_socket = connect_socket(opt)
+    client_info = get_client_nb_and_world_size(server_socket, opt)
+    print("Client info -> ", repr(client_info) + "\n")
+
+    test(server_socket)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as e:
+        sys.stderr.write(str(e))
+        sys.exit(84)
