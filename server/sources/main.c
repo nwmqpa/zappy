@@ -10,6 +10,7 @@
 #include "logger.h"
 #include "server.h"
 
+#ifndef TEST
 int main(int argc, char *argv[])
 {
     options_t *options = create_opt(argc, argv);
@@ -29,3 +30,4 @@ int main(int argc, char *argv[])
         return 84;
     }
 }
+#endif /* TEST */
