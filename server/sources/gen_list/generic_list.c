@@ -11,6 +11,7 @@ list_t *create_list()
 {
     list_t *list = malloc(sizeof(list_t));
 
+    list->size = 0;
     if (!list)
         return NULL;
     LIST_INIT(&list->head);
@@ -21,6 +22,7 @@ void append_list(list_t *list, void *elem)
 {
     entry_t *new = malloc(sizeof(entry_t));
 
+    list->size++;
     new->data = elem;
     LIST_INSERT_HEAD(&list->head, new, next);
 }
@@ -34,7 +36,8 @@ void *pop_list(list_t *list, size_t idx)
     {
         if (idx == i) {
             LIST_REMOVE(entry, next);
-            return entry;
+            list->size--;
+            return entry->data;
         }
         i++;
     }
@@ -54,7 +57,7 @@ void *get_list(list_t *list, size_t idx)
     LIST_FOREACH(entry, &list->head, next)
     {
         if (idx == i)
-            return entry;
+            return entry->data;
         i++;
     }
     return NULL;
@@ -75,6 +78,7 @@ void *filter_list(list_t *list, filter_func function)
     {
         if (function(entry)) {
             LIST_REMOVE(entry, next);
+            list->size--;
         }
         i++;
     }
@@ -87,7 +91,7 @@ void print_list(list_t *list, print_func function)
 
     LIST_FOREACH(entry, &list->head, next)
     {
-        function(entry);
+        function(entry->data);
     }
 }
 
@@ -103,7 +107,13 @@ void empty_list(list_t *list, print_func dtor)
     while (!LIST_EMPTY(&list->head)) {
         entry = LIST_FIRST(&list->head);
         LIST_REMOVE(entry, next);
-        dtor(entry);
+        dtor(entry->data);
     }
+    list->size = 0;
     LIST_INIT(&list->head);
+}
+
+size_t len_list(list_t *list)
+{
+    return list->size;
 }

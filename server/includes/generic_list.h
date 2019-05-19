@@ -22,6 +22,7 @@ typedef struct entry_s {
 
 typedef struct list_s {
     LIST_HEAD(list, entry_s) head;
+    size_t size;
 } list_t;
 
 list_t *create_list();
@@ -37,3 +38,9 @@ void *get_filter_list(list_t *list, filter_func function);
 void *filter_list(list_t *list, filter_func function);
 
 void print_list(list_t *list, print_func function);
+
+int is_empty_list(list_t *list);
+
+size_t len_list(list_t *list);
+
+void empty_list(list_t *list, print_func dtor);

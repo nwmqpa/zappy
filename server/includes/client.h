@@ -65,6 +65,10 @@ typedef struct client_s {
 
 client_t *client_create(size_t id);
 
+void add_command(client_t *client, char *command);
+int process_command(client_t *client);
+size_t len_command(client_t *client);
+
 void print_client(const client_t *client);
 void print_client_list(const void *data);
 

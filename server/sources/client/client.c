@@ -11,6 +11,7 @@ client_t *client_create(size_t id)
 {
     client_t *new = calloc(sizeof(client_t), 1);
 
+    new->commands = create_list();
     new->id = id;
     return new;
 }
