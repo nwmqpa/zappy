@@ -7,8 +7,6 @@ LD		=	gcc
 
 AR		=	ar
 
-TEST	=	test
-
 ROOT		=	.
 
 TEST_DIR	=	$(ROOT)/tests
@@ -28,10 +26,16 @@ SOURCES		=	main.c \
 				server/server_init.c \
 				gen_list/generic_list.c \
 				utils/logger.c \
-				client/client.c
+				client/client.c \
+				client/command.c
+
+TEST_SOURCES	=	client_command.c \
+					generic_list.c
 
 PREFIXED_SRCS 	=	$(addprefix $(SRC_DIR)/, $(SOURCES))
+PREFIXED_TEST 	=	$(addprefix $(TEST_DIR)/, $(TEST_SOURCES))
 PATSUBST_OBJS	=	$(patsubst  $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(PREFIXED_SRCS))
+PATSUBST_OBJS_TEST	=	$(patsubst  $(TEST_DIR)/%.c, $(BUILD_DIR)/%.o, $(PREFIXED_TEST))
 LIBS_MODULES 	=	$(addprefix lib, $(addsuffix .a, $(MODULES)))
 PREFIXED_MODULS	=	$(addprefix $(SRC_DIR)/, $(MODULES))
 PATSUBST_MODULS =	$(patsubst  $(SRC_DIR)/%, $(BUILD_DIR)/lib%.a, $(PREFIXED_MODULS))
@@ -53,18 +57,19 @@ CYAN		=	\e[1;96m
 
 V		=	@
 
+test:	CFLAGS += -g -D TEST
+test:	LDFLAGS += -lcriterion
+test:	$(ROOT)/test
+
 debug: CFLAGS += -g -D LOG_LEVEL=5
+debug:	re
 
-all:			$(ROOT)/$(NAME)
-
-debug: re
-
-$(TEST):
-		$(V)make --no-print-directory -C $(ROOT)/$(TEST_DIR) TEST=$(TEST)
+all:	$(ROOT)/$(NAME)
 
 clean:
 			$(Vprintf "$(WHITE)Cleaning $(BLUE)objects $(WHITE)files$(DEFAULT)\n"
 			$(V)rm -f $(PATSUBST_OBJS)
+			$(V)rm -f $(PATSUBST_OBJS_TEST)
 			$(V)for dir in $(PREFIXED_MODULS); do \
 				make --no-print-directory -C $$dir clean; \
 			done
@@ -72,7 +77,7 @@ clean:
 fclean:			clean
 			$(V)printf "$(WHITE)Cleaning $(GREEN)linked $(WHITE)files$(DEFAULT)\n"
 			$(V)rm -f $(ROOT)/$(NAME) $(BUILD_DIR)/$(NAME)
-			$(V)make --no-print-directory -C $(ROOT)/$(TEST_DIR) fclean
+			$(V)rm -f $(ROOT)/test $(BUILD_DIR)/test
 			$(V)for dir in $(PREFIXED_MODULS); do \
 				make --no-print-directory -C $$dir fclean; \
 			done
@@ -93,11 +98,25 @@ $(ROOT)/$(NAME):	$(BUILD_DIR)/$(NAME)
 			$(V)cp $(BUILD_DIR)/$(NAME) $(ROOT)/$(NAME)
 			$(V)printf "$(WHITE)Final $(GREEN)$(NAME)$(WHITE) size: $(CYAN)%dKb$(DEFAULT)\n" `du -s $@ | awk -F ' ' '{print $$1}'`
 
+$(ROOT)/test:	$(BUILD_DIR)/test
+			$(V)printf "$(WHITE)Copying $(GREEN)test$(WHITE) from $(BLUE)$(BUILD_DIR)$(WHITE) folder$(DEFAULT)\n"
+			$(V)cp $(BUILD_DIR)/test $(ROOT)/test
+			$(V)printf "$(WHITE)Final $(GREEN)test$(WHITE) size: $(CYAN)%dKb$(DEFAULT)\n" `du -s $@ | awk -F ' ' '{print $$1}'`
+
 $(BUILD_DIR)/$(NAME):	$(PATSUBST_OBJS) $(PATSUBST_MODULS) echo_build_parts
 			$(V)printf "$(WHITE)Linking $(BLUE)objects $(WHITE)into $(GREEN)$(NAME)$(DEFAULT)\n"
 			$(V)$(LD) -o $(BUILD_DIR)/$(NAME) $(PATSUBST_OBJS) $(LDFLAGS)
 
+$(BUILD_DIR)/test:	$(PATSUBST_OBJS_TEST) $(PATSUBST_OBJS) $(PATSUBST_MODULS)
+			$(V)printf "$(WHITE)Linking $(BLUE)objects $(WHITE)into $(GREEN)test$(DEFAULT)\n"
+			$(V)$(LD) -o $(BUILD_DIR)/test $(PATSUBST_OBJS) $(PATSUBST_OBJS_TEST) $(LDFLAGS)
+
 $(BUILD_DIR)/%.o:	$(SRC_DIR)/%.c
+			$(V)printf "$(WHITE)Compiling $(RED)$<$(WHITE) => $(BLUE)$@$(DEFAULT)\n"
+			$(V)mkdir -p $(dir $@)
+			$(V)$(CC) -o $@ -c $< $(CFLAGS)
+
+$(BUILD_DIR)/%.o:	$(TEST_DIR)/%.c
 			$(V)printf "$(WHITE)Compiling $(RED)$<$(WHITE) => $(BLUE)$@$(DEFAULT)\n"
 			$(V)mkdir -p $(dir $@)
 			$(V)$(CC) -o $@ -c $< $(CFLAGS)
@@ -106,4 +125,4 @@ $(BUILD_DIR)/lib%.a:	$(SRC_DIR)/%
 			$(V)printf "$(WHITE)Compiling module $(MAGENTA)$<$(DEFAULT)\n"
 			$(V)make --no-print-directory -C $<
 
-.PHONY:			all clean re echo_build_parts fclean
+.PHONY:			all clean re echo_build_parts fclean test
