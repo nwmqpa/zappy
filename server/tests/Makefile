@@ -29,7 +29,8 @@ SOURCES		=	main.c \
 				client/client.c	 \
 				client/command.c
 
-TEST_SOURCES	=	client_command.c
+TEST_SOURCES	=	client_command.c \
+					generic_list.c
 
 PREFIXED_SRCS 	=	$(addprefix $(SRC_DIR)/, $(SOURCES))
 PREFIXED_TEST 	=	$(addprefix $(TEST_DIR)/, $(TEST_SOURCES))
