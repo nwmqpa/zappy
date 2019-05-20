@@ -14,6 +14,7 @@
 typedef int (*cmp_func) (const void *, const void *);
 typedef int (*filter_func) (const void *);
 typedef void (*print_func) (const void *);
+typedef void (*dtor_func) (void *);
 
 typedef struct entry_s {
     void *data;
@@ -28,6 +29,8 @@ typedef struct list_s {
 list_t *create_list();
 
 void append_list(list_t *list, void *elem);
+void insert_head_list(list_t *list, void *elem);
+void insert_list(list_t *list, void *elem, size_t idx);
 
 void *pop_list(list_t *list, size_t idx);
 void *pop_filter_list(list_t *list, filter_func function);
@@ -43,4 +46,4 @@ int is_empty_list(list_t *list);
 
 size_t len_list(list_t *list);
 
-void empty_list(list_t *list, print_func dtor);
+void empty_list(list_t *list, dtor_func dtor);
