@@ -12,12 +12,19 @@ import sys
 def test(server_socket):
     print("In test\n")
 
+    print('Send     ->', "Inventory")    # print welcome message
     server_socket.send(("Inventory" + "\n").encode())
     new_data = server_socket.recv(1024)     # Recv Welcome message
     print('Received ->', repr(new_data))    # print welcome message
-
     ok = clean_received_message(repr(new_data))
-    print("====> ", ok)
+    print("==========> ", ok)
+
+    print('Send     ->', "Connect_nbr")    # print welcome message
+    server_socket.send(("Connect_nbr" + "\n").encode())
+    new_data = server_socket.recv(1024)     # Recv Welcome message
+    print('Received ->', repr(new_data))    # print welcome message
+    ok = clean_received_message(repr(new_data))
+    print("==========> ", ok)
 
 def main():
     """Main"""
