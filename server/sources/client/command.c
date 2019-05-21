@@ -14,7 +14,7 @@ void add_command(client_t *client, char *command)
 
     if (len < 10) {
         debugl("Registering command[%d] - %s.\n", len, command);
-        append_list(client->commands, (void *) command);
+        insert_head_list(client->commands, (void *) command);
     } else {
         infol(
         "Cannot register command, there is already 10 commands registered.\n");
