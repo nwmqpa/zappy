@@ -57,14 +57,14 @@ CYAN		=	\e[1;96m
 
 V		=	@
 
+all:	$(ROOT)/$(NAME)
+
 test:	CFLAGS += -g -D TEST
 test:	LDFLAGS += -lcriterion
 test:	$(ROOT)/test
 
 debug: CFLAGS += -g -D LOG_LEVEL=5
 debug:	re
-
-all:	$(ROOT)/$(NAME)
 
 clean:
 			$(Vprintf "$(WHITE)Cleaning $(BLUE)objects $(WHITE)files$(DEFAULT)\n"
