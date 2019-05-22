@@ -11,67 +11,43 @@ stages:
 
 build_server:
     stage: build
-    only:
-        - dev
-        - master
     script:
         - make -C server/
         
 build_graphic_client:
     stage: build
-    only:
-        - dev
-        - master
     allow_failure: true
     script:
         - make -C graphic_client/
         
 test_server:
     stage: test
-    only:
-        - dev
-        - master
     script:
         - make -C server/ test
         - ./server/test
     
 test_ai:
     stage: test
-    only:
-        - dev
-        - master
     script:
         - pytest ai/
 
 check_coding_ai:
     stage: check
-    only:
-        - dev
-        - master
     script:
         - pycodestyle ai/
 
 check_doc_ai:
     stage: check
-    only:
-        - dev
-        - master
     script:
         - pydocstyle ai/
 
 check_types_ai:
     stage: check
-    only:
-        - dev
-        - master
     script:
         - mypy --python-version 3.6 --strict ai/
 
 test_graphic_client:
     stage: test
-    only:
-        - dev
-        - master
     only:
         - dev
         - master
