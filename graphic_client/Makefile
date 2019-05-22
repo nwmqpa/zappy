@@ -21,7 +21,7 @@ MODULES		=
 
 SOURCES		=
 
-TEST_SOURCES	=
+TEST_SOURCES	=	dummy.c
 
 PREFIXED_SRCS 	=	$(addprefix $(SRC_DIR)/, $(SOURCES))
 PREFIXED_TEST 	=	$(addprefix $(TEST_DIR)/, $(TEST_SOURCES))
@@ -90,7 +90,7 @@ $(ROOT)/$(NAME):	$(BUILD_DIR)/$(NAME)
 			$(V)cp $(BUILD_DIR)/$(NAME) $(ROOT)/$(NAME)
 			$(V)printf "$(WHITE)Final $(GREEN)$(NAME)$(WHITE) size: $(CYAN)%dKb$(DEFAULT)\n" `du -s $@ | awk -F ' ' '{print $$1}'`
 
-$(ROOT)/test:	$(BUILD_DIR)/test
+$(ROOT)/test:		$(BUILD_DIR)/test
 			$(V)printf "$(WHITE)Copying $(GREEN)test$(WHITE) from $(BLUE)$(BUILD_DIR)$(WHITE) folder$(DEFAULT)\n"
 			$(V)cp $(BUILD_DIR)/test $(ROOT)/test
 			$(V)printf "$(WHITE)Final $(GREEN)test$(WHITE) size: $(CYAN)%dKb$(DEFAULT)\n" `du -s $@ | awk -F ' ' '{print $$1}'`
