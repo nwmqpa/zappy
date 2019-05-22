@@ -1,3 +1,5 @@
+"""Parse Inventory as an object"""
+
 class inventory:
     """Structure to stock Inventory"""
     def __init__(self, food, linemate, deraumere, siur, mendiane, phiras, thystame):
