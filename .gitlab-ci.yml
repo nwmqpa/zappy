@@ -29,6 +29,7 @@ test_server:
         - master
     script:
         - make -C server/ test
+        - ./server/test
     
 test_ai:
     stage: test
@@ -38,7 +39,7 @@ test_ai:
     allow_failure: true #TODO: Remove
     script:
         - pytest ai/
-        
+
 test_graphic_client:
     stage: test
     only:
@@ -49,6 +50,7 @@ test_graphic_client:
         - master
     script:
         - make -C graphic_client/ test
+        - ./server/test
         
 full_deploy:
     stage: deploy
