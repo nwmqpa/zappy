@@ -13,14 +13,24 @@
 #include <netinet/ip.h>
 #include <errno.h>
 #include "options.h"
+#include "generic_list.h"
 
 typedef struct server_s {
     int listener_client;
     int listener_graphic;
     char **teams;
+    list_t *clients;
 } server_t;
 
-int create_listener(options_t *options);
-server_t *setup_server(options_t *options);
+// Create server and initiliaze it from options.
+server_t *create_server(options_t *options);
+
+int create_client_listener(options_t *options);
+int create_graphic_listener(options_t *options);
+
+/*
+** Client commands.
+*/
+char *connect_nbr(const server_t *server);
 
 #endif /* SERVER_H_ */

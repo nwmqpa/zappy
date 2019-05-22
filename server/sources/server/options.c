@@ -37,6 +37,7 @@ static int get_names(options_t *options, char *argv[], int argc)
     return 0;
 }
 
+// TODO: Fix coding style.
 options_t *create_opt(int argc, char *argv[])
 {
     int opt = 0;
@@ -58,9 +59,11 @@ options_t *create_opt(int argc, char *argv[])
                 get_names(options, argv, argc);
                 break;
             case 'c':
-                options->freq = atoi(optarg);
+                options->client_nb = atoi(optarg);
                 break;
             case 'f':
+                options->freq = atoi(optarg);
+                break;
             default:
                 fprintf(stderr, USAGE);
                 exit(84);
@@ -71,6 +74,7 @@ options_t *create_opt(int argc, char *argv[])
 
 int check_opt(options_t *options)
 {
+    // TODO: Check arguments validity.
     return 0;
 }
 
@@ -82,8 +86,8 @@ void print_opt(options_t *options)
             "    height: %d,\n"
             "    name: [", options->port, options->width, options->height);
     for (int i = 0; options->name[i]; i++)
-        printf("%s, ", options->name[i]);
-    printf("]\n"
+        printf("%s%s", options->name[i], options->name[i + 1] ? ", " : "]\n" );
+    printf("    client_nb: %d\n"
             "    freq: %d\n"
-            "}\n", options->freq);
+            "}\n", options->client_nb, options->freq);
 }

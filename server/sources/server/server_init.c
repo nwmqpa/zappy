@@ -1,12 +1,12 @@
 /*
 ** EPITECH PROJECT, 2019
-** create_server.c
+** server_init.c
 ** File description:
-** Create socket for the server.
+** server intializers functions.
 */
 
-#include "server.h"
 #include "logger.h"
+#include "server.h"
 
 static void fill_addr(short port, struct sockaddr_in *addr)
 {
@@ -15,17 +15,15 @@ static void fill_addr(short port, struct sockaddr_in *addr)
     addr->sin_addr.s_addr = INADDR_ANY;
 }
 
-int create_listener(options_t *options)
+static int create_socket(struct sockaddr *addr)
 {
     int sock = socket(AF_INET, SOCK_STREAM, 0);
-    struct sockaddr addr = {0};
 
     if (sock == -1) {
         errorl("socket: %s\n", strerror(errno));
         return -1;
     }
-    fill_addr(options->port, (struct sockaddr_in *) &addr);
-    if (bind(sock, &addr, sizeof(struct sockaddr)) == -1) {
+    if (bind(sock, addr, sizeof(struct sockaddr)) == -1) {
         errorl("bind: %s\n", strerror(errno));
         return -1;
     }
@@ -36,7 +34,18 @@ int create_listener(options_t *options)
     return sock;
 }
 
-server_t *setup_server(options_t *options)
+int create_client_listener(options_t *options)
 {
-    return NULL;
+    struct sockaddr addr = {0};
+
+    fill_addr(options->port, (struct sockaddr_in *) &addr);
+    return create_socket(&addr);
+}
+
+int create_graphic_listener(options_t *options)
+{
+    struct sockaddr addr = {0};
+
+    fill_addr(options->port + 1, (struct sockaddr_in *) &addr);
+    return create_socket(&addr);
 }
