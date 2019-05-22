@@ -48,12 +48,9 @@ check_types_ai:
 
 test_graphic_client:
     stage: test
-    only:
-        - dev
-        - master
     script:
         - make -C graphic_client/ test
-        - ./server/test
+        - ./graphic_client/test
         
 full_deploy:
     stage: deploy
