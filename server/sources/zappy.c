@@ -7,30 +7,76 @@
 
 #include "zappy.h"
 #include "logger.h"
+#include "dispatcher.h"
 
-static int on_connect(int socket, void *data)
+static int on_connect_graphic(int socket, void *data)
 {
-
+    debugl("Graphic connect handler.\n");
+    return 0;
 }
 
-static int on_delete(int socket, void *data)
+static int on_delete_graphic(int socket, void *data)
 {
-
+    debugl("Graphic delete handler.\n");
+    return 0;
 }
 
-static int on_delete(int socket, void *data)
+static int on_active_graphic(int socket, void *data)
 {
+    debugl("Graphic active handler.\n");
+    return 0;
+}
 
+static int on_connect_client(int socket, void *data)
+{
+    debugl("Client connect handler.\n");
+    return 0;
+}
+
+static int on_delete_client(int socket, void *data)
+{
+    debugl("Client delete handler.\n");
+    return 0;
+}
+
+static int on_active_client(int socket, void *data)
+{
+    debugl("Client active handler.\n");
+    return 0;
+}
+
+static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
+        server_t *server)
+{
+    void *graphic_data = NULL;
+    void *client_data = NULL;
+
+    while (42) {
+        if (dispatch(graphic, graphic_data) == -1 ||
+                dispatch(client, client_data) == -1) {
+            infol("Closing server after an error.\n");
+            return -1;
+        }
+    }
+    return 0;
 }
 
 int zappy_server(server_t *server)
 {
+    dispatcher_t graphic_disp = {
+        .actives = {{0}},
+        .on_active = &on_active_graphic,
+        .on_delete = &on_delete_graphic,
+        .on_connect = &on_connect_graphic,
+        .listener = server->listener_graphic
+    };
+    dispatcher_t client_disp = {
+        .actives = {{0}},
+        .on_active = &on_active_client,
+        .on_delete = &on_delete_client,
+        .on_connect = &on_connect_client,
+        .listener = server->listener_client
+    };
     infol("Launching `Zappy` runtime server.\n");
-    while (42) {
-        if (dispatch() == -1) {
-            infol("Quitting server after an error.\n");
-            return 84;
-        }
-    }
-    return 0;
+    return run_dispatch(&client_disp, &graphic_disp, server);
 }
