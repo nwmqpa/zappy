@@ -1,4 +1,9 @@
 # Zappy :zap:
+Developement: [![Build Status](https://gitlab.nwmqpa.com/Alexandre/zappy/badges/dev/build.svg)](https://gitlab.nwmqpa.com/Alexandre/zappy/pipelines/)
+
+Developement: [![Build Status](https://gitlab.nwmqpa.com/Alexandre/zappy/badges/master/build.svg)](https://gitlab.nwmqpa.com/Alexandre/zappy/pipelines/)
+
+
 Edit [HERE](https://hackmd.io/vu5BvtcaTdCnuW5Kb4RJww)
 
 This is the `TODO` file tracking what we have to do and what we have done.
