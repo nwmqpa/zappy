@@ -1,8 +1,12 @@
 image: epitechcontent/epitest-docker
 
+before_script:
+  - pip3 install pycodestyle pydocstyle mypy pytest
+
 stages:
     - build
     - test
+    - check
     - deploy
 
 build_server:
@@ -36,9 +40,32 @@ test_ai:
     only:
         - dev
         - master
-    allow_failure: true #TODO: Remove
     script:
         - pytest ai/
+
+check_coding_ai:
+    stage: check
+    only:
+        - dev
+        - master
+    script:
+        - pycodestyle ai/
+
+check_doc_ai:
+    stage: check
+    only:
+        - dev
+        - master
+    script:
+        - pydocstyle ai/
+
+check_types_ai:
+    stage: check
+    only:
+        - dev
+        - master
+    script:
+        - mypy --python-version 3.6 --strict ai/
 
 test_graphic_client:
     stage: test
