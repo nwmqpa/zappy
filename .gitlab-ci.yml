@@ -50,7 +50,7 @@ test_graphic_client:
     stage: test
     script:
         - make -C graphic_client/ test
-        - ./server/test
+        - ./graphic_client/test
         
 full_deploy:
     stage: deploy
