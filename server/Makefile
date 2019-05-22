@@ -27,7 +27,8 @@ SOURCES		=	main.c \
 				gen_list/generic_list.c \
 				utils/logger.c \
 				client/client.c \
-				client/command.c
+				client/command.c \
+				utils/dispatcher.c
 
 TEST_SOURCES	=	client_command.c \
 					generic_list.c \
