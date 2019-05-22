@@ -30,15 +30,9 @@ typedef struct dispatcher_s {
 } dispatcher_t;
 
 /*
-* Disptacher constructor.
-*
-*/
-dispatcher_t dispatcher_new(int socket, disp_func, disp_func, disp_func);
-
-/*
 * Take a dispatcher a listener and a function and dispatch the function to
 * all active sockets. (Work with `select` under the hood.)
 */
-tcp_result_t dispatcher_run(dispatcher_t *this, void *data);
+int dispatch(dispatcher_t *this, void *data);
 
 #endif /* TCP_LIB_H_ */

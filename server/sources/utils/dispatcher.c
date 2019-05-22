@@ -5,23 +5,7 @@
 ** dispatcher
 */
 
-#include "tcp_lib.h"
-
-dispatcher_t dispatcher_new(int listener, disp_func on_active,
-        disp_func on_connect, disp_func on_delete)
-{
-    dispatcher_t disp = {
-        .actives = {{0}},
-        .on_delete = on_delete,
-        .on_active = on_active,
-        .on_connect = on_connect,
-        .listener = listener
-    };
-
-    FD_ZERO(&disp.actives);
-    FD_SET(listener, &disp.actives);
-    return disp;
-}
+#include "dispatcher.h"
 
 static void cleanup_socket(fd_set *actives, int socket)
 {
@@ -29,10 +13,10 @@ static void cleanup_socket(fd_set *actives, int socket)
     FD_CLR(socket, actives);
 }
 
-static tcp_result_t setup_fd(dispatcher_t *this, int socket, void *data)
+static int setup_fd(dispatcher_t *this, int socket, void *data)
 {
     if (socket < 0) {
-        return ERR_ACCEPT;
+        return -1;
     } else {
         this->on_connect(socket, data);
         FD_SET(socket, &this->actives);
@@ -40,15 +24,17 @@ static tcp_result_t setup_fd(dispatcher_t *this, int socket, void *data)
     return 0;
 }
 
-tcp_result_t dispatcher_run(dispatcher_t *this, void *data)
+int dispatch(dispatcher_t *this, void *data)
 {
     unsigned int size = sizeof(struct sockaddr);
     struct sockaddr_in stream_addr = {0};
     fd_set read_fd_set = this->actives;
 
+    FD_ZERO(&this->actives);
+    FD_SET(this->listener, &this->actives);
     if (select(FD_SETSIZE, &read_fd_set, NULL, NULL, NULL) < 0) {
         perror("select");
-        return ERR_SELECT;
+        return -1;
     }
     for (int i = 0; i < FD_SETSIZE; ++i) {
         if (!FD_ISSET(i, &read_fd_set))
