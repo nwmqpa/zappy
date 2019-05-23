@@ -1,6 +1,12 @@
+"""Parse and manage inventory."""
+
+
 class inventory:
-    """Structure to stock Inventory"""
-    def __init__(self, food, linemate, deraumere, siur, mendiane, phiras, thystame):
+    """Structure to stock Inventory."""
+
+    def __init__(self, food, linemate,
+                 deraumere, siur, mendiane, phiras, thystame):
+        """Init stones."""
         self.food = food
         self.linemate = linemate
         self.deraumere = deraumere
@@ -10,7 +16,9 @@ class inventory:
         self.thystame = thystame
 
     def __str__(self):
-        ret = "inventory -> food: {} linemate: {} deraumere: {} siur: {} mendiane: {} phiras: {} thystame: {}>".format(
+        """Fill str."""
+        ret = "inventory -> food: {} linemate: {} deraumere: {}"
+        "siur: {} mendiane: {} phiras: {} thystame: {}>".format(
             self.food,
             self.linemate,
             self.deraumere,
@@ -22,10 +30,12 @@ class inventory:
         return ret
 
     def __repr__(self):
+        """Return str."""
         return str(self)
 
+
 def parse_inventory(line):
-    """Parse Inventory answer sent by server and return an inventory object"""
+    """Parse Inventory answer sent by server and return an inventory object."""
     line = line.replace("[ ", "")
     line = line.replace(" ]", "")
     array = str(line).split(",")
@@ -36,5 +46,7 @@ def parse_inventory(line):
     curr_mendiane = (array[4].split(" "))[2]
     curr_phiras = (array[5].split(" "))[2]
     curr_thystame = (array[6].split(" "))[2]
-    curr_inventory = inventory(curr_food, curr_linemate, curr_deraumere, curr_siur, curr_mendiane, curr_phiras, curr_thystame)
+    curr_inventory = inventory(
+        curr_food, curr_linemate, curr_deraumere,
+        curr_siur, curr_mendiane, curr_phiras, curr_thystame)
     return (curr_inventory)
