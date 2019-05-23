@@ -1,4 +1,4 @@
-"""First connection to server, get basic info (team name, map width/height)"""
+"""First connection to server, get basic info (team name, map width/height)."""
 
 import socket
 import sys
@@ -6,14 +6,17 @@ from clear_received_message import clean_received_message
 
 
 class client_info:
-    """Structure to stock options"""
+    """Structure to stock options."""
+
     def __init__(self, team_name, team_nb, x, y):
+        """Init variables."""
         self.team_name = team_name
         self.team_nb = team_nb
         self.map_width = x
         self.map_height = y
 
     def __str__(self):
+        """Get arguments infos."""
         ret = "client_info -> <team_name: {} team_nb: {} "
         "map_width: {} map_heigth: {}>".format(
             self.team_name,
@@ -24,11 +27,12 @@ class client_info:
         return ret
 
     def __repr__(self):
+        """Return string."""
         return str(self)
 
 
 def connect_socket(opt):
-    """First connection to the server"""
+    """First connection to the server."""
     HOST = opt.machine
     PORT = opt.port
     try:
@@ -42,7 +46,7 @@ def connect_socket(opt):
 
 
 def get_client_nb_and_world_size(server_socket, opt):
-    """First interaction with server -> Welcome then team_nb and world_size"""
+    """First interaction with server -> Welcome then team_nb and world_size."""
     new_data = server_socket.recv(1024)     # Recv Welcome message
     # print('Received ->', repr(new_data))    # print welcome message
     TEAM_NAME = opt.name

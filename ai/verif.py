@@ -1,11 +1,11 @@
-"""Verification file"""
+"""Verification file."""
 
 import os
 import sys
 
 
 def display_help():
-    """Print usage"""
+    """Print usage."""
     print("USAGE: ./zappy_ai -p port -n name -h machine\n"
           "   port    is the port number\n"
           "   name    is the name of the team\n"
@@ -13,7 +13,7 @@ def display_help():
 
 
 def basic_verif():
-    """Verif number of args"""
+    """Verif number of args."""
     if (len(sys.argv) == 2
             and (sys.argv[1] == "-h" or sys.argv[1] == "--help")):
         display_help()
@@ -24,7 +24,7 @@ def basic_verif():
 
 
 def verif_args_values(opt):
-    """Verif if options correspond to good types"""
+    """Verif if options correspond to good types."""
     try:
         opt.port = int(opt.port)
     except ValueError:

@@ -1,4 +1,4 @@
-"""Get options and return it in structure"""
+"""Get options and return it in structure."""
 
 import sys
 import verif
@@ -6,13 +6,16 @@ import getopt
 
 
 class Options:
-    """Structure to stock options"""
+    """Structure to stock options."""
+
     def __init__(self, port, name, machine):
+        """Init port, name, machine."""
         self.port = port
         self.name = name
         self.machine = machine
 
     def __str__(self):
+        """Put them in an str."""
         ret = "Options -> <port: {} name: {} machine: {}>".format(
             self.port,
             self.name,
@@ -21,11 +24,12 @@ class Options:
         return ret
 
     def __repr__(self):
+        """Return str."""
         return str(self)
 
 
 def fill_my_args(optlist):
-    """Put options in structur and return it"""
+    """Put options in structur and return it."""
     occ = 0
     for x in optlist:
         for y in optlist:
@@ -47,7 +51,7 @@ def fill_my_args(optlist):
 
 
 def get_arguments():
-    """Parse options and fill structur with them, then return it"""
+    """Parse options and fill structur with them, then return it."""
     args = sys.argv
     args.pop(0)
     try:
