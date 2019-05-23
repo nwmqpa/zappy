@@ -4,6 +4,7 @@ import sys
 import verif
 import getopt
 
+
 class Options:
     """Structure to stock options"""
     def __init__(self, port, name, machine):
@@ -21,6 +22,7 @@ class Options:
 
     def __repr__(self):
         return str(self)
+
 
 def fill_my_args(optlist):
     """Put options in structur and return it"""
@@ -42,6 +44,7 @@ def fill_my_args(optlist):
             _machine = x[1]
     args = Options(_port, _name, _machine)
     return (args)
+
 
 def get_arguments():
     """Parse options and fill structur with them, then return it"""

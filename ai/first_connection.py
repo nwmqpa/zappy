@@ -4,6 +4,7 @@ import socket
 import sys
 from clear_received_message import clean_received_message
 
+
 class client_info:
     """Structure to stock options"""
     def __init__(self, team_name, team_nb, x, y):
@@ -13,7 +14,8 @@ class client_info:
         self.map_height = y
 
     def __str__(self):
-        ret = "client_info -> <team_name: {} team_nb: {} map_width: {} map_heigth: {}>".format(
+        ret = "client_info -> <team_name: {} team_nb: {} "
+        "map_width: {} map_heigth: {}>".format(
             self.team_name,
             self.team_nb,
             self.map_width,
@@ -24,6 +26,7 @@ class client_info:
     def __repr__(self):
         return str(self)
 
+
 def connect_socket(opt):
     """First connection to the server"""
     HOST = opt.machine
@@ -32,10 +35,11 @@ def connect_socket(opt):
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.connect((HOST, PORT))
         # print('Connection to server success')
-    except:
+    except ValueError:  # Check if it's ValueError
         print('Connection to server failed')
         sys.exit(84)
     return (server_socket)
+
 
 def get_client_nb_and_world_size(server_socket, opt):
     """First interaction with server -> Welcome then team_nb and world_size"""
@@ -44,12 +48,13 @@ def get_client_nb_and_world_size(server_socket, opt):
     TEAM_NAME = opt.name
     try:
         server_socket.send((TEAM_NAME + "\n").encode())
-    except:
+    except ValueError:  # Check if it's ValueError
         print("Can't send data to server")
         sys.exit(84)
-    new_data = server_socket.recv(1024)     # recv -> b'client_nb\nworld_x wolrd_y\n'
-    # print('Received ->', repr(new_data))    # print client_nb and world_size
-    new_data = str (repr(new_data))
+    new_data = server_socket.recv(1024)
+    # recv -> b'client_nb\nworld_x wolrd_y\n'
+    # print('Received ->', repr(new_data))
+    new_data = str(repr(new_data))
     new_data = clean_received_message(new_data)
     parsed_line = new_data.split()
     team_nb = parsed_line[0]
