@@ -5,7 +5,7 @@ class inventory:
     """Structure to stock Inventory."""
 
     def __init__(self, food, linemate,
-                 deraumere, siur, mendiane, phiras, thystame):
+                 deraumere, siur, mendiane, phiras, thystame)->None:
         """Init stones."""
         self.food = food
         self.linemate = linemate
@@ -15,7 +15,7 @@ class inventory:
         self.phiras = phiras
         self.thystame = thystame
 
-    def __str__(self):
+    def __str__(self)->str:
         """Fill str."""
         ret = "inventory -> food: {} linemate: {} deraumere: {}"
         "siur: {} mendiane: {} phiras: {} thystame: {}>".format(

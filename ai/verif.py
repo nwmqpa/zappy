@@ -4,7 +4,7 @@ import os
 import sys
 
 
-def display_help():
+def display_help() -> None:
     """Print usage."""
     print("USAGE: ./zappy_ai -p port -n name -h machine\n"
           "   port    is the port number\n"
@@ -12,7 +12,7 @@ def display_help():
           "   machine is the name of the machine; localhost by default")
 
 
-def basic_verif():
+def basic_verif()->None:
     """Verif number of args."""
     if (len(sys.argv) == 2
             and (sys.argv[1] == "-h" or sys.argv[1] == "--help")):
@@ -23,7 +23,7 @@ def basic_verif():
         sys.exit(84)
 
 
-def verif_args_values(opt):
+def verif_args_values(opt) -> None:
     """Verif if options correspond to good types."""
     try:
         opt.port = int(opt.port)
