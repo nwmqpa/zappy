@@ -3,7 +3,7 @@
 import socket
 import sys
 from ai.clear_received_message import clean_received_message
-import get_args
+import ai.get_args
 
 
 class client_info:
@@ -32,7 +32,7 @@ class client_info:
         return str(self)
 
 
-def connect_socket(opt: get_args.Options) -> socket.socket:
+def connect_socket(opt: ai.get_args.Options) -> socket.socket:
     """First connection to the server."""
     HOST = opt.machine
     PORT = opt.port
@@ -47,7 +47,7 @@ def connect_socket(opt: get_args.Options) -> socket.socket:
 
 
 def get_client_nb_and_world_size(
-        server_socket: socket.socket, opt: get_args.Options) -> client_info:
+        server_socket: socket.socket, opt: ai.get_args.Options) -> client_info:
     """First interaction with server -> Welcome then team_nb and world_size."""
     new_data = server_socket.recv(1024)     # Recv Welcome message
     # print('Received ->', repr(new_data))    # print welcome message

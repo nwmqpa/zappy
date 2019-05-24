@@ -37,7 +37,7 @@ def fill_my_args(optlist: typing.List[typing.Tuple[str, str]]) -> Options:
             if x[0] == y[0]:
                 occ = occ + 1
             if occ > 1:
-                verif.display_help()
+                ai.verif.display_help()
                 sys.exit(0)
         occ = 0
     for x in optlist:
@@ -60,6 +60,6 @@ def get_arguments() -> Options:
     try:
         optlist, args = getopt.getopt(args, 'p:n:h:')
     except getopt.GetoptError:
-        verif.display_help()
+        ai.verif.display_help()
         sys.exit(0)
     return fill_my_args(optlist)

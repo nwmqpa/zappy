@@ -1,3 +1,5 @@
+"""Base module for zappy_ai."""
+
 import ai.main
 import sys
 

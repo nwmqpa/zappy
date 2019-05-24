@@ -2,7 +2,7 @@
 
 import os
 import sys
-import get_args
+import ai.get_args
 
 
 def display_help() -> None:
@@ -24,7 +24,7 @@ def basic_verif() -> None:
         sys.exit(84)
 
 
-def verif_args_values(opt: get_args.Options) -> None:
+def verif_args_values(opt: ai.get_args.Options) -> None:
     """Verif if options correspond to good types."""
     if (opt.port > 65535 or opt.port <= 1023):
         display_help()
