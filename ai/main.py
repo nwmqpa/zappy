@@ -58,6 +58,7 @@ def get_connection_nb(server_socket: socket.socket) -> int:
 
 
 def all_commands(server_socket):
+    """All_command to send to server."""
     print("IN TEST\n")
 
     look_around(server_socket)

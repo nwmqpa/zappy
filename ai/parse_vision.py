@@ -1,9 +1,13 @@
-"""Parse the Look command -> return Array of Object with present things."""
+"""Parse the Look command return Array of Object with present things."""
 
 
 class vision:
     """Structure to stock Inventory"""
-    def __init__(self, tile_nb, food, linemate, deraumere, siur, mendiane, phiras, thystame):
+
+    def __init__(
+        self, tile_nb, food, linemate,
+        deraumere, siur, mendiane, phiras, thystame
+         ):
         """__init__."""
         self.tile_nb = tile_nb
         self.food = food
@@ -16,7 +20,10 @@ class vision:
 
     def __str__(self):
         """__str__."""
-        ret = "Vision -> tile_nb: {} food: {} linemate: {} deraumere: {} siur: {} mendiane: {} phiras: {} thystame: {}>".format(
+        ret = (
+            "Vision -> tile_nb: {} food: {} linemate: {} deraumere: {} " +
+            "siur: {} mendiane: {} phiras: {} thystame: {}>"
+            ).format(
             self.tile_nb,
             self.food,
             self.linemate,
@@ -32,6 +39,7 @@ class vision:
         """__repr__."""
         return str(self)
 
+
 def parse_vision(line):
     """Look arround in return array with present object"""
     print("In parse Vison\n")
@@ -41,7 +49,6 @@ def parse_vision(line):
     # print("line -> ", line)
     array = str(line).split(",")
     # print("sss -> ", array)
-
     tile = 0
     food = linemate = deraumere = siur = mendiane = phiras = thystame = 0
     for x in array:
@@ -64,6 +71,10 @@ def parse_vision(line):
             elif (str(i) == "thystame"):
                 thystame = thystame + 1
         tile = tile + 1
-        environnement.append(vision(tile, food, linemate, deraumere, siur, mendiane, phiras, thystame))
-    for x in environnement: # print current vision
+        environnement.append(
+            vision(
+                tile, food, linemate, deraumere,
+                siur, mendiane, phiras, thystame))
+
+    for x in environnement:
         print(x)
