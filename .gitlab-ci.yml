@@ -1,7 +1,4 @@
-image: epitechcontent/epitest-docker
-
-before_script:
-  - pip3 install pycodestyle pydocstyle mypy pytest
+image: nwmqpa/zappy-ci
 
 stages:
     - build
@@ -45,6 +42,13 @@ check_types_ai:
     stage: check
     script:
         - mypy --python-version 3.6 --strict ai/
+
+check_coding_server:
+    stage: check
+    allow_failure: true
+    script:
+        - cd server/sources && NormEZ -i
+        - cd ../includes && NormEZ -i
 
 test_graphic_client:
     stage: test
