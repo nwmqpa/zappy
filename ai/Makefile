@@ -4,9 +4,9 @@
 ## 2019
 ##
 
-ROOT	=	.
+ROOT		=	.
 
-NAME	=	zappy_ai
+NAME		=	zappy_ai
 
 V		=	@
 
@@ -14,28 +14,28 @@ V		=	@
 
 RED		=	\e[31;1m
 
-BLUE	=	\e[32;1m
+BLUE		=	\e[32;1m
 
-GREEN	=	\e[33;1m
+GREEN		=	\e[33;1m
 
-WHITE	=	\e[0m
+WHITE		=	\e[0m
 
-all: $(NAME)
+all: 		$(NAME)
 
 $(NAME):
-		@printf "$(GREEN)[Building project]\n$(WHITE)"
-		@echo "#!/usr/bin/env python3" > $(NAME)
-		@cat main_ai >> $(NAME)
-		@chmod +x $(NAME)
-		@printf "$(BLUE)[Project build]\n$(WHITE)"
+		$(V)printf "$(GREEN)[Building project]\n$(WHITE)"
+		$(V)echo "#!/usr/bin/env python3" > $(NAME)
+		$(V)cat main.py >> $(NAME)
+		$(V)chmod +x $(NAME)
+		$(V)printf "$(BLUE)[Project build]\n$(WHITE)"
 
 clean:
-		@printf "$(RED)[Cleaning binary]\n$(WHITE)"
+		$(V)printf "$(RED)[Cleaning binary]\n$(WHITE)"
 		$(V)rm -rf $(NAME)
 		$(V)rm -rf __pycache__/
 
-fclean: clean
-		@printf "$(RED)[Cleaning repository]\n$(WHITE)"
+fclean: 	clean
+		$(V)printf "$(RED)[Cleaning repository]\n$(WHITE)"
 		$(V)rm -rf $(NAME)
 
-re: fclean all
+re: 		fclean all

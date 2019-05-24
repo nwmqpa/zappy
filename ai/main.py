@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from verif import basic_verif
 from verif import verif_args_values
 from get_args import get_arguments
