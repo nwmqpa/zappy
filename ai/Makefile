@@ -8,34 +8,35 @@ ROOT		=	.
 
 NAME		=	zappy_ai
 
+SOURCE		=	main.py
+
+SHEBANG		=	/usr/bin/env python3
+
 V		=	@
 
 #----------------COLORS------------------#
 
-RED		=	\e[31;1m
-
-BLUE		=	\e[32;1m
-
-GREEN		=	\e[33;1m
-
-WHITE		=	\e[0m
+RED		=	\e[1;91m
+GREEN		=	\e[1;92m
+BLUE		=	\e[1;94m
+WHITE		=	\e[1;97m
+DEFAULT		=	\e[0m
 
 all: 		$(NAME)
 
 $(NAME):
-		$(V)printf "$(GREEN)[Building project]\n$(WHITE)"
-		$(V)echo "#!/usr/bin/env python3" > $(NAME)
-		$(V)cat main.py >> $(NAME)
+		$(V)printf "$(WHITE)Adding $(GREEN)shebang$(WHITE) to $(RED)$(SOURCE)$(DEFAULT)\n"
+		$(V)echo "#!$(SHEBANG)" > $(NAME)
+		$(V)cat $(SOURCE) >> $(NAME)
 		$(V)chmod +x $(NAME)
-		$(V)printf "$(BLUE)[Project build]\n$(WHITE)"
 
 clean:
-		$(V)printf "$(RED)[Cleaning binary]\n$(WHITE)"
-		$(V)rm -rf $(NAME)
+		$(V)printf "$(WHITE)Cleaning $(BLUE)objects $(WHITE)files$(DEFAULT)\n"
 		$(V)rm -rf __pycache__/
+		$(V)find -type f -name *.pyc -delete
 
 fclean: 	clean
-		$(V)printf "$(RED)[Cleaning repository]\n$(WHITE)"
+		$(V)printf "$(WHITE)Cleaning $(GREEN)binary $(WHITE)files$(DEFAULT)\n"
 		$(V)rm -rf $(NAME)
 
 re: 		fclean all
