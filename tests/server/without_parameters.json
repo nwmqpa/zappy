@@ -1,0 +1,11 @@
+[
+  {
+    "name": "without_parameters",
+    "run": "./zappy_server",
+    "stderr": {
+      "is_file": true,
+      "value": "tests/server/without_parameters"
+    },
+    "error_code": 84
+  }
+]
