@@ -1,7 +1,7 @@
-"""Parse and manage inventory."""
+"""Parse and manage Inventory."""
 
 
-class inventory:
+class Inventory:
     """Structure to stock Inventory."""
 
     def __init__(self, food: str, linemate: str,

@@ -42,6 +42,7 @@ def parse_vision(line):
     array = str(line).split(",")
     # print("sss -> ", array)
 
+    tile = 0
     food = linemate = deraumere = siur = mendiane = phiras = thystame = 0
     for x in array:
         splited = x.split(" ")
