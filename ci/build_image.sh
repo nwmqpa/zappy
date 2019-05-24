@@ -1,4 +1,4 @@
 #!/bin/bash
 
-docker build . --tag nwmqpa/zappy-ci
-docker push nwmqpa/zappy-cli
+docker build . --tag nwmqpa/zappy-ci:latest
+docker push nwmqpa/zappy-ci:latest
