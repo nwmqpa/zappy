@@ -9,6 +9,7 @@
 
 #include <stdlib.h>
 #include "generic_list.h"
+#include "server.h"
 
 /*
 ** Define directions that can have a player.
@@ -71,6 +72,7 @@ size_t len_command(client_t *client);
 
 void print_client(const client_t *client);
 void print_client_list(const void *data);
+void move_client(client_t *client, int x, int y, pos_t size);
 
 /*
 ** Client commands.
@@ -81,16 +83,16 @@ void print_client_list(const void *data);
 **  response:   ok
 **  time limit: 7/f
 */
-char *forward(client_t *client);
-char *left(client_t *client);
-char *right(client_t *client);
+char *forward(client_t *client, server_t *server);
+char *left(client_t *client, server_t *server);
+char *right(client_t *client, server_t *server);
 
 /*
 ** Look command
 **  response:   [player, tile1-content, tile2-content, ...]
 **  time limit: 7/f
 */
-char *look(client_t *client);
+char *look(client_t *client, server_t *server);
 
 /*
 ** Inventory command
@@ -98,14 +100,14 @@ char *look(client_t *client);
 **      -> where `X` `Y` `Z` number possesed by the player.
 **  time limit: 1/f
 */
-char *inventory(client_t *client);
+char *inventory(client_t *client, server_t *server);
 
 /*
 ** Broadcast [text] command
 **  response:   ok
 **  time limit: 7/f
 */
-char *broadcast(client_t *client, const char *text);
+char *broadcast(client_t *client, server_t *server, const char *text);
 
 /*
 ** Fork command
@@ -126,8 +128,8 @@ char *eject();
 **  response:   ok/ko
 **  time limit: 7/f
 */
-char *take(client_t *client);
-char *set(client_t *client);
+char *take(client_t *client, server_t *server);
+char *set(client_t *client, server_t *server);
 
 /*
 ** Incantation command
@@ -135,4 +137,4 @@ char *set(client_t *client);
 **      -> where X is the client->level
 **  time limit: 300/f
 */
-char *incante(client_t *client);
+char *incante(client_t *client, server_t *server);
