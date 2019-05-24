@@ -1,0 +1,11 @@
+[
+  {
+    "name": "without_parameters",
+    "run": "./zappy_ai",
+    "stderr": {
+      "is_file": true,
+      "value": "tests/ai/without_parameters"
+    },
+    "error_code": 84
+  }
+]
