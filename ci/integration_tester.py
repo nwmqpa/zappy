@@ -113,7 +113,6 @@ class Application(object):
                 for file_path in os.scandir(sys.argv[1]):
                     if ".json" not in file_path.path:
                         continue
-                    print(file_path.path)
                     with open(file_path.path, "r") as file:
                         tests = json.loads(file.read())
                         for test in tests:
