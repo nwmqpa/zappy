@@ -14,7 +14,7 @@ map_t *create_map(unsigned int width, unsigned int height)
 
     new->width = width;
     new->height = height;
-    new->tiles = malloc(sizeof(tile_t) * total);
+    new->tiles = calloc(sizeof(tile_t), total);
     for (unsigned int i = 0; i < total; ++i)
          set_tile(&new->tiles[i]);
     return new;

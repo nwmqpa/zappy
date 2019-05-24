@@ -33,7 +33,8 @@ SOURCES		=	main.c \
 
 TEST_SOURCES	=	client_command.c \
 					generic_list.c \
-					arg_parser.c
+					arg_parser.c \
+					map.c
 
 PREFIXED_SRCS 	=	$(addprefix $(SRC_DIR)/, $(SOURCES))
 PREFIXED_TEST 	=	$(addprefix $(TEST_DIR)/, $(TEST_SOURCES))
