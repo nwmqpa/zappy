@@ -31,7 +31,7 @@ def print_diff(stdout, stderr, code, test) -> bool:
                 to_get.upper(),
                 output
             ))
-        has_pass = False
+            has_pass = False
     if "error_code" in test:
         if code != test["error_code"]:
             print("\033[1;97mExpected code: \033[1;92m{}\033[1;97m but got \033[1;91m{}\033[0m".format(
@@ -120,7 +120,7 @@ class Application(object):
         except IndexError:
             raise Exception("No second argument.")
 
-    def execute_tests(self) -> None:
+    def execute_tests(self) -> bool:
         """
         Execute all tests.
 
@@ -137,9 +137,10 @@ class Application(object):
         elif passed / len(tests) < 1:
             sys.stdout.write("\033[1;96m")
         if passed / len(tests) == 1:
-            sys.stdout.write("\033[1;94m")
+            sys.stdout.write("\033[1;92m")
         sys.stdout.write("PASSED [{}/{}]".format(passed, len(tests)))
         print("\033[0m")
+        return passed / len(tests) == 1
 
 
     def run(self) -> None:
@@ -152,10 +153,10 @@ class Application(object):
             self.parse_args()
         except Exception as e:
             self.exit_on_error(str(e), 1)
-        self.execute_tests()
+        return 0 if self.execute_tests() == 1 else 1
 
 
 if __name__ == "__main__":
     app = Application()
-    app.run()
+    sys.exit(app.run())
 
