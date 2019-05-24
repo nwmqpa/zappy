@@ -1,4 +1,4 @@
-image: nwmqpa/zappy-ci
+image: nwmqpa/zappy-ci:latest
 
 stages:
     - build
@@ -60,12 +60,12 @@ unit_test_graphic_client:
 integration_test_server:
     stage: integration_test
     script:
-        - python ci/integration_tester.py tests/server
+        - integration_tester tests/server
 
 integration_test_ai:
     stage: integration_test
     script:
-        - python ci/integration_tester.py tests/ai
+        - integration_tester tests/ai
 
 full_deploy:
     stage: deploy
