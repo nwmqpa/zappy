@@ -22,7 +22,6 @@ int main(int argc, char *argv[])
         return 84;
     }
     server = create_server(options);
-    print_opt(options);
     free(options);
     if (server) {
         return zappy_server(server);
