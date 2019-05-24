@@ -13,6 +13,10 @@
 #ifndef TEST
 int main(int argc, char *argv[])
 {
+    if (argc == 1) {
+        dprintf(2, "zappy_server: Too few arguments.\n");
+        exit(84);
+    }
     options_t *options = create_opt(argc, argv);
     server_t *server = NULL;
 

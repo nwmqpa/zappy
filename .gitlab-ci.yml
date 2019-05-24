@@ -1,8 +1,9 @@
-image: nwmqpa/zappy-ci
+image: nwmqpa/zappy-ci:latest
 
 stages:
     - build
-    - test
+    - unit_test
+    - integration_test
     - check
     - deploy
 
@@ -17,14 +18,14 @@ build_graphic_client:
     script:
         - make -C graphic_client/
         
-test_server:
-    stage: test
+unit_test_server:
+    stage: unit_test
     script:
         - make -C server/ test
         - ./server/test
     
-test_ai:
-    stage: test
+unit_test_ai:
+    stage: unit_test
     script:
         - pytest ai/
 
@@ -50,12 +51,24 @@ check_coding_server:
         - cd server/sources && NormEZ -i
         - cd ../includes && NormEZ -i
 
-test_graphic_client:
-    stage: test
+unit_test_graphic_client:
+    stage: unit_test
     script:
         - make -C graphic_client/ test
         - ./graphic_client/test
-        
+
+integration_test_server:
+    stage: integration_test
+    script:
+        - make
+        - integration_tester tests/server
+
+integration_test_ai:
+    stage: integration_test
+    script:
+        - make
+        - integration_tester tests/ai
+
 full_deploy:
     stage: deploy
     only:
