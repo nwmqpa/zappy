@@ -1,10 +1,10 @@
-from verif import basic_verif
-from verif import verif_args_values
-from get_args import get_arguments
-from first_connection import connect_socket
-from first_connection import get_client_nb_and_world_size
-from clear_received_message import clean_received_message
-from parse_inventory import parse_inventory
+from ai.verif import basic_verif
+from ai.verif import verif_args_values
+from ai.get_args import get_arguments
+from ai.first_connection import connect_socket
+from ai.first_connection import get_client_nb_and_world_size
+from ai.clear_received_message import clean_received_message
+from ai.parse_inventory import parse_inventory
 import socket
 import sys
 

@@ -8,7 +8,7 @@ ROOT		=	.
 
 NAME		=	zappy_ai
 
-SOURCE		=	main.py
+SOURCE		=	package.py
 
 SHEBANG		=	/usr/bin/env python3
 
