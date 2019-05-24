@@ -1,9 +1,8 @@
 """Get options and return it in structure."""
 
 import sys
-import verif
 import getopt
-
+import ai.verif
 
 class Options:
     """Structure to stock options."""

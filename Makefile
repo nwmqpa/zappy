@@ -28,7 +28,7 @@ $(SERVER):		$(SERVER_DIR)/$(SERVER)
 			
 $(AI):			$(AI_DIR)/$(AI)
 			$(V)printf "$(WHITE)Copying $(GREEN)$(AI)$(WHITE) from $(BLUE)$(AI_DIR)$(WHITE) folder$(DEFAULT)\n"
-			$(V)cp $(AI_DIR)/$(AI) $(SERVER)
+			$(V)cp $(AI_DIR)/$(AI) $(AI)
 
 $(SERVER_DIR)/$(SERVER):
 			$(V)printf "$(WHITE)Making $(GREEN)$(SERVER)$(DEFAULT)\n"

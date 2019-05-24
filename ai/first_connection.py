@@ -2,7 +2,7 @@
 
 import socket
 import sys
-from clear_received_message import clean_received_message
+from ai.clear_received_message import clean_received_message
 
 
 class client_info:
