@@ -20,6 +20,8 @@ server_t *create_server(options_t *options)
     server->listener_client = create_client_listener(options);
     server->listener_graphic = create_graphic_listener(options);
     server->clients = create_list();
+    server->width = options->width;
+    server->height = options->height;
     if (server->listener_client == -1 || server->listener_client == -1) {
         free(server);
         return NULL;
