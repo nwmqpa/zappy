@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Entrypoint for the integration tester application."""
 import sys
 import os
