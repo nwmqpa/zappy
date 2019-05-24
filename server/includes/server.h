@@ -18,6 +18,8 @@
 typedef struct server_s {
     int listener_client;
     int listener_graphic;
+    unsigned int width;
+    unsigned int height;
     char **teams;
     list_t *clients;
 } server_t;
