@@ -24,9 +24,8 @@ void add_player(tile_t *tile, int id)
 {
     int *new = malloc(sizeof(int) * tile->nb_player + 1);
 
-    for (unsigned int i = 0; i < tile->nb_player - 1; ++i) {
+    for (unsigned int i = 0; i < tile->nb_player; ++i)
         new[i] = tile->player_ids[i];
-    }
     new[tile->nb_player] = id;
     tile->nb_player += 1;
     free(tile->player_ids);

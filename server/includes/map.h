@@ -36,4 +36,4 @@ typedef struct map_s {
 map_t *create_map(unsigned int width, unsigned int height);
 tile_t *get_tile_map(map_t *map, unsigned int x, unsigned int y);
 int move_client_map(map_t *map, client_t *client);
-char *get_map_reponse(map_t *map);
+char *get_reponse_string(map_t *map);
