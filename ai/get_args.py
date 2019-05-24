@@ -3,17 +3,19 @@
 import sys
 import getopt
 import ai.verif
+import typing
+
 
 class Options:
     """Structure to stock options."""
 
-    def __init__(self, port, name, machine):
+    def __init__(self, port: int, name: str, machine: str):
         """Init port, name, machine."""
         self.port = port
         self.name = name
         self.machine = machine
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Put them in an str."""
         ret = "Options -> <port: {} name: {} machine: {}>".format(
             self.port,
@@ -22,12 +24,12 @@ class Options:
         )
         return ret
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Return str."""
         return str(self)
 
 
-def fill_my_args(optlist):
+def fill_my_args(optlist: typing.List[typing.Tuple[str, str]]) -> Options:
     """Put options in structur and return it."""
     occ = 0
     for x in optlist:
@@ -40,16 +42,18 @@ def fill_my_args(optlist):
         occ = 0
     for x in optlist:
         if (x[0] == "-p"):
-            _port = x[1]
+            try:
+                _port = int(x[1])
+            except ValueError:
+                raise Exception("Port should be an integer")
         if (x[0] == "-n"):
             _name = x[1]
         if (x[0] == "-h"):
             _machine = x[1]
-    args = Options(_port, _name, _machine)
-    return (args)
+    return Options(_port, _name, _machine)
 
 
-def get_arguments():
+def get_arguments() -> Options:
     """Parse options and fill structur with them, then return it."""
     args = sys.argv
     args.pop(0)
@@ -58,5 +62,4 @@ def get_arguments():
     except getopt.GetoptError:
         verif.display_help()
         sys.exit(0)
-    args = fill_my_args(optlist)
-    return (args)
+    return fill_my_args(optlist)

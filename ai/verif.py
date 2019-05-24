@@ -2,6 +2,7 @@
 
 import os
 import sys
+import get_args
 
 
 def display_help() -> None:
@@ -12,10 +13,10 @@ def display_help() -> None:
           "   machine is the name of the machine; localhost by default")
 
 
-def basic_verif()->None:
+def basic_verif() -> None:
     """Verif number of args."""
-    if (len(sys.argv) == 2
-            and (sys.argv[1] == "-h" or sys.argv[1] == "--help")):
+    if (len(sys.argv) == 2 and
+       (sys.argv[1] == "-h" or sys.argv[1] == "--help")):
         display_help()
         sys.exit(0)
     elif (len(sys.argv) != 7):
@@ -23,13 +24,8 @@ def basic_verif()->None:
         sys.exit(84)
 
 
-def verif_args_values(opt) -> None:
+def verif_args_values(opt: get_args.Options) -> None:
     """Verif if options correspond to good types."""
-    try:
-        opt.port = int(opt.port)
-    except ValueError:
-        display_help()
-        raise Exception("Port should be an integer")
     if (opt.port > 65535 or opt.port <= 1023):
         display_help()
         raise Exception("Invalid port")
