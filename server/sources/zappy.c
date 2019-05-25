@@ -8,42 +8,7 @@
 #include "zappy.h"
 #include "logger.h"
 #include "dispatcher.h"
-
-static int on_connect_graphic(int socket, void *data)
-{
-    debugl("Graphic connect handler.\n");
-    return 0;
-}
-
-static int on_delete_graphic(int socket, void *data)
-{
-    debugl("Graphic delete handler.\n");
-    return 0;
-}
-
-static int on_active_graphic(int socket, void *data)
-{
-    debugl("Graphic active handler.\n");
-    return 0;
-}
-
-static int on_connect_client(int socket, void *data)
-{
-    debugl("Client connect handler.\n");
-    return 0;
-}
-
-static int on_delete_client(int socket, void *data)
-{
-    debugl("Client delete handler.\n");
-    return 0;
-}
-
-static int on_active_client(int socket, void *data)
-{
-    debugl("Client active handler.\n");
-    return 0;
-}
+#include "handlers.h"
 
 static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
         server_t *server)
