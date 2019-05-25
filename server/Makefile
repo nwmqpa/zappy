@@ -32,7 +32,7 @@ SOURCES		=	main.c \
 				utils/logger.c \
 				client/client.c \
 				client/command.c \
-				client/forward.c
+				client/move.c
 
 TEST_SOURCES	=	client_command.c \
 					generic_list.c \
