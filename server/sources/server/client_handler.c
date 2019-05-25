@@ -5,6 +5,8 @@
 ** Client handler function callback.
 */
 
+#include "logger.h"
+
 int on_connect_client(int socket, void *data)
 {
     debugl("Client connect handler.\n");

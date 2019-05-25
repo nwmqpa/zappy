@@ -5,6 +5,8 @@
 ** Graphic function dispatched.
 */
 
+#include "logger.h"
+
 int on_connect_graphic(int socket, void *data)
 {
     debugl("Graphic connect handler.\n");
