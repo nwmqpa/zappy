@@ -87,6 +87,21 @@ void *pop_filter_list(list_t *list, filter_func function)
     return NULL;
 }
 
+void *pop_cmp_list(list_t *list, cmp_func function, void *to_cmp)
+{
+    entry_t *entry;
+
+    LIST_FOREACH(entry, &list->head, next)
+    {
+        if (function(entry->data, to_cmp)) {
+            LIST_REMOVE(entry, next);
+            list->size--;
+            return entry->data;
+        }
+    }
+    return NULL;
+}
+
 void *get_list(list_t *list, size_t idx)
 {
     entry_t *entry;

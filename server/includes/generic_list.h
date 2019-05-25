@@ -34,6 +34,7 @@ void insert_list(list_t *list, void *elem, size_t idx);
 
 void *pop_list(list_t *list, size_t idx);
 void *pop_filter_list(list_t *list, filter_func function);
+void *pop_cmp_list(list_t *list, cmp_func function, void *to_cmp);
 
 void *get_list(list_t *list, size_t idx);
 void *get_filter_list(list_t *list, filter_func function);
