@@ -39,7 +39,7 @@ void *pop_cmp_list(list_t *list, cmp_func function, void *to_cmp);
 void *get_list(list_t *list, size_t idx);
 void *get_filter_list(list_t *list, filter_func function);
 
-void *filter_list(list_t *list, filter_func function);
+void *filter_list(list_t *list, filter_func function, dtor_func dtor);
 
 void print_list(list_t *list, print_func function);
 

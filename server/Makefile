@@ -24,7 +24,11 @@ SOURCES		=	main.c \
 				server/options.c \
 				server/server.c \
 				server/server_init.c \
-				gen_list/generic_list.c \
+				gen_list/basic.c \
+				gen_list/compare.c \
+				gen_list/filter.c \
+				gen_list/insert.c \
+				gen_list/utils.c \
 				utils/logger.c \
 				client/client.c \
 				client/command.c
