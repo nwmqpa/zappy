@@ -7,6 +7,7 @@ zappy_server
 *.pyc
 __pycache__
 .vscode/*
+*/.vscode
 B-PSU-403_zappy.pdf
 zappy_serve_test*
 */test
