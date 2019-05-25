@@ -8,7 +8,7 @@
 #include "zappy.h"
 #include "logger.h"
 #include "dispatcher.h"
-#include "handler.h"
+#include "handlers.h"
 
 static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
         server_t *server)
@@ -18,22 +18,6 @@ static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
     while (42) {
         if (dispatch(graphic, graphic_data) == -1 ||
         dispatch(client, server) == -1) {
-            infol("Closing server after an error.\n");
-            return -1;
-        }
-    }
-    return 0;
-}
-
-static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
-        server_t *server)
-{
-    void *graphic_data = NULL;
-    void *client_data = NULL;
-
-    while (42) {
-        if (dispatch(graphic, graphic_data) == -1 ||
-                dispatch(client, client_data) == -1) {
             infol("Closing server after an error.\n");
             return -1;
         }
