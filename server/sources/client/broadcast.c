@@ -9,7 +9,7 @@
 
 void send_to_clients(server_t *server, const char *text, size_t local_id)
 {
-    // TODO: Send to all client.
+    // TODO: Send to all clients.
 }
 
 char *broadcast(client_t *client, server_t *server, const char *text)
