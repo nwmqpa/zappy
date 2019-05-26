@@ -54,6 +54,7 @@ typedef struct pos_s {
 ** -> level: The number of time the player have evolved.
 ** -> direction: Where the player is facing.
 ** -> position: [x, y] position defining on which tile the player is positioned.
+** -> cooldown: Time that left to before launching the new incante.
 */
 typedef struct client_s {
     size_t id;
@@ -62,6 +63,7 @@ typedef struct client_s {
     unsigned int direction;
     pos_t position;
     inventory_t inventory;
+    size_t cooldown;
 } client_t;
 
 client_t *client_create(size_t id);
