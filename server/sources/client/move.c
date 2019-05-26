@@ -15,6 +15,7 @@ char *forward(client_t *client, server_t *server)
         .y = server->height
     };
 
+    client->cooldown = 7;
     switch (client->direction) {
     case LEFT:
         move_client(client, -1, 0, size);
@@ -27,7 +28,6 @@ char *forward(client_t *client, server_t *server)
         break;
     case DOWN:
         move_client(client, 0, -1, size);
-        break;
     }
     return "ok";
 }
@@ -39,6 +39,7 @@ char *left(client_t *client, server_t *server)
         .y = server->height
     };
 
+    client->cooldown = 7;
     switch (client->direction) {
     case LEFT:
         move_client(client, 0, -1, size);
@@ -51,7 +52,6 @@ char *left(client_t *client, server_t *server)
         break;
     case DOWN:
         move_client(client, 1, 0, size);
-        break;
     }
     return "ok";
 }
@@ -63,6 +63,7 @@ char *right(client_t *client, server_t *server)
         .y = server->height
     };
 
+    client->cooldown = 7;
     switch (client->direction) {
     case LEFT:
         move_client(client, 0, 1, size);
@@ -75,7 +76,6 @@ char *right(client_t *client, server_t *server)
         break;
     case DOWN:
         move_client(client, -1, 0, size);
-        break;
     }
     return "ok";
 }
