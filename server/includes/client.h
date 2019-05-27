@@ -116,14 +116,14 @@ char *broadcast(client_t *client, server_t *server, const char *text);
 **  response:   ok
 **  time limit: 42/f
 */
-char *fork_client();
+char *fork_client(client_t *client, server_t *server);
 
 /*
 ** Eject command
 **  response:   ok/ko
 **  time limit: 7/f
 */
-char *eject();
+char *eject(client_t *client, server_t *server);
 
 /*
 ** Map interaction command
