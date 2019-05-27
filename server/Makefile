@@ -35,7 +35,10 @@ SOURCES		=	main.c \
 				client/move.c \
 				client/incantation.c \
 				client/inventory.c \
-				client/look.c
+				client/look.c \
+				client/broadcast.c \
+				client/fork.c \
+				client/eject.c
 
 TEST_SOURCES	=	client_command.c \
 					generic_list.c \
