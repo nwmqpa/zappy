@@ -43,6 +43,11 @@ int on_delete_client(int socket, void *data)
 
 int on_active_client(int socket, void *data)
 {
+    char buffer[1025];
+    size_t bytes_read = read(socket, buffer, 1024);
+
+    if (bytes_read == 0)
+        return -1;
     debugl("Client active handler.\n");
     return 0;
 }

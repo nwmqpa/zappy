@@ -24,5 +24,3 @@ int on_active_graphic(int socket, void *data)
     debugl("Graphic active handler.\n");
     return 0;
 }
-
-

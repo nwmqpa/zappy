@@ -22,8 +22,8 @@ typedef int (*disp_func)(int fd, void *data);
 *
 */
 typedef struct dispatcher_s {
-    int listener;
-    fd_set actives;
+    int epoll_fd;
+    int main_socket;
     disp_func on_active;
     disp_func on_connect;
     disp_func on_delete;

@@ -5,21 +5,38 @@
 ** dispatcher
 */
 
+#include <sys/epoll.h>
+#include <errno.h>
+#include <string.h>
 #include "dispatcher.h"
+#include "logger.h"
 
-static void cleanup_socket(fd_set *actives, int socket)
+static void cleanup_socket(dispatcher_t *this, int socket)
 {
+    struct epoll_event event = {0};
+    
+    event.events = EPOLLIN;
+    event.data.fd = socket;
+    if (epoll_ctl(this->epoll_fd, EPOLL_CTL_DEL, socket, &event))
+        errorl("Failed to remove file descriptor to epoll\n");
     close(socket);
-    FD_CLR(socket, actives);
 }
 
 static int setup_fd(dispatcher_t *this, int socket, void *data)
 {
+    struct epoll_event event = {0};
+    
+    event.events = EPOLLIN;
+    event.data.fd = socket;
     if (socket < 0) {
         return -1;
     } else {
+        if (epoll_ctl(this->epoll_fd, EPOLL_CTL_ADD, socket, &event)) {
+            errorl("Failed to add file descriptor to epoll\n");
+            close(socket);
+            return 1;
+        }
         this->on_connect(socket, data);
-        FD_SET(socket, &this->actives);
     }
     return 0;
 }
@@ -27,25 +44,18 @@ static int setup_fd(dispatcher_t *this, int socket, void *data)
 int dispatch(dispatcher_t *this, void *data)
 {
     unsigned int size = sizeof(struct sockaddr);
-    struct sockaddr_in stream_addr = {0};
-    fd_set read_fd_set = this->actives;
+    struct sockaddr_in saddr = {0};
+    struct epoll_event events[5];
+    int event_count = epoll_wait(this->epoll_fd, events, 5, 1);
 
-    FD_ZERO(&this->actives);
-    FD_SET(this->listener, &this->actives);
-    if (select(FD_SETSIZE, &read_fd_set, NULL, NULL, NULL) < 0) {
-        perror("select");
-        return -1;
-    }
-    for (int i = 0; i < FD_SETSIZE; ++i) {
-        if (!FD_ISSET(i, &read_fd_set))
-            continue;
-        (void) data;
-        if (i == this->listener)
-            setup_fd(this, accept(i, (struct sockaddr *) &stream_addr, &size),
-                    data);
-        else if (this->on_active(i, data) < 0) {
-            this->on_delete(i, data);
-            cleanup_socket(&this->actives, i);
+    for (int i = 0; i < event_count; i++) {
+        if (events[i].data.fd == this->main_socket) {
+            setup_fd(this,
+            accept(events[i].data.fd, (struct sockaddr *) &saddr, &size),
+            data);
+        } else if (this->on_active(events[i].data.fd, data) < 0) {
+            this->on_delete(events[i].data.fd, data);
+            cleanup_socket(this, events[i].data.fd);
         }
     }
     return 0;

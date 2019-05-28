@@ -16,8 +16,10 @@
 #include "generic_list.h"
 
 typedef struct server_s {
-    int listener_client;
-    int listener_graphic;
+    int epoll_fd_client;
+    int epoll_fd_graphic;
+    int socket_client;
+    int socket_graphic;
     char **teams;
     list_t *clients;
 } server_t;

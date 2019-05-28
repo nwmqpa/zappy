@@ -28,19 +28,19 @@ static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
 int zappy_server(server_t *server)
 {
     dispatcher_t graphic_disp = {
-        .actives = {{0}},
         .on_active = &on_active_graphic,
         .on_delete = &on_delete_graphic,
         .on_connect = &on_connect_graphic,
-        .listener = server->listener_graphic
+        .epoll_fd = server->epoll_fd_graphic,
+        .main_socket = server->socket_graphic
     };
     dispatcher_t client_disp = {
-        .actives = {{0}},
         .on_active = &on_active_client,
         .on_delete = &on_delete_client,
         .on_connect = &on_connect_client,
-        .listener = server->listener_client
+        .epoll_fd = server->epoll_fd_client,
+        .main_socket = server->socket_client
     };
     infol("Launching `Zappy` runtime server.\n");
-    return run_dispatch(&client_disp, &graphic_disp, server);
+    return run_dispatch(&graphic_disp, &client_disp, server);
 }
