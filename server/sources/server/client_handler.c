@@ -23,7 +23,7 @@ void handle_protocol(client_t *client, server_t *server)
     char team_name[100] = {0};
     int free_space = -1;
 
-    write(client->id, "WELCOME\n", 8);
+    dprintf(client->id, "WELCOME\n");
     read(client->id, &team_name, 100);
     free_space = add_client_to_team(server, client, team_name);
     dprintf(client->id, "%d\n", free_space);
