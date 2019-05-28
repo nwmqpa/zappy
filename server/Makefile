@@ -34,7 +34,8 @@ SOURCES		=	main.c \
 				client/command.c \
 				utils/dispatcher.c \
 				server/graphic_handler.c \
-				server/client_handler.c
+				server/client_handler.c \
+				server/teams.c
 
 TEST_SOURCES	=	client_command.c \
 					generic_list.c \
