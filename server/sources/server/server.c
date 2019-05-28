@@ -13,7 +13,7 @@
 static void add_fd(server_t *server)
 {
     struct epoll_event event = {0};
-    
+
     event.events = EPOLLIN;
     event.data.fd = server->socket_client;
     if (epoll_ctl(server->epoll_fd_client, EPOLL_CTL_ADD, server->socket_client, &event)) {
@@ -29,6 +29,22 @@ static void add_fd(server_t *server)
     }
 }
 
+static void setup_teams(server_t *server, options_t *options)
+{
+    int size = 0;
+    int i = 0;
+
+    while (options->name[size])
+        size++;
+    server->teams = malloc(sizeof(team_t *) * size + 1);
+    for (; options->name[i]; ++i) {
+        server->teams[i] = malloc(sizeof(team_t));
+        server->teams[i]->name = options->name[i];
+        server->teams[i]->clients = calloc(sizeof(int), options->client_nb);
+    }
+    server->teams[i] = 0;
+}
+
 server_t *create_server(options_t *options)
 {
     server_t *server = malloc(sizeof(server_t));
@@ -42,13 +58,14 @@ server_t *create_server(options_t *options)
     server->epoll_fd_client = epoll_create1(0);
     server->epoll_fd_graphic = epoll_create1(0);
     server->clients = create_list();
+    server->client_per_team = options->client_nb;
     if (server->socket_client == -1 || server->socket_graphic == -1 ||
         server->epoll_fd_client == -1 || server->epoll_fd_graphic == -1) {
         free(server);
         return NULL;
     }
     add_fd(server);
-    server->teams = options->name;
+    setup_teams(server, options);
     return server;
 }
 
