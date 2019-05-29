@@ -1,5 +1,5 @@
 
-NAME		=	graphic_client
+NAME		=	graphic_ui
 
 CC		=	g++
 
@@ -19,14 +19,16 @@ INCLUDE_DIR	=	$(ROOT)/includes
 
 MODULES		=
 
-SOURCES		=
+SOURCES		=		Case.cpp \
+					Map.cpp
 
-TEST_SOURCES	=	dummy.c
+TEST_SOURCES	=
+
 
 PREFIXED_SRCS 	=	$(addprefix $(SRC_DIR)/, $(SOURCES))
 PREFIXED_TEST 	=	$(addprefix $(TEST_DIR)/, $(TEST_SOURCES))
-PATSUBST_OBJS	=	$(patsubst  $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(PREFIXED_SRCS))
-PATSUBST_OBJS_TEST	=	$(patsubst  $(TEST_DIR)/%.c, $(BUILD_DIR)/%.o, $(PREFIXED_TEST))
+PATSUBST_OBJS	=	$(patsubst  $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(PREFIXED_SRCS))
+PATSUBST_OBJS_TEST	=	$(patsubst  $(TEST_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(PREFIXED_TEST))
 LIBS_MODULES 	=	$(addprefix lib, $(addsuffix .a, $(MODULES)))
 PREFIXED_MODULS	=	$(addprefix $(SRC_DIR)/, $(MODULES))
 PATSUBST_MODULS =	$(patsubst  $(SRC_DIR)/%, $(BUILD_DIR)/lib%.a, $(PREFIXED_MODULS))
@@ -48,8 +50,7 @@ CYAN		=	\e[1;96m
 
 V		=	@
 
-all:
-			$(V)printf "$(WHITE)Nothing is built right now you $(RED)fucking piece of shit.\n$(DEFAULT)"
+all:	$(ROOT)/$(NAME)
 
 test:			CFLAGS += -g -D TEST
 test:			LDFLAGS += -lcriterion
@@ -103,12 +104,12 @@ $(BUILD_DIR)/test:	$(PATSUBST_OBJS_TEST) $(PATSUBST_OBJS) $(PATSUBST_MODULS)
 			$(V)printf "$(WHITE)Linking $(BLUE)objects $(WHITE)into $(GREEN)test$(DEFAULT)\n"
 			$(V)$(LD) -o $(BUILD_DIR)/test $(PATSUBST_OBJS) $(PATSUBST_OBJS_TEST) $(LDFLAGS)
 
-$(BUILD_DIR)/%.o:	$(SRC_DIR)/%.c
+$(BUILD_DIR)/%.o:	$(SRC_DIR)/%.cpp
 			$(V)printf "$(WHITE)Compiling $(RED)$<$(WHITE) => $(BLUE)$@$(DEFAULT)\n"
 			$(V)mkdir -p $(dir $@)
 			$(V)$(CC) -o $@ -c $< $(CFLAGS)
 
-$(BUILD_DIR)/%.o:	$(TEST_DIR)/%.c
+$(BUILD_DIR)/%.o:	$(TEST_DIR)/%.cpp
 			$(V)printf "$(WHITE)Compiling $(RED)$<$(WHITE) => $(BLUE)$@$(DEFAULT)\n"
 			$(V)mkdir -p $(dir $@)
 			$(V)$(CC) -o $@ -c $< $(CFLAGS)
