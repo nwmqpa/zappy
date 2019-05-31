@@ -69,12 +69,29 @@ options_t *create_opt(int argc, char *argv[])
                 exit(84);
         }
     }
+    if (options->freq == 0)
+        options->freq = 100;
     return options;
 }
 
 int check_opt(options_t *options)
 {
-    // TODO: Check arguments validity.
+    if (options->width > 30) {
+        errorl("Tool long width.");
+        return -1;
+    }
+    if (options->height > 30) {
+        errorl("Tool long height.");
+        return -1;
+    }
+    if (options->freq <= 0) {
+        errorl("Invalid frequence.");
+        return -1;
+    }
+    if (options->client_nb < 0) {
+        errorl("Invalid client_nb.");
+        return -1;
+    }
     return 0;
 }
 

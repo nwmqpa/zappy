@@ -48,3 +48,5 @@ int is_empty_list(list_t *list);
 size_t len_list(list_t *list);
 
 void empty_list(list_t *list, dtor_func dtor);
+
+void map(list_t *list, dtor_func mapped);
