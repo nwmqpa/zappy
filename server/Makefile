@@ -31,7 +31,11 @@ SOURCES		=	main.c \
 				gen_list/utils.c \
 				utils/logger.c \
 				client/client.c \
-				client/command.c
+				client/command.c \
+				utils/dispatcher.c \
+				server/graphic_handler.c \
+				server/client_handler.c \
+				server/teams.c
 
 TEST_SOURCES	=	client_command.c \
 					generic_list.c \
@@ -48,7 +52,7 @@ LINK_MODULES	=	$(addprefix -l, $(MODULES))
 
 
 WARNINGS	=	-Wall -Wextra
-CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) -fdiagnostics-color=always -D _GNU_SOURCE
+CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) -fdiagnostics-color=always -D _GNU_SOURCE -Wno-unused-parameter
 LDFLAGS		=	-L $(BUILD_DIR) $(LINK_MODULES)
 
 DEFAULT		=	\e[0m
