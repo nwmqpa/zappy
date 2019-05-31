@@ -42,7 +42,7 @@ def send_message(server_socket: socket.socket, message: str) -> None:
 
 def get_connection_nb(server_socket: socket.socket) -> int:
     """Return nb of connected players."""
-    print('Send     ->', "Connect_nbr")     # sned message
+    print('Send     ->', "Connect_nbr")     # send message
     server_socket.send(("Connect_nbr" + "\n").encode())
     new_data = server_socket.recv(1024).decode()
     print("Recv =====>", new_data, "\n")
@@ -51,7 +51,7 @@ def get_connection_nb(server_socket: socket.socket) -> int:
 
 def move_forward(server_socket: socket.socket) -> None:
     """Move plyer Forward."""
-    print('Send     ->', "Forward")     # sned message
+    print('Send     ->', "Forward")     # send message
     server_socket.send(("Forward" + "\n").encode())
     new_data = server_socket.recv(1024).decode()
     print("Recv =====>", new_data, "\n")
@@ -59,7 +59,7 @@ def move_forward(server_socket: socket.socket) -> None:
 
 def turn_right(server_socket: socket.socket) -> None:
     """Make player turn Right."""
-    print('Send     ->', "Right")     # sned message
+    print('Send     ->', "Right")     # send message
     server_socket.send(("Right" + "\n").encode())
     new_data = server_socket.recv(1024).decode()
     print("Recv =====>", new_data, "\n")
@@ -67,7 +67,7 @@ def turn_right(server_socket: socket.socket) -> None:
 
 def turn_left(server_socket: socket.socket) -> None:
     """Make player turn Left."""
-    print('Send     ->', "Left")     # sned message
+    print('Send     ->', "Left")     # send message
     server_socket.send(("Left" + "\n").encode())
     new_data = server_socket.recv(1024).decode()
     print("Recv =====>", new_data, "\n")

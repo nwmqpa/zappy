@@ -1,6 +1,9 @@
 """Parse and manage Inventory."""
 
 
+import sys
+
+
 class Inventory:
     """Structure to stock Inventory."""
 

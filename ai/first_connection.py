@@ -3,7 +3,6 @@
 
 import socket
 import sys
-from ai.clear_received_message import clean_received_message
 import ai.get_args
 
 
@@ -57,8 +56,6 @@ def get_client_nb_and_world_size(
         print("Can't send data to server")
         sys.exit(84)
     new_data = server_socket.recv(1024)
-    new_data_str = str(repr(new_data))
-    new_data_str = clean_received_message(new_data_str)
     parsed_line = new_data.split()
     team_nb = parsed_line[0].decode()
     world_x = parsed_line[1].decode()
