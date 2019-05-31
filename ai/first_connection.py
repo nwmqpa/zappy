@@ -1,5 +1,6 @@
 """First connection to server, get basic info (team name, map width/height)."""
 
+
 import socket
 import sys
 from ai.clear_received_message import clean_received_message
@@ -39,8 +40,7 @@ def connect_socket(opt: ai.get_args.Options) -> socket.socket:
     try:
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.connect((HOST, PORT))
-        # print('Connection to server success')
-    except ValueError:  # Check if it's ValueError
+    except ValueError:
         print('Connection to server failed')
         sys.exit(84)
     return (server_socket)
@@ -49,17 +49,14 @@ def connect_socket(opt: ai.get_args.Options) -> socket.socket:
 def get_client_nb_and_world_size(
         server_socket: socket.socket, opt: ai.get_args.Options) -> client_info:
     """First interaction with server -> Welcome then team_nb and world_size."""
-    new_data = server_socket.recv(1024)     # Recv Welcome message
-    # print('Received ->', repr(new_data))    # print welcome message
+    new_data = server_socket.recv(1024)
     TEAM_NAME = opt.name
     try:
         server_socket.send((TEAM_NAME + "\n").encode())
-    except ValueError:  # Check if it's ValueError
+    except ValueError:
         print("Can't send data to server")
         sys.exit(84)
     new_data = server_socket.recv(1024)
-    # recv -> b'client_nb\nworld_x wolrd_y\n'
-    # print('Received ->', repr(new_data))
     new_data_str = str(repr(new_data))
     new_data_str = clean_received_message(new_data_str)
     parsed_line = new_data.split()
