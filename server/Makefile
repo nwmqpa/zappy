@@ -35,7 +35,7 @@ SOURCES		=	main.c \
 				utils/dispatcher.c \
 				server/graphic_handler.c \
 				server/client_handler.c \
-				server/teams.c
+				server/teams.c \
 				map/map.c \
 				map/tile.c
 
