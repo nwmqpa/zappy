@@ -7,9 +7,13 @@
 
 #include "client_commands.h"
 
-void send_to_clients(server_t *server, const char *text, size_t local_id)
+static void send_to_clients(server_t *server, const char *text, size_t local_id)
 {
-    // TODO: Send to all clients.
+    int tile = 0;
+    int y = 4;
+
+    map(server->clients);
+    dprintf(local_id, "message %d, %s\n", tile, text);
 }
 
 char *broadcast(client_t *client, server_t *server, const char *text)
