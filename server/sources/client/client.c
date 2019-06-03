@@ -28,13 +28,13 @@ client_t *client_create(size_t id)
 
     new->commands = create_list();
     new->id = id;
-    new->inventory.food = 10;
+    new->inventory.inv.food = 10;
     return new;
 }
 
 void print_client(const client_t *client)
 {
-    debugl("Client {"
+    printf("Client {"
             "   id: %ld\n"
             "}\n"
             , client->id);
