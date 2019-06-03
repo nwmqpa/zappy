@@ -15,6 +15,7 @@
 #include "client.h"
 #include "options.h"
 #include "generic_list.h"
+#include "map.h"
 
 typedef struct team_s {
     char *name;
@@ -31,6 +32,7 @@ typedef struct server_s {
     team_t **teams;
     list_t *clients;
     int client_per_team;
+    map_t *map;
 } server_t;
 
 // Create server and initiliaze it from options.
