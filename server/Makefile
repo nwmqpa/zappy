@@ -39,6 +39,7 @@ SOURCES		=	main.c \
 				client/broadcast.c \
 				client/fork.c \
 				client/eject.c \
+				client/object.c \
 				utils/dispatcher.c \
 				server/graphic_handler.c \
 				server/client_handler.c \
