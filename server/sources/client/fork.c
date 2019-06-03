@@ -5,7 +5,7 @@
 ** Fork command file.
 */
 
-#include "client.h"
+#include "client_commands.h"
 
 // TODO: Adding fork.
 char *fork_client(client_t *client, server_t *server)

@@ -5,7 +5,7 @@
 ** Incantation command.
 */
 
-#include "client.h"
+#include "client_commands.h"
 
 //TODO: Complete incantation command.
 static int is_incant_possible(client_t *client, server_t *server)

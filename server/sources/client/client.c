@@ -6,7 +6,7 @@
 */
 
 #include "logger.h"
-#include "client.h"
+#include "client_commands.h"
 
 void move_client(client_t *client, int x, int y, pos_t size)
 {

@@ -5,8 +5,7 @@
 ** Forward command.
 */
 
-#include "client.h"
-#include "server.h"
+#include "client_commands.h"
 
 char *forward(client_t *client, server_t *server)
 {

@@ -38,11 +38,18 @@ SOURCES		=	main.c \
 				client/look.c \
 				client/broadcast.c \
 				client/fork.c \
-				client/eject.c
+				client/eject.c \
+				utils/dispatcher.c \
+				server/graphic_handler.c \
+				server/client_handler.c \
+				server/teams.c \
+				map/map.c \
+				map/tile.c
 
 TEST_SOURCES	=	client_command.c \
 					generic_list.c \
-					arg_parser.c
+					arg_parser.c \
+					map.c
 
 PREFIXED_SRCS 	=	$(addprefix $(SRC_DIR)/, $(SOURCES))
 PREFIXED_TEST 	=	$(addprefix $(TEST_DIR)/, $(TEST_SOURCES))
@@ -55,7 +62,7 @@ LINK_MODULES	=	$(addprefix -l, $(MODULES))
 
 
 WARNINGS	=	-Wall -Wextra
-CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) -fdiagnostics-color=always -D _GNU_SOURCE
+CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) -fdiagnostics-color=always -D _GNU_SOURCE -Wno-unused-parameter
 LDFLAGS		=	-L $(BUILD_DIR) $(LINK_MODULES)
 
 DEFAULT		=	\e[0m

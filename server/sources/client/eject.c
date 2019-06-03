@@ -5,7 +5,7 @@
 ** Ejection command file.
 */
 
-#include "client.h"
+#include "client_commands.h"
 
 // TODO: Implement.
 char *eject(client_t *client, server_t *server)

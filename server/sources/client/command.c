@@ -6,7 +6,7 @@
 */
 
 #include "logger.h"
-#include "client.h"
+#include "client_commands.h"
 
 void add_command(client_t *client, char *command)
 {

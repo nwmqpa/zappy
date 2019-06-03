@@ -5,7 +5,7 @@
 ** Broadcast command file.
 */
 
-#include "client.h"
+#include "client_commands.h"
 
 void send_to_clients(server_t *server, const char *text, size_t local_id)
 {

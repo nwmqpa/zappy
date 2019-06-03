@@ -5,7 +5,7 @@
 ** Look around command file.
 */
 
-#include "client.h"
+#include "client_commands.h"
 
 char *get_vision_content(server_t *server, unsigned int level,
         unsigned int direction, pos_t position)

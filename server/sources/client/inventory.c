@@ -5,7 +5,7 @@
 ** Inventory command file.
 */
 
-#include "client.h"
+#include "client_commands.h"
 
 char *inventory(client_t *client, server_t *server)
 {
