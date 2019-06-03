@@ -28,14 +28,14 @@ void print_int(const void *data)
     cr_log_info("%d\n", *value);
 }
 
-void times_10(void *data, void *nothing)
+void times_10(void *data, const void *nothing)
 {
     int *value = ((int *) data);
 
     *value *= 10;
 }
 
-void times_x(void *data, void *x)
+void times_x(void *data, const void *x)
 {
     int *times = ((int *) x);
     int *value = ((int *) data);
