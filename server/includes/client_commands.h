@@ -10,12 +10,20 @@
 #include "server.h"
 #include "client.h"
 
-typedef char * (*cmd_func) (client_t *client, server_t *server);
+typedef char * (*cmd_func) (client_t *, server_t *);
+typedef char * (*cmd_param_func) (client_t *, server_t *, const char *);
 
 typedef struct command_s {
     char *name;
     cmd_func function;
+    int len;
 } command_t;
+
+typedef struct command_param_s {
+    char *name;
+    cmd_param_func function;
+    int len;
+} command_param_t;
 
 /*
 ** Moving command
@@ -67,8 +75,8 @@ char *eject(client_t *client, server_t *server);
 **  response:   ok/ko
 **  time limit: 7/f
 */
-char *take(client_t *client, server_t *server);
-char *set(client_t *client, server_t *server);
+char *take(client_t *client, server_t *server, const char *object);
+char *set(client_t *client, server_t *server, const char *object);
 
 /*
 ** Incantation command
@@ -77,10 +85,3 @@ char *set(client_t *client, server_t *server);
 **  time limit: 300/f
 */
 char *incante(client_t *client, server_t *server);
-
-/*
-** Launch the right command.
-**
-*/
-char *handle_client_command(client_t *client, server_t *server,
-        const char *command);
