@@ -68,7 +68,7 @@ int on_active_client(int socket, void *data)
         errorl("Client with socket: %d not found.\n", socket);
         return -1;
     }
-    handle_client_command(client, server, buffer);
+    add_command(client, strdup(buffer));
     debugl("Client active handler.\n");
     return 0;
 }
