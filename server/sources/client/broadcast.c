@@ -10,7 +10,6 @@
 // TODO: Calculate the tile.
 static void send_text(void *ptr, const void *data)
 {
-    const server_t *server = (server_t *) data;
     const char *text = (char *) data + 1;
     client_t *client = (client_t *) ptr;
     int tile = 1;
@@ -20,7 +19,6 @@ static void send_text(void *ptr, const void *data)
 
 static void send_to_clients(server_t *server, const char *text, size_t local_id)
 {
-    int tile = 0;
     const void *data[2] = {0};
 
     data[0] = server;
