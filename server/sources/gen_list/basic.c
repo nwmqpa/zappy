@@ -49,12 +49,12 @@ void *get_list(list_t *list, size_t idx)
     return NULL;
 }
 
-void map(list_t *list, dtor_func func)
+void map(list_t *list, map_func func, void *params)
 {
     entry_t *entry;
 
     LIST_FOREACH(entry, &list->head, next)
     {
-        func(entry->data);
+        func(entry->data, params);
     }
 }
