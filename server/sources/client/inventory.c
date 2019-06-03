@@ -14,12 +14,12 @@ char *inventory(client_t *client, server_t *server)
     client->cooldown = 1;
     asprintf(&inv, "[linemate %d, deraumere %d, sibur %d, mendiane %d,"
             " phiras %d, thystame %d, food %d]",
-            client->inventory.linemate,
-            client->inventory.deraumere,
-            client->inventory.sibur,
-            client->inventory.mendiane,
-            client->inventory.phiras,
-            client->inventory.thystame,
-            client->inventory.food);
+            client->inventory.inv.linemate,
+            client->inventory.inv.deraumere,
+            client->inventory.inv.sibur,
+            client->inventory.inv.mendiane,
+            client->inventory.inv.phiras,
+            client->inventory.inv.thystame,
+            client->inventory.inv.food);
     return inv;
 }

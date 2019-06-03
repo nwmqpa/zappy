@@ -11,13 +11,13 @@ static const unsigned int MAX_RAND_TILE = 20;
 
 void set_tile(tile_t *new)
 {
-    new->inventory.linemate = rand() % MAX_RAND_TILE;
-    new->inventory.deraumere = rand() % MAX_RAND_TILE;
-    new->inventory.sibur = rand() % MAX_RAND_TILE;
-    new->inventory.mendiane = rand() % MAX_RAND_TILE;
-    new->inventory.phiras = rand() % MAX_RAND_TILE;
-    new->inventory.thystame = rand() % MAX_RAND_TILE;
-    new->inventory.food = rand() % MAX_RAND_TILE;
+    new->inventory.inv.linemate = rand() % MAX_RAND_TILE;
+    new->inventory.inv.deraumere = rand() % MAX_RAND_TILE;
+    new->inventory.inv.sibur = rand() % MAX_RAND_TILE;
+    new->inventory.inv.mendiane = rand() % MAX_RAND_TILE;
+    new->inventory.inv.phiras = rand() % MAX_RAND_TILE;
+    new->inventory.inv.thystame = rand() % MAX_RAND_TILE;
+    new->inventory.inv.food = rand() % MAX_RAND_TILE;
 }
 
 void add_player(tile_t *tile, int id)
