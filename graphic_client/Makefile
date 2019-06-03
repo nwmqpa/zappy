@@ -1,4 +1,3 @@
-
 NAME		=	graphic_ui
 
 CC		=	g++
@@ -19,8 +18,8 @@ INCLUDE_DIR	=	$(ROOT)/includes
 
 MODULES		=
 
-SOURCES		=		Case.cpp \
-					Map.cpp
+SOURCES		=		Map.cpp	\
+					main.cpp
 
 TEST_SOURCES	=
 
@@ -35,9 +34,9 @@ PATSUBST_MODULS =	$(patsubst  $(SRC_DIR)/%, $(BUILD_DIR)/lib%.a, $(PREFIXED_MODU
 LINK_MODULES	=	$(addprefix -l, $(MODULES))
 
 
-WARNINGS	=	-Wall -Wextra
+WARNINGS	=	-Wall -Wextra -lSDL2 -lSDL2_image
 CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) -fdiagnostics-color=always -D _GNU_SOURCE
-LDFLAGS		=	-L $(BUILD_DIR) $(LINK_MODULES)
+LDFLAGS		=	-L $(BUILD_DIR) $(LINK_MODULES) -lSDL2 -lSDL2_image
 
 DEFAULT		=	\e[0m
 WHITE		=	\e[1;97m

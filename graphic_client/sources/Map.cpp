@@ -11,7 +11,7 @@ Map::Map()
 {
     this->initScreen();
     this->getSize();
-    this->generateMap();
+    //this->generateMap();
 }
 
 Map::~Map()
@@ -22,61 +22,68 @@ void Map::initScreen()
     _isAlive = true;
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
-        throw new SDL_GetError();
+        throw SDL_GetError();
     if (IMG_Init(IMG_INIT_PNG) < 0)
-        throw new IMG_GetError();
+        throw IMG_GetError();
     else {
         _window = SDL_CreateWindow("Zappy", SDL_WINDOWPOS_UNDEFINED,
                 SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
         if (_window == NULL)
-            throw new SDL_GetError();
+            throw SDL_GetError();
         else
-            screen = SDL_GetWindowSurface(window);
+            _screen = SDL_GetWindowSurface(_window);
     }
 }
 
 void Map::Quit()
 {
-    SDL_DestroyWindow(window);
+    SDL_DestroyWindow(_window);
     IMG_Quit();
     SDL_Quit();
-    this->setLife(false);
+    _isAlive = false;
+}
+
+void Map::Update()
+{
+    SDL_UpdateWindowSurface(_window);
 }
 
 void Map::mainCycle()
 {
-    while (this->getLife()) {
-        while (SDL_PollEvent(&event) != 0) {
-            switch (event.type) {
+    while (_isAlive) {
+        while (SDL_PollEvent(&_event) != 0) {
+            switch (_event.type) {
                 case SDL_QUIT:
                     this->Quit();
             }
         }
+        Update();
     }
 }
 
 void Map::getSize()
 {
     try {
-        _map_size = "appel API"
+        //_map_size = "appel API"
     } catch (std::exception *error) {
-        this->setLife(false);
-        throw (error.what());
+        _isAlive = false;
+        throw (error->what());
     }
 }
 
 void Map::generateMap()
 {
     try {
-        for (int i = 0; i < (_map_size.x * _map_size.y); i += 1) {
-            srv_tile_content_t *tmp = "appel API";
-            if (_map.size() > 0 && _map[i].getTile() != tmp)
-                _map[i].setTile(tmp);
-            else
-                _map.push_back(new Case(tmp));
-        }
+        printf("generation\n");
+        //for (int i = 0; i < (_map_size.x * _map_size.y); i += 1) {
+            //srv_tile_content_t *tmp = "appel API";
+            //if (_map.size() > 0 && _map[i].getTile() != tmp)
+            //    _map[i].setTile(tmp);
+            //else
+                //_map.push_back(new Case(tmp));
+        //}
     } catch (std::exception *error) {
-        this->setLife(false);
+        _isAlive = false;
     }
 }
 

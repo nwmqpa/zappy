@@ -8,6 +8,8 @@
 #ifndef CASE_HPP_
     #define CASE_HPP_
 
+#include "SDL2/SDL.h"
+
 class Case {
     public:
         Case();
