@@ -24,7 +24,7 @@ enum DIRECTION {
 ** Define a client inventory
 ** each of it's field is a props gatherable on the map.
 */
-typedef struct inventory_s {
+struct inventory_s {
     unsigned int linemate;
     unsigned int deraumere;
     unsigned int sibur;
@@ -32,6 +32,11 @@ typedef struct inventory_s {
     unsigned int phiras;
     unsigned int thystame;
     unsigned int food;
+};
+
+typedef union inventory_u {
+    struct inventory_s inv;
+    unsigned int inv_arr[7];
 } inventory_t;
 
 /*
@@ -67,7 +72,7 @@ typedef struct client_s {
 
 client_t *client_create(size_t id);
 
-void add_command(client_t *client, char *command);
+int add_command(client_t *client, char *command);
 int process_command(client_t *client);
 size_t len_command(client_t *client);
 
