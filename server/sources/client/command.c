@@ -8,6 +8,12 @@
 #include "logger.h"
 #include "client_commands.h"
 
+static const command_t COMMANDS[] = {
+    {"fork", fork_client},
+    {"eject", eject},
+    {NULL, NULL}
+};
+
 void add_command(client_t *client, char *command)
 {
     size_t len = len_list(client->commands);
@@ -35,4 +41,24 @@ int process_command(client_t *client)
 size_t len_command(client_t *client)
 {
     return len_list(client->commands);
+}
+
+char *handle_client_command(client_t *client, server_t *server,
+        const char *command)
+{
+    char *ret = NULL;
+
+    if (strcmp(command, "broadcast") == 0)
+        return broadcast(client, server, command);
+    for (int i = 0; COMMANDS[i].name; ++i) {
+        if (strcmp(COMMANDS[i].name ,command) == 0) {
+            ret = COMMANDS[i].function(client, server);
+            break;
+        }
+    }
+    if (ret == NULL)
+        errorl("Command %s not found.\n", command);
+    else
+        dprintf(client->id, ret);
+    return ret;
 }

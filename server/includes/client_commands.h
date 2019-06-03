@@ -10,6 +10,13 @@
 #include "server.h"
 #include "client.h"
 
+typedef char * (*cmd_func) (client_t *client, server_t *server);
+
+typedef struct command_s {
+    char *name;
+    cmd_func function;
+} command_t;
+
 /*
 ** Moving command
 **  response:   ok
@@ -70,3 +77,10 @@ char *set(client_t *client, server_t *server);
 **  time limit: 300/f
 */
 char *incante(client_t *client, server_t *server);
+
+/*
+** Launch the right command.
+**
+*/
+char *handle_client_command(client_t *client, server_t *server,
+        const char *command);
