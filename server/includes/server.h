@@ -14,12 +14,21 @@
 #include <errno.h>
 #include "options.h"
 #include "generic_list.h"
+#include "client.h"
+
+typedef struct team_s {
+    char *name;
+    int *clients;
+} team_t;
 
 typedef struct server_s {
-    int listener_client;
-    int listener_graphic;
-    char **teams;
+    int epoll_fd_client;
+    int epoll_fd_graphic;
+    int socket_client;
+    int socket_graphic;
+    team_t **teams;
     list_t *clients;
+    int client_per_team;
 } server_t;
 
 // Create server and initiliaze it from options.
@@ -27,6 +36,8 @@ server_t *create_server(options_t *options);
 
 int create_client_listener(options_t *options);
 int create_graphic_listener(options_t *options);
+
+int add_client_to_team(server_t *server, client_t *client, const char *team);
 
 void print_server(server_t *server);
 
