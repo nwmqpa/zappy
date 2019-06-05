@@ -29,6 +29,7 @@ client_t *client_create(size_t id)
     new->commands = create_list();
     new->id = id;
     new->inventory.inv.food = 10;
+    new->level = 1;
     return new;
 }
 
