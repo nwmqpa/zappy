@@ -17,6 +17,8 @@ SRC_DIR 	=	$(ROOT)/sources
 
 INCLUDE_DIR	=	$(ROOT)/includes
 
+COMPILER_COMMAND 	=	compile_commands.json
+
 MODULES		=
 
 SOURCES		=	main.c \
@@ -45,16 +47,20 @@ SOURCES		=	main.c \
 				server/client_handler.c \
 				server/teams.c \
 				map/map.c \
-				map/tile.c
+				map/tile.c \
+				utils/utils.c
 
 TEST_SOURCES	=	client_command.c \
 					generic_list.c \
 					arg_parser.c \
-					map.c
+					map.c \
+					utils.c \
+					commands.c
 
 PREFIXED_SRCS 	=	$(addprefix $(SRC_DIR)/, $(SOURCES))
 PREFIXED_TEST 	=	$(addprefix $(TEST_DIR)/, $(TEST_SOURCES))
 PATSUBST_OBJS	=	$(patsubst  $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(PREFIXED_SRCS))
+PATSUBST_JSON	=	$(patsubst  $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o.json, $(PREFIXED_SRCS))
 PATSUBST_OBJS_TEST	=	$(patsubst  $(TEST_DIR)/%.c, $(BUILD_DIR)/%.o, $(PREFIXED_TEST))
 LIBS_MODULES 	=	$(addprefix lib, $(addsuffix .a, $(MODULES)))
 PREFIXED_MODULS	=	$(addprefix $(SRC_DIR)/, $(MODULES))
@@ -86,10 +92,19 @@ test:	$(ROOT)/test
 debug: CFLAGS += -g -D LOG_LEVEL=5
 debug:	re
 
+cmd_gen: $(ROOT)/$(COMPILER_COMMAND)
+
+$(ROOT)/$(COMPILER_COMMAND): $(PATSUBST_JSON)
+	$(V)printf "$(WHITE)Creating $(BLUE)$(COMPILER_COMMAND)$(WHITE).\n"
+	$(V)sed -e '1s/^/[$\n/' -e '$$s/,$$/$\n]/' $(PATSUBST_JSON) > $(ROOT)/$(COMPILER_COMMAND)
+	$(V)printf "$(WHITE)Cleaning $(BLUE)objects $(WHITE)files$(DEFAULT)\n"
+	$(V)rm *.o
+
 clean:
-			$(Vprintf "$(WHITE)Cleaning $(BLUE)objects $(WHITE)files$(DEFAULT)\n"
+			$(V)printf "$(WHITE)Cleaning $(BLUE)objects $(WHITE)files$(DEFAULT)\n"
 			$(V)rm -f $(PATSUBST_OBJS)
 			$(V)rm -f $(PATSUBST_OBJS_TEST)
+			$(V)rm -f $(PATSUBST_JSON)
 			$(V)for dir in $(PREFIXED_MODULS); do \
 				make --no-print-directory -C $$dir clean; \
 			done
@@ -130,6 +145,11 @@ $(BUILD_DIR)/$(NAME):	$(PATSUBST_OBJS) $(PATSUBST_MODULS) echo_build_parts
 $(BUILD_DIR)/test:	$(PATSUBST_OBJS_TEST) $(PATSUBST_OBJS) $(PATSUBST_MODULS)
 			$(V)printf "$(WHITE)Linking $(BLUE)objects $(WHITE)into $(GREEN)test$(DEFAULT)\n"
 			$(V)$(LD) -o $(BUILD_DIR)/test $(PATSUBST_OBJS) $(PATSUBST_OBJS_TEST) $(LDFLAGS)
+
+$(BUILD_DIR)/%.o.json:	$(SRC_DIR)/%.c
+			$(V)printf "$(WHITE)Compiling command $(RED)$<$(WHITE) => $(BLUE)$@$(DEFAULT)\n"
+			$(V)mkdir -p $(dir $@)
+		    $(V)clang -MJ $@ -c $< $(CFLAGS)
 
 $(BUILD_DIR)/%.o:	$(SRC_DIR)/%.c
 			$(V)printf "$(WHITE)Compiling $(RED)$<$(WHITE) => $(BLUE)$@$(DEFAULT)\n"
