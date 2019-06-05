@@ -40,8 +40,10 @@ char *eject(client_t *client, server_t *server)
     client->cooldown = 7;
     for (unsigned int i = 0; i < tile->nb_player; i++) {
         client_id = tile->player_ids[i];
+        if (client_id == client->id)
+            continue;
         remove_player(tile, client_id);
-        for (int i = 0; client && client->id != (size_t) client_id; ++i)
+        for (int i = 0; client && client_ptr->id != (size_t) client_id; ++i)
             client_ptr = get_list(server->clients, i);
         eject_client(client_ptr, server->map, client->position);
     }
