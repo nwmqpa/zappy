@@ -43,10 +43,16 @@ void add_player(tile_t *tile, int id)
     tile->player_ids = new;
 }
 
+static void update_meta(size_t *total_len, int *nb_elem, int value)
+{
+    *total_len += value;
+    (*nb_elem)++;
+}
+
 char *tile_to_string(const tile_t *tile)
 {
     char *res = NULL;
-    char *stock[9] = {NULL};
+    char *stock[8] = {0};
     int value;
     size_t total_len = 0;
     int nb_elem = 0;
@@ -55,17 +61,15 @@ char *tile_to_string(const tile_t *tile)
         value = tile->inventory.inv_arr[i];
         if (value > 0) {
             asprintf(&stock[i], "%s:%d", RESOURCES_NAME[i], value);
-            total_len += strlen(stock[i]) + 1;
-            nb_elem++;
+            update_meta(&total_len, &nb_elem, strlen(stock[i]) + 1);
         }
     }
     if (tile->nb_player > 0) {
-        asprintf(&stock[8], "player:%d", tile->nb_player);
-        total_len += strlen(stock[8]) + 1;
-        nb_elem++;
+        asprintf(&stock[7], "player:%d", tile->nb_player);
+        update_meta(&total_len, &nb_elem, strlen(stock[7]) + 1);
     }
     res = calloc(sizeof(char), total_len);
-    join_str(res, stock, ' ', nb_elem);
+    join_str(res, (const char **) stock, ' ', nb_elem);
     return res;
 }
 
