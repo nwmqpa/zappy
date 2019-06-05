@@ -20,6 +20,8 @@ enum DIRECTION {
     DOWN    = 3
 };
 
+static const int INVENTORY_SIZE = 7;
+
 /*
 ** Define a client inventory
 ** each of it's field is a props gatherable on the map.
