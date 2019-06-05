@@ -5,10 +5,9 @@
 ** Client handler function callback.
 */
 
-#include "server.h"
-#include "client.h"
 #include "logger.h"
 #include "generic_list.h"
+#include "client_commands.h"
 
 static int deleting_client_cmp(const void *id_checked, const void *id)
 {
@@ -58,9 +57,18 @@ int on_active_client(int socket, void *data)
 {
     char buffer[1025];
     size_t bytes_read = read(socket, buffer, 1024);
+    client_t *client = NULL;
+    server_t *server = (server_t *) data;
 
     if (bytes_read == 0)
         return -1;
+    for (int i = 0; client && client->id != (size_t) socket; ++i)
+        client = get_list(server->clients, i);
+    if (client == NULL) {
+        errorl("Client with socket: %d not found.\n", socket);
+        return -1;
+    }
+    add_command(client, strdup(buffer));
     debugl("Client active handler.\n");
     return 0;
 }

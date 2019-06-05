@@ -12,9 +12,10 @@
 #include <sys/socket.h>
 #include <netinet/ip.h>
 #include <errno.h>
+#include "client.h"
 #include "options.h"
 #include "generic_list.h"
-#include "client.h"
+#include "map.h"
 
 typedef struct team_s {
     char *name;
@@ -22,6 +23,8 @@ typedef struct team_s {
 } team_t;
 
 typedef struct server_s {
+    unsigned int width;
+    unsigned int height;
     int epoll_fd_client;
     int epoll_fd_graphic;
     int socket_client;
@@ -29,6 +32,7 @@ typedef struct server_s {
     team_t **teams;
     list_t *clients;
     int client_per_team;
+    map_t *map;
 } server_t;
 
 // Create server and initiliaze it from options.

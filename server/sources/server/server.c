@@ -45,6 +45,21 @@ static void setup_teams(server_t *server, options_t *options)
     server->teams[i] = 0;
 }
 
+static void setup_network(server_t *server, options_t *options)
+{
+    debugl("Setup of network.\n");
+    server->socket_client = create_client_listener(options);
+    server->socket_graphic = create_graphic_listener(options);
+    server->epoll_fd_client = epoll_create1(0);
+    server->epoll_fd_graphic = epoll_create1(0);
+    if (server->socket_client == -1 || server->socket_graphic == -1 ||
+    server->epoll_fd_client == -1 || server->epoll_fd_graphic == -1) {
+        fatall("Cannot connect quitting Zappy!\n");
+        free(server);
+        exit(84);
+    }
+}
+
 server_t *create_server(options_t *options)
 {
     server_t *server = malloc(sizeof(server_t));
@@ -53,29 +68,25 @@ server_t *create_server(options_t *options)
         fatall("Malloc failed quitting Zappy!\n");
         exit(84);
     }
-    server->socket_client = create_client_listener(options);
-    server->socket_graphic = create_graphic_listener(options);
-    server->epoll_fd_client = epoll_create1(0);
-    server->epoll_fd_graphic = epoll_create1(0);
+    setup_network(server, options);
     server->clients = create_list();
+    server->width = options->width;
+    server->height = options->height;
     server->client_per_team = options->client_nb;
-    if (server->socket_client == -1 || server->socket_graphic == -1 ||
-        server->epoll_fd_client == -1 || server->epoll_fd_graphic == -1) {
-        free(server);
-        return NULL;
-    }
+    server->map = create_map(server->width, server->height);
     add_fd(server);
     setup_teams(server, options);
     return server;
 }
 
+// TODO: Make it work.
 void print_server(server_t *server)
 {
-    debugl("Server {\n"
+    printf("Server {\n"
             "    listener_client: %hd,\n"
             "    listener_graphic: %hd,\n"
             "    teams: [", server->socket_client, server->socket_graphic);
     for (int i = 0; server->teams[i]; ++i)
-        debugl("%s%s", server->teams[i], server->teams[i + 1] ? ", " : "]\n" );
-    debugl("}\n");
+        printf("%s%s", server->teams[i], server->teams[i + 1] ? ", " : "]\n" );
+    printf("}\n");
 }

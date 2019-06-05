@@ -30,21 +30,21 @@ Test(map, map_response)
 
     cr_assert(tile != NULL);
 
-    tile->inventory.linemate = 0;
-    tile->inventory.deraumere = 0;
-    tile->inventory.sibur = 0;
-    tile->inventory.mendiane = 0;
-    tile->inventory.phiras = 0;
-    tile->inventory.thystame = 0;
-    tile->inventory.food = 0;
+    tile->inventory.inv.linemate = 0;
+    tile->inventory.inv.deraumere = 0;
+    tile->inventory.inv.sibur = 0;
+    tile->inventory.inv.mendiane = 0;
+    tile->inventory.inv.phiras = 0;
+    tile->inventory.inv.thystame = 0;
+    tile->inventory.inv.food = 0;
 
     tile = get_tile_map(map, 0, 0);
 
-    cr_assert(tile->inventory.linemate == 0);
-    cr_assert(tile->inventory.phiras == 0);
-    cr_assert(tile->inventory.thystame == 0);
-    cr_assert(tile->inventory.food == 0);
-    cr_assert(tile->inventory.sibur == 0);
+    cr_assert(tile->inventory.inv.linemate == 0);
+    cr_assert(tile->inventory.inv.phiras == 0);
+    cr_assert(tile->inventory.inv.thystame == 0);
+    cr_assert(tile->inventory.inv.food == 0);
+    cr_assert(tile->inventory.inv.sibur == 0);
 }
 
 Test(map, add_player)
