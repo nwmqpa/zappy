@@ -8,7 +8,23 @@
 #include "map.h"
 #include "client_commands.h"
 
-static char *get_view_level(int level, pos_t pos, map_t *map)
+static pos_t get_xy(unsigned int direction, int level, pos_t pos, int begin)
+{
+    switch (direction) {
+    case LEFT:
+        return (pos_t){pos.x - level, pos.y + begin};
+    case RIGHT:
+        return (pos_t){pos.x + level, pos.y + begin};
+    case UP:
+        return (pos_t){pos.x + begin, pos.y + level};
+    case DOWN:
+        return (pos_t){pos.x + begin, pos.y - level};
+    }
+    return (pos_t){-1, -1};
+}
+
+static char *get_view_level(int level, pos_t pos, map_t *map,
+        unsigned int direction)
 {
     int sub_level = level - 1;
     int begin = sub_level * -1;
@@ -17,12 +33,13 @@ static char *get_view_level(int level, pos_t pos, map_t *map)
     char *line;
     int idx = 0;
     char *ret;
+    pos_t xy;
 
     while (begin <= sub_level) {
-        line = tile_to_string(get_tile_map(map, pos.x - begin, pos.y + level - 1));
+        xy = get_xy(direction, level - 1, pos, begin++);
+        line = tile_to_string(get_tile_map(map, xy.x,  xy.y));
         total_len += strlen(line) + 1;
         stock[idx++] = line;
-        begin++;
     }
     if (level == 1)
         return line;
@@ -53,7 +70,7 @@ static char *get_vision_content(server_t *server, unsigned int level,
     char *new = NULL;
 
     for (unsigned int i = 1; i <= level; ++i) {
-        new = get_view_level(i, position, server->map);
+        new = get_view_level(i, position, server->map, direction);
         if (tmp != NULL)
             asprintf(&buffer, "%s,%s", tmp, new);
         else
