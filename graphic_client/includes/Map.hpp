@@ -31,9 +31,9 @@ class Map {
         SDL_Event _event;
 
         bool _isAlive;
-//        std::vector<Case *> _map;
+        std::vector<Case *> _map;
 
-//        srv_map_size_t *_map_size;
+        srv_map_size_t *_map_size;
 };
 
 #endif

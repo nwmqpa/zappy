@@ -64,7 +64,8 @@ void Map::mainCycle()
 void Map::getSize()
 {
     try {
-        //_map_size = "appel API"
+        srv_map_size_t *try = {5, 5};
+        _map_size = try;
     } catch (std::exception *error) {
         _isAlive = false;
         throw (error->what());
@@ -74,16 +75,16 @@ void Map::getSize()
 void Map::generateMap()
 {
     try {
+        srv_tile_content_t case = {0, 0, 0, 0, 0, 0, 0, 0, 0};
         printf("generation\n");
-        //for (int i = 0; i < (_map_size.x * _map_size.y); i += 1) {
-            //srv_tile_content_t *tmp = "appel API";
-            //if (_map.size() > 0 && _map[i].getTile() != tmp)
-            //    _map[i].setTile(tmp);
-            //else
-                //_map.push_back(new Case(tmp));
-        //}
+        for (int i = 0; i < (_map_size.x * _map_size.y); i += 1) {
+            srv_tile_content_t *tmp = &case;
+            if (_map.size() > 0 && _map[i].getTile() != tmp)
+                _map[i].setTile(tmp);
+            else
+                _map.push_back(new Case(tmp));
+        }
     } catch (std::exception *error) {
         _isAlive = false;
     }
 }
-
