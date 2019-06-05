@@ -59,3 +59,26 @@ Test(commands, look_level2_with_some_things) {
     char *ret = look(client, server);
     cr_assert_str_eq(ret, "[linemate:42,,,]");
 }
+
+// Test(commands, look_level2_direction) {
+//     server_t *server = setup_server(4, 4);
+//     client_t *client = client_create(3);
+//
+//     for (int y = 0; y < 4; ++y) {
+//         for (int x = 0; x < 4; ++x) {
+//             tile_t *tile = get_tile_map(server->map, x, y);
+//             for (int i = 0; i < INVENTORY_SIZE; ++i)
+//                 tile->inventory.inv_arr[i] = 0;
+//         }
+//     }
+//     client->level = 2;
+//     client->direction = 3;
+//     client->position.x = 1;
+//     client->position.y = 1;
+//     get_tile_map(server->map, 1, 1)->inventory.inv.linemate = 1;
+//     get_tile_map(server->map, 0, 0)->inventory.inv.deraumere = 2;
+//     get_tile_map(server->map, 1, 0)->inventory.inv.food = 3;
+//     get_tile_map(server->map, 2, 0)->inventory.inv.phiras = 4;
+//     char *ret = look(client, server);
+//     cr_assert_str_eq(ret, "[linemate:1,deraumere:2,food:3,phiras:4]");
+// }
