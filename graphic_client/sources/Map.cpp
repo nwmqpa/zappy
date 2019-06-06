@@ -11,7 +11,7 @@ Map::Map()
 {
     this->initScreen();
     this->getSize();
-    //this->generateMap();
+    this->generateMap();
 }
 
 Map::~Map()
@@ -64,8 +64,7 @@ void Map::mainCycle()
 void Map::getSize()
 {
     try {
-        srv_map_size_t *try = {5, 5};
-        _map_size = try;
+        //_map_size = try;
     } catch (std::exception *error) {
         _isAlive = false;
         throw (error->what());
@@ -75,15 +74,14 @@ void Map::getSize()
 void Map::generateMap()
 {
     try {
-        srv_tile_content_t case = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-        printf("generation\n");
+        /*printf("generation\n");
         for (int i = 0; i < (_map_size.x * _map_size.y); i += 1) {
             srv_tile_content_t *tmp = &case;
             if (_map.size() > 0 && _map[i].getTile() != tmp)
                 _map[i].setTile(tmp);
             else
-                _map.push_back(new Case(tmp));
-        }
+                _map.push_back(new Case(tmp, _screen));
+        }*/
     } catch (std::exception *error) {
         _isAlive = false;
     }

@@ -8,6 +8,9 @@
 #ifndef ANIMATIONS_HPP_
     #define ANIMATIONS_HPP_
 
+#include <iostream>
+#include <string>
+
 class Animation {
     public:
         Animation();
@@ -20,6 +23,6 @@ class Animation {
         int picture_in_line;
         int lines;
         int maxpicture;
-}
+};
 
 #endif

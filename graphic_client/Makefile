@@ -18,7 +18,8 @@ INCLUDE_DIR	=	$(ROOT)/includes
 
 MODULES		=
 
-SOURCES		=		Case.cpp	\
+SOURCES		=		Animation.cpp	\
+					Case.cpp	\
 					Map.cpp	\
 					main.cpp
 

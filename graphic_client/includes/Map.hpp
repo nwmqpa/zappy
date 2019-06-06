@@ -12,6 +12,7 @@
 #include "protocols.h"
 #include "SDL2/SDL_image.h"
 #include "SDL2/SDL.h"
+#include "Case.hpp"
 
 class Map {
     public:

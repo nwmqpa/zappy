@@ -7,13 +7,13 @@
 
 #include "Case.hpp"
 
-Case::Case(srv_tile_content_t *tileset)
+Case::Case(srv_tile_content_t *tileset, SDL_Surface *screen)
 {
     _tile = tileset;
-    _x = tileset.x;
-    _y = tileset.y;
-    _back = ;
-
+    _x = tileset->x;
+    _y = tileset->y;
+    _back = IMG_Load("resources/Item_700.png");
+    SDL_BlitSurface(_back, NULL, screen, NULL);
 }
 
 Case::~Case()
@@ -21,10 +21,10 @@ Case::~Case()
 
 void Case::draw()
 {
-    std::vector<animation>::iterator it;
+    std::vector<Animation>::iterator it;
 
-    for (; it != _resources.end(); it++)
-        *it->draw();
+    //for (; it != _resources.end(); it++)
+    //    *it->draw();
 }
 
 void Case::AddComponent(RESOURCE_NUMBER number, int value)
