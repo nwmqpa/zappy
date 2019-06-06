@@ -19,6 +19,8 @@ class Case {
         Case(srv_tile_content_t *, SDL_Surface *);
         ~Case();
 
+        void setTile(srv_tile_content_t *);
+        srv_tile_content_t *getTile() {return _tile;}
         void draw();
         void AddComponent(RESOURCE_NUMBER id, int value);
 

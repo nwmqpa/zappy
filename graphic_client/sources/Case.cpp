@@ -20,6 +20,11 @@ Case::Case(srv_tile_content_t *tileset, SDL_Surface *screen)
 Case::~Case()
 {}
 
+void Case::setTile(srv_tile_content_t *tile)
+{
+    _tile = tile;
+}
+
 void Case::draw()
 {
     std::vector<Animation>::iterator it;
