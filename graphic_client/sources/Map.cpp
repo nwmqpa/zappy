@@ -33,6 +33,7 @@ void Map::initScreen()
         else
             _screen = SDL_GetWindowSurface(_window);
     }
+    /*Initialisation de la fenêtre et des modules de SDL*/
 }
 
 void Map::Quit()
@@ -46,6 +47,7 @@ void Map::Quit()
 void Map::Update()
 {
     SDL_UpdateWindowSurface(_window);
+    /*Update*/
 }
 
 void Map::mainCycle()
@@ -59,30 +61,34 @@ void Map::mainCycle()
         }
         Update();
     }
+    /*Boucle de vie de la fenêtre/gestion des events et update de la fenêtre*/
 }
 
 void Map::getSize()
 {
     try {
-        //_map_size = try;
+        /*Récupération de la taille de la carte (srv_map_size_t)*/
     } catch (std::exception *error) {
         _isAlive = false;
         throw (error->what());
     }
+    /*Récupération de la taille de la carte*/
 }
 
 void Map::generateMap()
 {
     try {
-        /*printf("generation\n");
+        printf("generation\n");
         for (int i = 0; i < (_map_size.x * _map_size.y); i += 1) {
+            /*Récupération de la composition des chaque case (srv_tile_content_t)*/
             srv_tile_content_t *tmp = &case;
             if (_map.size() > 0 && _map[i].getTile() != tmp)
                 _map[i].setTile(tmp);
             else
                 _map.push_back(new Case(tmp, _screen));
-        }*/
+        }
     } catch (std::exception *error) {
         _isAlive = false;
     }
+    /*Génération et update des informations des cases de la carte*/
 }

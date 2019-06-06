@@ -14,6 +14,7 @@ Case::Case(srv_tile_content_t *tileset, SDL_Surface *screen)
     _y = tileset->y;
     _back = IMG_Load("resources/Item_700.png");
     SDL_BlitSurface(_back, NULL, screen, NULL);
+    /*récupération de données et affichage du background de la case*/
 }
 
 Case::~Case()
@@ -25,6 +26,7 @@ void Case::draw()
 
     //for (; it != _resources.end(); it++)
     //    *it->draw();
+    /*Affichage de chaque ressource sur une case*/
 }
 
 void Case::AddComponent(RESOURCE_NUMBER number, int value)
@@ -52,4 +54,5 @@ void Case::AddComponent(RESOURCE_NUMBER number, int value)
             _tile->q6 += value;
             break;
     }
+    /*Gestion des ressources sur une case*/
 }
