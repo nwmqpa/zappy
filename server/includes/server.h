@@ -45,9 +45,4 @@ int add_client_to_team(server_t *server, client_t *client, const char *team);
 
 void print_server(server_t *server);
 
-/*
-** Client commands.
-*/
-char *connect_nbr(const server_t *server);
-
 #endif /* SERVER_H_ */
