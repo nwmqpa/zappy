@@ -48,7 +48,8 @@ SOURCES		=	main.c \
 				server/teams.c \
 				map/map.c \
 				map/tile.c \
-				utils/utils.c
+				utils/utils.c \
+				client/connect_nbr.c
 
 TEST_SOURCES	=	client_command.c \
 					generic_list.c \
