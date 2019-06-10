@@ -70,7 +70,7 @@ typedef struct client_s {
     unsigned int direction;
     pos_t position;
     inventory_t inventory;
-    size_t cooldown;
+    int cooldown;
     char *to_send;
 } client_t;
 

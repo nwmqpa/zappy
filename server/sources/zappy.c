@@ -9,6 +9,23 @@
 #include "logger.h"
 #include "dispatcher.h"
 #include "handlers.h"
+#include "client_commands.h"
+
+static void handle_player_tick(void *data, const void *params)
+{
+    client_t *client = data;
+    const int *elapsed_time = params;
+
+    client->cooldown -= *elapsed_time;
+    if (client->cooldown < 0)
+        client->cooldown = -1;
+}
+
+void tick_system(server_t *server)
+{
+    int elapsed_time = 1;
+    map(server->clients, handle_player_tick, NULL);
+}
 
 static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
         server_t *server)
@@ -21,7 +38,7 @@ static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
             infol("Closing server after an error.\n");
             return -1;
         }
-
+        tick_system(server);
     }
     return 0;
 }
