@@ -7,13 +7,19 @@
 
 #include "Case.hpp"
 
-Case::Case(srv_tile_content_t *tileset, SDL_Surface *screen)
+Case::Case(srv_tile_content_t *tileset, SDL_Surface *screen, srv_map_size_t *map)
 {
     _tile = tileset;
     _x = tileset->x;
     _y = tileset->y;
     _back = IMG_Load("resources/Item_700.png");
-    SDL_BlitSurface(_back, NULL, screen, NULL);
+
+    _pos.x = (screen->w / 2 - (map->x / 2)) +
+        (tileset->x - tileset->y) * (_back->w / 2) - 0;
+    _pos.y = (screen->h / 2 - (map->y / 2)) +
+        (tileset->x + tileset->y) * (_back->h / 2) - 0;
+
+    SDL_BlitSurface(_back, NULL, screen, &_pos);
     /*récupération de données et affichage du background de la case*/
 }
 

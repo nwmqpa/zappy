@@ -21,11 +21,14 @@ class Map {
 
         void initScreen();
         void getSize();
+
         void generateMap();
         void mainCycle();
+
         void Update();
         void Quit();
 
+        void getMapsrv();
     private:
         SDL_Window *_window;
         SDL_Surface *_screen;

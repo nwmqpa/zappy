@@ -16,7 +16,7 @@
 
 class Case {
     public:
-        Case(srv_tile_content_t *, SDL_Surface *);
+        Case(srv_tile_content_t *, SDL_Surface *, srv_map_size_t *);
         ~Case();
 
         void setTile(srv_tile_content_t *);
@@ -26,7 +26,9 @@ class Case {
 
     private:
         SDL_Surface *_back;
+        SDL_Rect _pos;
         srv_tile_content_t *_tile;
+
         int _x;
         int _y;
         std::vector<Animation> _resources;
