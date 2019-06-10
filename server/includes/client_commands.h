@@ -26,6 +26,8 @@ typedef struct command_param_s {
     int len;
 } command_param_t;
 
+int process_command(client_t *client, server_t *server);
+
 /*
 ** Moving command
 **  response:   ok

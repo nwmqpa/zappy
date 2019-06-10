@@ -61,6 +61,7 @@ typedef struct pos_s {
 ** -> direction: Where the player is facing.
 ** -> position: [x, y] position defining on which tile the player is positioned.
 ** -> cooldown: Time that left to before launching the new incante.
+** -> to_send: When cooldown is over this will be send to the player.
 */
 typedef struct client_s {
     int id;
@@ -70,12 +71,12 @@ typedef struct client_s {
     pos_t position;
     inventory_t inventory;
     size_t cooldown;
+    char *to_send;
 } client_t;
 
 client_t *client_create(size_t id);
 
 int add_command(client_t *client, char *command);
-int process_command(client_t *client);
 size_t len_command(client_t *client);
 
 void print_client(const client_t *client);

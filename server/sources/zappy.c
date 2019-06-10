@@ -21,6 +21,7 @@ static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
             infol("Closing server after an error.\n");
             return -1;
         }
+
     }
     return 0;
 }
