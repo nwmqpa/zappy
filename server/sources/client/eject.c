@@ -29,7 +29,6 @@ static void eject_client(client_t *client, map_t *map, pos_t pos)
     add_player(get_tile_map(map, client->position.x, client->position.y), client->id);
 }
 
-// Take all player on the same tile and eject them in their direction.
 char *eject(client_t *client, server_t *server)
 {
     tile_t *tile = get_tile_map(server->map, client->position.x,
