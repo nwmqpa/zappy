@@ -36,7 +36,7 @@ client_t *client_create(size_t id)
 void print_client(const client_t *client)
 {
     printf("Client {"
-            "   id: %ld\n"
+            "   id: %d\n"
             "}\n"
             , client->id);
 }

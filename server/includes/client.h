@@ -63,7 +63,7 @@ typedef struct pos_s {
 ** -> cooldown: Time that left to before launching the new incante.
 */
 typedef struct client_s {
-    size_t id;
+    int id;
     list_t *commands;
     unsigned int level;
     unsigned int direction;
