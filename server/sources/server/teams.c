@@ -43,7 +43,7 @@ int add_client_to_team(server_t *server, client_t *client, const char *team)
     return -1;
 }
 
-static int is_id_in_team(size_t id, team_t *team, int nb_client)
+static int is_id_in_team(int id, team_t *team, int nb_client)
 {
     for (int i = 0; i < nb_client; ++i)
         if (id == team->clients[i])
