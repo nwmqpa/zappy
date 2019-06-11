@@ -18,7 +18,7 @@ INCLUDE_DIR	=	$(ROOT)/includes
 
 MODULES		=
 
-SOURCES		=		Map.cpp	\
+SOURCES		=		WindowCreator.cpp	\
 					main.cpp
 
 TEST_SOURCES	=

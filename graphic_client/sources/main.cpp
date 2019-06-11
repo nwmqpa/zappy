@@ -1,9 +1,9 @@
-#include "Map.hpp"
+#include "SDL.hpp"
 
 int main(void)
 {
-    Map map;
+    WindowCreator tmp("Test");
 
-    map.mainCycle();
+    tmp.Life();
     return (0);
 }
