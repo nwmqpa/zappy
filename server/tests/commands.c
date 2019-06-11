@@ -7,6 +7,7 @@
 
 #include <criterion/criterion.h>
 #include "client_commands.h"
+#include "client.h"
 
 server_t *setup_server(int x, int y)
 {
@@ -80,17 +81,22 @@ Test(commands, look_level2_direction) {
 
 Test(commands, eject_basic) {
     server_t *server = setup_server(10, 10);
+
     client_t *client0 = client_create(3);
-    client0->position = (pos_t){0, 4};
+    client0->direction = DOWN;
+    client0->position = (pos_t){1, 1};
+
     client_t *client1 = client_create(4);
-    client1->position = (pos_t){2, 2};
+    client1->position = (pos_t){1, 1};
     client1->direction = RIGHT;
+
     client_t *client2 = client_create(5);
-    client2->position = (pos_t){2, 2};
-    client1->direction = TOP;
+    client2->position = (pos_t){1, 1};
+    client2->direction = UP;
+
     client_t *client3 = client_create(6);
-    client3->position = (pos_t){2, 2};
-    client1->direction = LEFT;
+    client3->position = (pos_t){1, 1};
+    client3->direction = LEFT;
 
     server->clients = create_list();
     append_list(server->clients, client0);
@@ -98,17 +104,24 @@ Test(commands, eject_basic) {
     append_list(server->clients, client2);
     append_list(server->clients, client3);
 
-    for (int y = 0; y < 4; ++y) {
-        for (int x = 0; x < 4; ++x) {
-            tile_t *tile = get_tile_map(server->map, x, y);
-            for (int i = 0; i < INVENTORY_SIZE; ++i)
-                tile->inventory.inv_arr[i] = 0;
-        }
-    }
-    get_tile_map(server->map, 1, 1)->inventory.inv.linemate = 1;
-    get_tile_map(server->map, 0, 0)->inventory.inv.deraumere = 2;
-    get_tile_map(server->map, 1, 0)->inventory.inv.food = 3;
-    get_tile_map(server->map, 2, 0)->inventory.inv.phiras = 4;
-    char *ret = look(client, server);
-    cr_assert_str_eq(ret, "[linemate:1,deraumere:2,food:3,phiras:4]");
+
+    tile_t *tile = get_tile_map(server->map, 1, 1);
+    add_player(tile, client0->id);
+    add_player(tile, client1->id);
+    add_player(tile, client2->id);
+    add_player(tile, client3->id);
+
+    eject(client0, server);
+    // Client 0 shouldn't move
+    cr_assert_eq(client0->position.x, 1);
+    cr_assert_eq(client0->position.y, 1);
+
+    cr_assert_eq(client1->position.x, 2);
+    cr_assert_eq(client1->position.y, 1);
+
+    cr_assert_eq(client2->position.x, 1);
+    cr_assert_eq(client2->position.y, 2);
+
+    cr_assert_eq(client3->position.x, 0);
+    cr_assert_eq(client3->position.y, 1);
 }
