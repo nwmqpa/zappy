@@ -78,15 +78,3 @@ server_t *create_server(options_t *options)
     setup_teams(server, options);
     return server;
 }
-
-// TODO: Make it work.
-void print_server(server_t *server)
-{
-    printf("Server {\n"
-            "    listener_client: %hd,\n"
-            "    listener_graphic: %hd,\n"
-            "    teams: [", server->socket_client, server->socket_graphic);
-    for (int i = 0; server->teams[i]; ++i)
-        printf("%s%s", server->teams[i], server->teams[i + 1] ? ", " : "]\n" );
-    printf("}\n");
-}

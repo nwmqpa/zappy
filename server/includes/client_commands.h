@@ -26,6 +26,8 @@ typedef struct command_param_s {
     int len;
 } command_param_t;
 
+int process_command(client_t *client, server_t *server);
+
 /*
 ** Moving command
 **  response:   ok
@@ -86,3 +88,11 @@ char *set(client_t *client, server_t *server, const char *object);
 **  time limit: 300/f
 */
 char *incante(client_t *client, server_t *server);
+
+/*
+** Connect nbr command.
+**  response:   `Value`
+**      -> The nbr of available slots in client's team.
+**  time limit: 0
+*/
+char *connect_nbr(client_t *client, server_t *server);

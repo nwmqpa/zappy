@@ -62,7 +62,7 @@ int on_active_client(int socket, void *data)
 
     if (bytes_read == 0)
         return -1;
-    for (int i = 0; client && client->id != (size_t) socket; ++i)
+    for (int i = 0; client && client->id != socket; ++i)
         client = get_list(server->clients, i);
     if (client == NULL) {
         errorl("Client with socket: %d not found.\n", socket);

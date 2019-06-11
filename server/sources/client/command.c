@@ -41,22 +41,6 @@ int add_command(client_t *client, char *command)
     }
 }
 
-int process_command(client_t *client)
-{
-    char *command;
-
-    if (is_empty_list(client->commands))
-        return -1;
-    command = (char *) pop_list(client->commands, 0);
-    debugl("Handling command %s.\n", command);
-    return 0;
-}
-
-size_t len_command(client_t *client)
-{
-    return len_list(client->commands);
-}
-
 static char *iter_command(client_t *client, server_t *server, const char *command)
 {
     for (int i = 0; COMMANDS_PARAM[i].name; ++i) {
@@ -73,4 +57,21 @@ static char *iter_command(client_t *client, server_t *server, const char *comman
     }
     errorl("Command not found %s.\n", command);
     return "ko\n";
+}
+
+int process_command(client_t *client, server_t *server)
+{
+    char *command;
+
+    if (is_empty_list(client->commands))
+        return -1;
+    command = (char *) pop_list(client->commands, 0);
+    client->to_send = iter_command(client, server, command);
+    debugl("Handling command %s.\n", command);
+    return 0;
+}
+
+size_t len_command(client_t *client)
+{
+    return len_list(client->commands);
 }

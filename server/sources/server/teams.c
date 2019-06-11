@@ -42,3 +42,24 @@ int add_client_to_team(server_t *server, client_t *client, const char *team)
     infol("Not such team %s.\n", team);
     return -1;
 }
+
+static int is_id_in_team(int id, team_t *team, int nb_client)
+{
+    for (int i = 0; i < nb_client; ++i)
+        if (id == team->clients[i])
+            return 1;
+    return 0;
+}
+
+team_t *get_client_team(client_t *client, server_t *server)
+{
+    debugl("Getting client's %d team.\n");
+    for (int i = 0; server->teams[i]; ++i) {
+        if (is_id_in_team(client->id, server->teams[i],
+                    server->client_per_team)) {
+            return server->teams[i];
+        }
+    }
+    errorl("Player has no team.\n");
+    return NULL;
+}
