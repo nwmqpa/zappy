@@ -13,3 +13,6 @@ zappy_serve_test*
 */test
 */build/test
 .mypy_cache
+
+server/.cquery
+server/compile_commands.json
