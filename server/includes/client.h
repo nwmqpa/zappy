@@ -74,7 +74,8 @@ typedef struct client_s {
     char *to_send;
 } client_t;
 
-client_t *client_create(size_t id);
+client_t *client_create(int id);
+void client_delete(client_t *client);
 
 int add_command(client_t *client, char *command);
 size_t len_command(client_t *client);

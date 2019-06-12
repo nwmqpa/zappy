@@ -22,7 +22,7 @@ void move_client(client_t *client, int x, int y, pos_t size)
         client->position.y = (size.y - y) % size.y;
 }
 
-client_t *client_create(size_t id)
+client_t *client_create(int id)
 {
     client_t *new = calloc(sizeof(client_t), 1);
 
@@ -31,6 +31,13 @@ client_t *client_create(size_t id)
     new->inventory.inv.food = 10;
     new->level = 1;
     return new;
+}
+
+void client_delete(client_t *client)
+{
+    if (client->to_send != NULL)
+        free(client->to_send);
+    empty_list(client->commands, free);
 }
 
 void print_client(const client_t *client)

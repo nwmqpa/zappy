@@ -49,7 +49,7 @@ int on_delete_client(int socket, void *data)
     client = pop_cmp_list(
             server->clients, deleting_client_cmp, (void *) &socket);
     infol("Deleting client %d.", client->id);
-    // TODO: Delete client.
+    client_delete(client);
     return 0;
 }
 
