@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include "generic_list.h"
 
+
 /*
 ** Define directions that can have a player.
 */
@@ -73,6 +74,9 @@ typedef struct client_s {
     int cooldown;
     char *to_send;
 } client_t;
+
+// Utility function.
+int client_cmp(const void *entry, const void *id);
 
 client_t *client_create(int id);
 void client_delete(client_t *client);

@@ -9,7 +9,7 @@
 #include "generic_list.h"
 #include "client_commands.h"
 
-static int deleting_client_cmp(const void *entry, const void *id)
+int client_cmp(const void *entry, const void *id)
 {
     const client_t *client = entry;
     int rhs = *((size_t *) id);
@@ -46,8 +46,7 @@ int on_delete_client(int socket, void *data)
     client_t *client = NULL;
 
     debugl("Client delete handler.\n");
-    client = pop_cmp_list(
-            server->clients, deleting_client_cmp, (void *) &socket);
+    client = pop_cmp_list( server->clients, client_cmp, (void *) &socket);
     if (!client) {
         errorl("Client %d not found.\n", socket);
         return 84;
@@ -59,15 +58,14 @@ int on_delete_client(int socket, void *data)
 
 int on_active_client(int socket, void *data)
 {
-    char buffer[1025];
+    char buffer[1025] = {0};
     size_t bytes_read = read(socket, buffer, 1024);
     client_t *client = NULL;
     server_t *server = (server_t *) data;
 
     if (bytes_read == 0)
         return -1;
-    for (int i = 0; client && client->id != socket; ++i)
-        client = get_list(server->clients, i);
+    client = get_cmp_list(server->clients, client_cmp, (void *) &socket);
     if (client == NULL) {
         errorl("Client with socket: %d not found.\n", socket);
         return -1;
