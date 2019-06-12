@@ -34,15 +34,14 @@ static void setup_teams(server_t *server, options_t *options)
     int size = 0;
     int i = 0;
 
-    while (options->name[size])
-        size++;
-    server->teams = malloc(sizeof(team_t *) * size + 1);
+    while (options->name[size++]);
+    server->teams = malloc(sizeof(team_t *) * size + 2);
     for (; options->name[i]; ++i) {
         server->teams[i] = malloc(sizeof(team_t));
         server->teams[i]->name = options->name[i];
         server->teams[i]->clients = calloc(sizeof(int), options->client_nb);
     }
-    server->teams[i] = 0;
+    server->teams[i] = NULL;
 }
 
 static void setup_network(server_t *server, options_t *options)
