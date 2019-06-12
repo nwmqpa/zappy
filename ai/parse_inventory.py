@@ -51,7 +51,7 @@ def parse_inventory(line: str) -> Inventory:
     curr_siur = (array[3].split(" "))[2]
     curr_mendiane = (array[4].split(" "))[2]
     curr_phiras = (array[5].split(" "))[2]
-    curr_thystame = (array[6].split(" "))[2]
+    curr_thystame = ((array[6].split(" "))[2]).replace("\n", "")
     return (Inventory(
         curr_food, curr_linemate, curr_deraumere,
         curr_siur, curr_mendiane, curr_phiras, curr_thystame))

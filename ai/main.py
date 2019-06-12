@@ -23,7 +23,7 @@ def send_message(server_socket: socket.socket, message: str) -> None:
 
 def get_connection_nb(server_socket: socket.socket) -> int:
     """Return nb of connected players."""
-    print('Send     ->', "Connect_nbr")
+    print('Send     ->', "Allowed Connect_nbr")
     server_socket.send(("Connect_nbr" + "\n").encode())
     new_data = server_socket.recv(1024).decode()
     print("Recv =====>", new_data, "\n")
