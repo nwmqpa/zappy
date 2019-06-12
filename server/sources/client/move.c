@@ -28,7 +28,7 @@ char *forward(client_t *client, server_t *server)
     case DOWN:
         move_client(client, 0, -1, size);
     }
-    return "ok";
+    return strdup("ok\n");
 }
 
 char *left(client_t *client, server_t *server)
@@ -52,7 +52,7 @@ char *left(client_t *client, server_t *server)
     case DOWN:
         move_client(client, 1, 0, size);
     }
-    return "ok";
+    return strdup("ok\n");
 }
 
 char *right(client_t *client, server_t *server)
@@ -76,5 +76,5 @@ char *right(client_t *client, server_t *server)
     case DOWN:
         move_client(client, -1, 0, size);
     }
-    return "ok";
+    return strdup("ok\n");
 }
