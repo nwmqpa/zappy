@@ -17,8 +17,10 @@ static void handle_player_tick(void *data, const void *params)
     const int *elapsed_time = params;
 
     client->cooldown -= *elapsed_time;
-    if (client->cooldown < 0)
+    if (client->cooldown < 0) {
         client->cooldown = -1;
+        dprintf(client->id, "%s\n", client->to_send);
+    }
 }
 
 void tick_system(server_t *server)
