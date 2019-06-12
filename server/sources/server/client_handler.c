@@ -9,12 +9,12 @@
 #include "generic_list.h"
 #include "client_commands.h"
 
-static int deleting_client_cmp(const void *id_checked, const void *id)
+static int deleting_client_cmp(const void *entry, const void *id)
 {
-    size_t lhs = *((size_t *) id_checked);
-    size_t rhs = *((size_t *) id);
+    const client_t *client = entry;
+    int rhs = *((size_t *) id);
 
-    return lhs == rhs;
+    return client->id == rhs;
 }
 
 void handle_protocol(client_t *client, server_t *server)
@@ -48,7 +48,11 @@ int on_delete_client(int socket, void *data)
     debugl("Client delete handler.\n");
     client = pop_cmp_list(
             server->clients, deleting_client_cmp, (void *) &socket);
-    infol("Deleting client %d.", client->id);
+    if (!client) {
+        errorl("Client %d not found.\n", socket);
+        return 84;
+    }
+    infol("Deleting client %d.\n", client->id);
     client_delete(client);
     return 0;
 }
