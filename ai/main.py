@@ -15,43 +15,43 @@ import sys
 
 def send_message(server_socket: socket.socket, message: str) -> None:
     """Broadcast message to all players."""
-    print('Send     ->', "Broadcast text")
+    # print('Send     ->', "Broadcast text")
     server_socket.send(("Broadcast " + message + "\n").encode())
     new_data = server_socket.recv(1024).decode()
-    print("Recv =====>", new_data, "\n")
+    # print("Recv =====>", new_data, "\n")
 
 
 def get_connection_nb(server_socket: socket.socket) -> int:
     """Return nb of connected players."""
-    print('Send     ->', "Allowed Connect_nbr")
+    # print('Send     ->', "Allowed Connect_nbr")
     server_socket.send(("Connect_nbr" + "\n").encode())
     new_data = server_socket.recv(1024).decode()
-    print("Recv =====>", new_data, "\n")
+    # print("Recv =====>", new_data, "\n")
     return (int(new_data))
 
 
 def move_forward(server_socket: socket.socket) -> None:
     """Move plyer Forward."""
-    print('Send     ->', "Forward")
+    # print('Send     ->', "Forward")
     server_socket.send(("Forward" + "\n").encode())
     new_data = server_socket.recv(1024).decode()
-    print("Recv =====>", new_data, "\n")
+    # print("Recv =====>", new_data, "\n")
 
 
 def turn_right(server_socket: socket.socket) -> None:
     """Make player turn Right."""
-    print('Send     ->', "Right")
+    # print('Send     ->', "Right")
     server_socket.send(("Right" + "\n").encode())
     new_data = server_socket.recv(1024).decode()
-    print("Recv =====>", new_data, "\n")
+    # print("Recv =====>", new_data, "\n")
 
 
 def turn_left(server_socket: socket.socket) -> None:
     """Make player turn Left."""
-    print('Send     ->', "Left")
+    # print('Send     ->', "Left")
     server_socket.send(("Left" + "\n").encode())
     new_data = server_socket.recv(1024).decode()
-    print("Recv =====>", new_data, "\n")
+    # print("Recv =====>", new_data, "\n")
 
 
 def commands(server_socket: socket.socket) -> None:
@@ -62,19 +62,14 @@ def commands(server_socket: socket.socket) -> None:
     turn_right(server_socket)
     turn_left(server_socket)
 
-    # new_data = server_socket.recv(1024).decode()
-    # # print('Received ->', repr(new_data))
-    # print("Recv =====>", new_data, "\n")
-
 
 def main() -> None:
-    """Main."""
+    """Entry point of the bot."""
     basic_verif()
     opt = get_arguments()
     verif_args_values(opt)
     server_socket = connect_socket(opt)
     client_info = get_client_nb_and_world_size(server_socket, opt)
-    # print("Client info -> ", repr(client_info) + "\n")
     commands(server_socket)
 
     curr_player = Player(server_socket)

@@ -8,14 +8,14 @@ class Vision:
 
     def __init__(
         self, tile_nb: int, food: int, linemate: int,
-        deraumere: int, siur: int, mendiane: int, phiras: int, thystame: int
+        deraumere: int, sibur: int, mendiane: int, phiras: int, thystame: int
          ) -> None:
         """__init__."""
         self.tile_nb = tile_nb
         self.food = food
         self.linemate = linemate
         self.deraumere = deraumere
-        self.siur = siur
+        self.sibur = sibur
         self.mendiane = mendiane
         self.phiras = phiras
         self.thystame = thystame
@@ -24,13 +24,13 @@ class Vision:
         """__str__."""
         ret = (
             "Vision -> tile_nb: {} food: {} linemate: {} deraumere: {} " +
-            "siur: {} mendiane: {} phiras: {} thystame: {}>"
+            "sibur: {} mendiane: {} phiras: {} thystame: {}>"
             ).format(
             self.tile_nb,
             self.food,
             self.linemate,
             self.deraumere,
-            self.siur,
+            self.sibur,
             self.mendiane,
             self.phiras,
             self.thystame
@@ -49,10 +49,10 @@ def parse_vision(line: str) -> List[Vision]:
     line = line.replace(" ]", "")
     array = str(line).split(",")
     tile = 0
-    food = linemate = deraumere = siur = mendiane = phiras = thystame = 0
+    food = linemate = deraumere = sibur = mendiane = phiras = thystame = 0
     for x in array:
         splited = x.split(" ")
-        food = linemate = deraumere = siur = mendiane = phiras = thystame = 0
+        food = linemate = deraumere = sibur = mendiane = phiras = thystame = 0
         for i in splited:
             if (str(i) == "food"):
                 food = food + 1
@@ -60,8 +60,8 @@ def parse_vision(line: str) -> List[Vision]:
                 linemate = linemate + 1
             elif (str(i) == "deraumere"):
                 deraumere = deraumere + 1
-            elif (str(i) == "siur"):
-                siur = siur + 1
+            elif (str(i) == "sibur"):
+                sibur = sibur + 1
             elif (str(i) == "mendiane"):
                 mendiane = mendiane + 1
             elif (str(i) == "phiras"):
@@ -72,5 +72,5 @@ def parse_vision(line: str) -> List[Vision]:
         environment.append(
             Vision(
                 tile, food, linemate, deraumere,
-                siur, mendiane, phiras, thystame))
+                sibur, mendiane, phiras, thystame))
     return (environment)
