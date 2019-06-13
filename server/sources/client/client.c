@@ -33,6 +33,7 @@ client_t *client_create(int id)
     return new;
 }
 
+// TODO: Remove player from team.
 void client_delete(client_t *client)
 {
     if (client->to_send != NULL)

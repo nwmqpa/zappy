@@ -44,6 +44,7 @@ int create_graphic_listener(options_t *options);
 team_t *get_client_team(client_t *client, server_t *server);
 
 int add_client_to_team(server_t *server, client_t *client, const char *team);
+void remove_client_from_team(team_t *team, client_t *client, server_t *server);
 
 void print_server(server_t *server);
 

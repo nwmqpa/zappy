@@ -16,6 +16,7 @@ static const command_t COMMANDS[] = {
     {"right", forward, 5},
     {"look", look, 4},
     {"incante", incante, 7},
+    {"connect_nbr", connect_nbr, 0},
     {NULL, NULL, 0}
 };
 
