@@ -29,6 +29,7 @@ void get_map_status(server_t *server) {
         }
         putchar('\n');
     }
+    putchar('\n');
 }
 
 void get_teams_status(server_t *server) {
@@ -70,12 +71,10 @@ char *server_status(server_t *server, const char *command) {
     part = strtok(dupped, " \n");
     while (part != NULL) {
         func = get_func(part);
-        if (func == NULL) {
+        if (func == NULL)
             errorl("Cannot find %s status.\n", part);
-            continue;
-        } else {
+        else
             func(server);
-        }
         part = strtok(NULL, " \n");
     }
     free(dupped);
