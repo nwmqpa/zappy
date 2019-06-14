@@ -5,6 +5,7 @@
 ** Client handler function callback.
 */
 
+#include "map.h"
 #include "logger.h"
 #include "generic_list.h"
 #include "client_commands.h"
@@ -25,6 +26,9 @@ void handle_protocol(client_t *client, server_t *server)
     dprintf(client->id, "WELCOME\n");
     read(client->id, &team_name, 100);
     free_space = add_client_to_team(server, client, team_name);
+    if (free_space > 0)
+        add_player(get_random_tile(server->map, server->width, server->height),
+                client->id);
     dprintf(client->id, "%d\n", free_space - 1);
 }
 
