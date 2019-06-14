@@ -13,7 +13,7 @@ class Player:
     """All player action to live."""
 
     def __init__(self, server_socket: socket.socket) -> None:
-        """Init basic infos."""
+        """Set basic infos."""
         self.server_socket = server_socket
         self.inventory = Inventory
         self.units_of_time = 0
@@ -74,15 +74,6 @@ class Player:
                                         "phiras": 2,
                                         "thystame": 1
                                     }]
-        # self.my_stuff = {
-        #     "food": 1200,
-        #     "linemate": 0,
-        #     "deraumere": 0,
-        #     "sibur": 0,
-        #     "mendiane": 0,
-        #     "phiras": 0,
-        #     "thystame": 0
-        # }
 
     def send_msg(self, message: str) -> None:
         """Send message to server."""
@@ -120,7 +111,7 @@ class Player:
             return(-1)
         else:
             print("Response is ->", response)
-            print("Add " + object + " to inventory.")
+            print("Add `" + object + "` to inventory.")
             if object == "food":
                 self.inventory.food = str(int(self.inventory.food) + 1)
             elif object == "linemate":
@@ -143,7 +134,7 @@ class Player:
         return(self.inventory.get_item(stone))
 
     def should_take(self, stone: str) -> bool:
-        """Return True if we have to pickup this stone."""
+        """Return True if we have to pickup this stone, else return False."""
         if (stone == "food" and self.get_stone_nb("food") < 10):
             return (True)
         elif (stone == "linemate" and self.get_stone_nb("linemate") < 9):
@@ -190,11 +181,40 @@ class Player:
             return(self.take_object("thystame"))
         return(0)
 
+    def move_forward(self) -> None:
+        """Move player `Forward`."""
+        print("\nPlayer move `Forward`.")
+        self.send_msg("Forward")
+        response = self.recv_msg()
+        print("Response for player move ->", response)
+
+    def turn_right(self) -> None:
+        """Make player turn `Right`."""
+        print("\nPlayer move `Right`.")
+        self.send_msg("Right")
+        response = self.recv_msg()
+        print("Response for player move ->", response)
+
+    def turn_left(self) -> None:
+        """Make player turn `Left`."""
+        print("\nPlayer move `Left`.")
+        self.send_msg("Left")
+        response = self.recv_msg()
+        print("Response for player move ->", response)
+
+    def where_to_move(self) -> None:
+        """Determine if player move forward, turn right or left."""
+        self.move_forward()
+        # self.turn_left()
+        # self.turn_right()
+        # raise NotImplementedError
+
     def life_loop(self) -> None:
         """Player life."""
         print("Begin of loop.\n")
         i = 0
-        while (i < 1):
+        while (i < 500):
+            print("LOOP\n")
             self.inventory = self.check_inventory()
             print(self.inventory, "\n")
             self.units_of_time = int(self.inventory.food) * 126
@@ -207,5 +227,7 @@ class Player:
 
             self.choose_stone_to_take(self.actual_level)
             print(self.inventory)
+
+            self.where_to_move()
 
             i = i + 1
