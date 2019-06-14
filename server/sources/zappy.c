@@ -24,7 +24,7 @@ static void handle_player_tick(void *data, const void *params)
     if (client->cooldown < 0) {
         client->cooldown = 0;
         if (client->to_send) {
-            dprintf(client->id, "%s\n", client->to_send);
+            dprintf(client->id, "%s", client->to_send);
             free(client->to_send);
             client->to_send = NULL;
         } else {
