@@ -9,21 +9,21 @@
 #include "client_commands.h"
 
 static const command_t COMMANDS[] = {
-    {"fork", fork_client, 4},
-    {"eject", eject, 5},
-    {"forward", forward, 7},
-    {"left", left, 4},
-    {"right", forward, 5},
-    {"look", look, 4},
-    {"incante", incante, 7},
-    {"connect_nbr", connect_nbr, 11},
+    {"Fork", fork_client, 4},
+    {"Eject", eject, 5},
+    {"Forward", forward, 7},
+    {"Left", left, 4},
+    {"Right", forward, 5},
+    {"Look", look, 4},
+    {"Incante", incante, 7},
+    {"Connect_nbr", connect_nbr, 11},
     {NULL, NULL, 0}
 };
 
 static const command_param_t COMMANDS_PARAM[] = {
-    {"broadcast", broadcast, 9},
-    {"take", take, 4},
-    {"set", set, 3},
+    {"Broadcast", broadcast, 9},
+    {"Take", take, 4},
+    {"Set", set, 3},
     {NULL, NULL, 0}
 };
 
