@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include "map.h"
+#include "logger.h"
 
 static const unsigned int MAX_RAND_TILE = 20;
 
@@ -33,8 +34,9 @@ void set_tile(tile_t *new)
 
 void add_player(tile_t *tile, int id)
 {
-    int *new = malloc(sizeof(int) * tile->nb_player + 1);
+    int *new = malloc(sizeof(int) * (tile->nb_player + 1));
 
+    debugl("Adding client %d there is %d players.\n", id, tile->nb_player);
     for (unsigned int i = 0; i < tile->nb_player; ++i)
         new[i] = tile->player_ids[i];
     new[tile->nb_player] = id;
