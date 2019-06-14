@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
         dprintf(2, "zappy_server: Too few arguments.\n");
         return 84;
     }
+    srandom(time(NULL));
     options_t *options = create_opt(argc, argv);
     server_t *server = NULL;
 
@@ -26,10 +27,9 @@ int main(int argc, char *argv[])
     }
     server = create_server(options);
     free(options);
-    if (server) {
+    if (server)
         return zappy_server(server);
-    } else {
+    else
         return 84;
-    }
 }
 #endif /* TEST */
