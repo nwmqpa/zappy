@@ -9,7 +9,7 @@
 #include "client.h"
 #include "logger.h"
 
-static int check_free_space(team_t *team, int max_client, int new_client)
+int check_free_space(team_t *team, int max_client, int new_client)
 {
     int ret = 0;
 
