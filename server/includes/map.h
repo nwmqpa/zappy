@@ -8,6 +8,7 @@
 #pragma once
 
 #include "client.h"
+#include "utils.h"
 
 /*
 ** Contain an inventory and player's id of those placed on them.
@@ -33,6 +34,7 @@ typedef struct map_s {
     tile_t *tiles;
 } map_t;
 
+char *tile_to_string(const tile_t *tile);
 map_t *create_map(unsigned int width, unsigned int height);
 tile_t *get_tile_map(map_t *map, unsigned int x, unsigned int y);
 int move_client_map(map_t *map, client_t *client);

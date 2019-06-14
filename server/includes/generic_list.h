@@ -15,6 +15,7 @@ typedef int (*cmp_func) (const void *, const void *);
 typedef int (*filter_func) (const void *);
 typedef void (*print_func) (const void *);
 typedef void (*dtor_func) (void *);
+typedef void (*map_func) (void *, const void *);
 
 typedef struct entry_s {
     void *data;
@@ -48,3 +49,5 @@ int is_empty_list(list_t *list);
 size_t len_list(list_t *list);
 
 void empty_list(list_t *list, dtor_func dtor);
+
+void map(list_t *list, map_func mapped, void *data);
