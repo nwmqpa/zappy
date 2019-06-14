@@ -5,16 +5,17 @@
 ** Client handler function callback.
 */
 
+#include "map.h"
 #include "logger.h"
 #include "generic_list.h"
 #include "client_commands.h"
 
-static int deleting_client_cmp(const void *id_checked, const void *id)
+int client_cmp(const void *entry, const void *id)
 {
-    size_t lhs = *((size_t *) id_checked);
-    size_t rhs = *((size_t *) id);
+    const client_t *client = entry;
+    int rhs = *((size_t *) id);
 
-    return lhs == rhs;
+    return client->id == rhs;
 }
 
 void handle_protocol(client_t *client, server_t *server)
@@ -25,7 +26,10 @@ void handle_protocol(client_t *client, server_t *server)
     dprintf(client->id, "WELCOME\n");
     read(client->id, &team_name, 100);
     free_space = add_client_to_team(server, client, team_name);
-    dprintf(client->id, "%d\n", free_space);
+    if (free_space > 0)
+        add_player(get_random_tile(server->map, server->width, server->height),
+                client->id);
+    dprintf(client->id, "%d\n", free_space - 1);
 }
 
 int on_connect_client(int socket, void *data)
@@ -44,26 +48,31 @@ int on_delete_client(int socket, void *data)
 {
     server_t *server = (server_t *) data;
     client_t *client = NULL;
+    team_t *team = NULL;
 
     debugl("Client delete handler.\n");
-    client = pop_cmp_list(
-            server->clients, deleting_client_cmp, (void *) &socket);
-    infol("Deleting client %d.", client->id);
-    // TODO: Delete client.
+    client = pop_cmp_list( server->clients, client_cmp, (void *) &socket);
+    if (!client) {
+        errorl("Client %d not found.\n", socket);
+        return 84;
+    }
+    infol("Deleting client %d.\n", client->id);
+    team = get_client_team(client, server);
+    remove_client_from_team(team, client, server);
+    client_delete(client);
     return 0;
 }
 
 int on_active_client(int socket, void *data)
 {
-    char buffer[1025];
+    char buffer[1025] = {0};
     size_t bytes_read = read(socket, buffer, 1024);
     client_t *client = NULL;
     server_t *server = (server_t *) data;
 
     if (bytes_read == 0)
         return -1;
-    for (int i = 0; client && client->id != socket; ++i)
-        client = get_list(server->clients, i);
+    client = get_cmp_list(server->clients, client_cmp, (void *) &socket);
     if (client == NULL) {
         errorl("Client with socket: %d not found.\n", socket);
         return -1;

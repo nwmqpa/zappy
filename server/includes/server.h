@@ -22,6 +22,8 @@ typedef struct team_s {
     int *clients;
 } team_t;
 
+int check_free_space(team_t *team, int max_client, int new_client);
+
 typedef struct server_s {
     unsigned int width;
     unsigned int height;
@@ -44,7 +46,19 @@ int create_graphic_listener(options_t *options);
 team_t *get_client_team(client_t *client, server_t *server);
 
 int add_client_to_team(server_t *server, client_t *client, const char *team);
+void remove_client_from_team(team_t *team, client_t *client, server_t *server);
 
 void print_server(server_t *server);
+
+/* DEBUG */
+
+typedef void (*debug_func) (server_t *);
+
+struct server_part_s {
+    char *name;
+    debug_func func;
+};
+
+char *server_status(server_t *server, const char *command);
 
 #endif /* SERVER_H_ */

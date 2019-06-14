@@ -13,18 +13,34 @@
 
 static void handle_player_tick(void *data, const void *params)
 {
+    struct {
+        int elapsed;
+        server_t *server;
+    } const *parameters = params;
     client_t *client = data;
-    const int *elapsed_time = params;
+    int elapsed_time = parameters->elapsed;
 
-    client->cooldown -= *elapsed_time;
-    if (client->cooldown < 0)
-        client->cooldown = -1;
+    client->cooldown -= elapsed_time;
+    if (client->cooldown < 0) {
+        client->cooldown = 0;
+        if (client->to_send) {
+            dprintf(client->id, "%s", client->to_send);
+            free(client->to_send);
+            client->to_send = NULL;
+        } else {
+            process_command(client, parameters->server);
+        }
+    }
 }
 
 void tick_system(server_t *server)
 {
-    int elapsed_time = 1;
-    map(server->clients, handle_player_tick, NULL);
+    struct {
+        int elapsed;
+        server_t *server;
+    } name = { 1, server };
+
+    map(server->clients, handle_player_tick, &name);
 }
 
 static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
@@ -34,7 +50,7 @@ static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
 
     while (42) {
         if (dispatch(graphic, graphic_data) == -1 ||
-        dispatch(client, server) == -1) {
+                dispatch(client, server) == -1) {
             infol("Closing server after an error.\n");
             return -1;
         }

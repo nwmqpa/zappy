@@ -39,3 +39,4 @@ map_t *create_map(unsigned int width, unsigned int height);
 tile_t *get_tile_map(map_t *map, unsigned int x, unsigned int y);
 int move_client_map(map_t *map, client_t *client);
 char *get_reponse_string(map_t *map);
+tile_t *get_random_tile(map_t *map, unsigned int max_x, unsigned max_y);

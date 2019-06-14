@@ -16,6 +16,7 @@ static const command_t COMMANDS[] = {
     {"right", forward, 5},
     {"look", look, 4},
     {"incante", incante, 7},
+    {"connect_nbr", connect_nbr, 11},
     {NULL, NULL, 0}
 };
 
@@ -55,8 +56,12 @@ static char *iter_command(client_t *client, server_t *server, const char *comman
             return COMMANDS[i].function(client, server);
         }
     }
+    if (strncmp("status", command, 6) == 0) {
+        debugl("Status %s\n", command);
+        return server_status(server, command + 6);
+    }
     errorl("Command not found %s.\n", command);
-    return "ko\n";
+    return strdup("ko\n");
 }
 
 int process_command(client_t *client, server_t *server)
