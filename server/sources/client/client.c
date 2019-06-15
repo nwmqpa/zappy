@@ -8,18 +8,24 @@
 #include "logger.h"
 #include "client_commands.h"
 
-void move_client(client_t *client, int x, int y, pos_t size)
+void move_client(client_t *client, server_t *server, pos_t new, pos_t size)
 {
-    client->position.x += x;
-    client->position.y += y;
+    tile_t *new_tile = NULL;
+    tile_t *old_tile = get_tile_map(server->map, client->position.x,
+            client->position.y);
 
+    remove_player(old_tile, client->id);
+    client->position.x += new.x;
+    client->position.y += new.y;
     client->position.x %= size.x;
     client->position.y %= size.y;
-
     if (client->position.x < 0)
-        client->position.x = (size.x - x) % size.x;
+        client->position.x = size.x + new.x;
     if (client->position.y < 0)
-        client->position.y = (size.y - y) % size.y;
+        client->position.y = size.y + new.y;
+    new_tile = get_tile_map(server->map, client->position.x,
+            client->position.y);
+    add_player(new_tile, client->id);
 }
 
 client_t *client_create(int id)
@@ -33,12 +39,11 @@ client_t *client_create(int id)
     return new;
 }
 
-// TODO: Remove player from team.
 void client_delete(client_t *client)
 {
-    if (client->to_send != NULL)
-        free(client->to_send);
+    free(client->to_exec);
     empty_list(client->commands, free);
+    dprintf(client->id, "dead\n");
 }
 
 void print_client(client_t *client)
@@ -61,12 +66,12 @@ void print_client(client_t *client)
             "   position: (x: %d, y: %d)\n"
             "   level: %d\n"
             "   cooldown: %d\n"
-            "   to_send: %s\n"
+            "   to_exec: %s\n"
             "   direction: %s\n"
             "}\n"
             , client->id, inv, client->position.x,
             client->position.y, client->level, client->cooldown,
-            client->to_send, direction);
+            client->to_exec, direction);
     free(inv);
 }
 

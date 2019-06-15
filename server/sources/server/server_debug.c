@@ -22,7 +22,8 @@ void get_players_status(server_t *server) {
 void get_map_status(server_t *server) {
     tile_t *tile = NULL;
 
-    for (unsigned int y = 0; y < server->height; ++y) {
+    for (int y = server->height; y >= 0; --y) {
+        printf("%2d | ", y);
         for (unsigned int x = 0; x < server->width; ++x) {
             tile = get_tile_map(server->map, x, y);
             printf("[%d]", tile->nb_player);

@@ -19,17 +19,18 @@ static void handle_player_tick(void *data, const void *params)
     } const *parameters = params;
     client_t *client = data;
     int elapsed_time = parameters->elapsed;
+    char *to_send = NULL;
 
     client->cooldown -= elapsed_time;
-    if (client->cooldown < 0) {
+    if (client->cooldown <= 0) {
         client->cooldown = 0;
-        if (client->to_send) {
-            dprintf(client->id, "%s", client->to_send);
-            free(client->to_send);
-            client->to_send = NULL;
-        } else {
-            process_command(client, parameters->server);
-        }
+        if (client->to_exec) {
+            to_send = process_command(client, parameters->server);
+            dprintf(client->id, "%s\n", to_send);
+            free(client->to_exec);
+            client->to_exec = NULL;
+        } else
+            prepare_command(client);
     }
 }
 

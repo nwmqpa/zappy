@@ -22,14 +22,22 @@ void handle_protocol(client_t *client, server_t *server)
 {
     char team_name[100] = {0};
     int free_space = -1;
+    unsigned int x = rand() % (server->width - 1);
+    unsigned int y = rand() % (server->height - 1);
 
     dprintf(client->id, "WELCOME\n");
     read(client->id, &team_name, 100);
-    free_space = add_client_to_team(server, client, team_name);
-    if (free_space > 0)
-        add_player(get_random_tile(server->map, server->width, server->height),
-                client->id);
+    while ((free_space = add_client_to_team(server, client, team_name)) == -1) {
+        dprintf(client->id, "ko\n");
+        read(client->id, &team_name, 100);
+    }
+    if (free_space > 0) {
+        add_player(get_tile_map(server->map, x, y), client->id);
+        client->position.x = x;
+        client->position.y = y;
+    }
     dprintf(client->id, "%d\n", free_space - 1);
+    dprintf(client->id, "%d %d\n", server->width, server->height);
 }
 
 int on_connect_client(int socket, void *data)
