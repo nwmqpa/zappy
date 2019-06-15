@@ -13,10 +13,11 @@ static const command_t COMMANDS[] = {
     {"Eject", eject, 5},
     {"Forward", forward, 7},
     {"Left", left, 4},
-    {"Right", forward, 5},
+    {"Right", right, 5},
     {"Look", look, 4},
     {"Incante", incante, 7},
     {"Connect_nbr", connect_nbr, 11},
+    {"Inventory", inventory, 9},
     {NULL, NULL, 0}
 };
 

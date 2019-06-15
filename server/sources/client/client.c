@@ -16,10 +16,12 @@ void move_client(client_t *client, int x, int y, pos_t size)
     client->position.x %= size.x;
     client->position.y %= size.y;
 
+    debugl("Moving client %d to %d %d.\npos %d %d", client->id,
+            client->position.x, client->position.y, size.x, size.y);
     if (client->position.x < 0)
-        client->position.x = (size.x - x) % size.x;
+        client->position.x = size.x + x;
     if (client->position.y < 0)
-        client->position.y = (size.y - y) % size.y;
+        client->position.y = size.y + y;
 }
 
 client_t *client_create(int id)

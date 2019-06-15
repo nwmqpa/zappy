@@ -28,7 +28,7 @@ static char *get_view_level(int level, pos_t pos, map_t *map,
 {
     int sub_level = level - 1;
     int begin = sub_level * -1;
-    const char **stock = malloc(sizeof(char *) * sub_level);
+    const char **stock = malloc(sizeof(char *) * (sub_level + 1));
     int total_len = 0;
     char *line;
     int idx = 0;
