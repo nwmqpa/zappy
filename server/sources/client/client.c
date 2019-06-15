@@ -36,6 +36,7 @@ client_t *client_create(int id)
     new->id = id;
     new->inventory.inv.food = 10;
     new->level = 1;
+    new->need_to_eat = 126;
     return new;
 }
 
