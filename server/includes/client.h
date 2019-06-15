@@ -86,4 +86,3 @@ size_t len_command(client_t *client);
 
 void print_client(client_t *client);
 void print_client_list(const void *data);
-void move_client(client_t *client, int x, int y, pos_t size);

@@ -22,6 +22,8 @@ void handle_protocol(client_t *client, server_t *server)
 {
     char team_name[100] = {0};
     int free_space = -1;
+    unsigned int x = rand() % (server->width - 1);
+    unsigned int y = rand() % (server->height - 1);
 
     dprintf(client->id, "WELCOME\n");
     read(client->id, &team_name, 100);
@@ -29,9 +31,11 @@ void handle_protocol(client_t *client, server_t *server)
         dprintf(client->id, "ko\n");
         read(client->id, &team_name, 100);
     }
-    if (free_space > 0)
-        add_player(get_random_tile(server->map, server->width, server->height),
-                client->id);
+    if (free_space > 0) {
+        add_player(get_tile_map(server->map, x, y), client->id);
+        client->position.x = x;
+        client->position.y = y;
+    }
     dprintf(client->id, "%d\n", free_space - 1);
     dprintf(client->id, "%d %d\n", server->width, server->height);
 }

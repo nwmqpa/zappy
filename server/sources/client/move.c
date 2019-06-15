@@ -9,24 +9,21 @@
 
 char *forward(client_t *client, server_t *server)
 {
-    pos_t size = {
-        .x = server->width,
-        .y = server->height
-    };
+    pos_t size = {server->width, server->height};
 
     client->cooldown = 7;
     switch (client->direction) {
     case LEFT:
-        move_client(client, -1, 0, size);
+        move_client(client, server, (pos_t){-1, 0}, size);
         break;
     case RIGHT:
-        move_client(client, 1, 0, size);
+        move_client(client, server, (pos_t){1, 0}, size);
         break;
     case UP:
-        move_client(client, 0, 1, size);
+        move_client(client, server, (pos_t){0, 1}, size);
         break;
     case DOWN:
-        move_client(client, 0, -1, size);
+        move_client(client, server, (pos_t){0, -1}, size);
     }
     return strdup("ok");
 }
