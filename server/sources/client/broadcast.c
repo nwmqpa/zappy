@@ -28,7 +28,6 @@ static void send_to_clients(server_t *server, const char *text, size_t local_id)
 
 char *broadcast(client_t *client, server_t *server, const char *text)
 {
-    client->cooldown = 7;
     send_to_clients(server, text, client->id);
     return strdup("ok");
 }

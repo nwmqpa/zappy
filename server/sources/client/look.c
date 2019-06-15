@@ -83,7 +83,6 @@ static char *get_vision_content(server_t *server, unsigned int level,
 
 char *look(client_t *client, server_t *server)
 {
-    client->cooldown = 7;
     return get_vision_content(server, client->level, client->direction,
             client->position);
 }

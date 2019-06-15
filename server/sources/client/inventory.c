@@ -11,7 +11,6 @@ char *inventory(client_t *client, server_t *server)
 {
     char *inv = NULL;
 
-    client->cooldown = 1;
     asprintf(&inv, "[linemate %d, deraumere %d, sibur %d, mendiane %d,"
             " phiras %d, thystame %d, food %d]",
             client->inventory.inv.linemate,

@@ -36,7 +36,6 @@ char *eject(client_t *client, server_t *server)
     client_t *client_ptr = NULL;
     unsigned int nb_player = tile->nb_player;
 
-    client->cooldown = 7;
     for (unsigned int i = 0; i < nb_player; i++) {
         client_id = tile->player_ids[i];
         if (client_id == client->id)

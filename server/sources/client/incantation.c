@@ -17,6 +17,5 @@ char *incante(client_t *client, server_t *server)
 {
     if (!is_incant_possible(client, server))
         return strdup("ko");
-    client->cooldown = 700;
     return strdup("Elevation underway\nCurrent level: %d");
 }

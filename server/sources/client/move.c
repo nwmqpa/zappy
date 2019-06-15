@@ -11,7 +11,6 @@ char *forward(client_t *client, server_t *server)
 {
     pos_t size = {server->width, server->height};
 
-    client->cooldown = 7;
     switch (client->direction) {
     case LEFT:
         move_client(client, server, (pos_t){-1, 0}, size);
@@ -30,7 +29,6 @@ char *forward(client_t *client, server_t *server)
 
 char *left(client_t *client, server_t *server)
 {
-    client->cooldown = 7;
     switch (client->direction) {
     case LEFT:
         client->direction = DOWN;
@@ -49,7 +47,6 @@ char *left(client_t *client, server_t *server)
 
 char *right(client_t *client, server_t *server)
 {
-    client->cooldown = 7;
     switch (client->direction) {
     case LEFT:
         client->direction = UP;
