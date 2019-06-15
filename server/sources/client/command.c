@@ -62,7 +62,7 @@ static char *iter_command(client_t *client, server_t *server, const char *comman
         return server_status(server, command + 6);
     }
     errorl("Command not found %s.\n", command);
-    return strdup("ko\n");
+    return strdup("ko");
 }
 
 int process_command(client_t *client, server_t *server)

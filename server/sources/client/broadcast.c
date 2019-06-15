@@ -14,7 +14,7 @@ static void send_text(void *ptr, const void *data)
     client_t *client = (client_t *) ptr;
     int tile = 1;
 
-    dprintf(client->id, "message %d, %s\n", tile, text);
+    dprintf(client->id, "message %d, %s", tile, text);
 }
 
 static void send_to_clients(server_t *server, const char *text, size_t local_id)
@@ -30,5 +30,5 @@ char *broadcast(client_t *client, server_t *server, const char *text)
 {
     client->cooldown = 7;
     send_to_clients(server, text, client->id);
-    return strdup("ok\n");
+    return strdup("ok");
 }
