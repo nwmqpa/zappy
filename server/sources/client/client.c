@@ -39,11 +39,9 @@ client_t *client_create(int id)
     return new;
 }
 
-// TODO: Remove player from team.
 void client_delete(client_t *client)
 {
-    if (client->to_send != NULL)
-        free(client->to_send);
+    free(client->to_exec);
     empty_list(client->commands, free);
     dprintf(client->id, "dead\n");
 }
@@ -68,12 +66,12 @@ void print_client(client_t *client)
             "   position: (x: %d, y: %d)\n"
             "   level: %d\n"
             "   cooldown: %d\n"
-            "   to_send: %s\n"
+            "   to_exec: %s\n"
             "   direction: %s\n"
             "}\n"
             , client->id, inv, client->position.x,
             client->position.y, client->level, client->cooldown,
-            client->to_send, direction);
+            client->to_exec, direction);
     free(inv);
 }
 
