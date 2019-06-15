@@ -85,7 +85,7 @@ int prepare_command(client_t *client)
     debugl("Preparing command %s.\n", client->to_exec);
     client->cooldown = get_cooldown(client->to_exec);
     if (client->cooldown == -1) {
-        errorl("Cannot find cooldown of %s.\n", client->commands);
+        errorl("Cannot find cooldown of %s.\n", client->to_exec);
         return -1;
     }
     return 0;
