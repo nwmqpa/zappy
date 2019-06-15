@@ -15,23 +15,21 @@ int main(int argc, char *argv[])
 {
     if (argc == 1) {
         dprintf(2, "zappy_server: Too few arguments.\n");
-        exit(84);
+        return 84;
     }
+    srandom(time(NULL));
     options_t *options = create_opt(argc, argv);
     server_t *server = NULL;
 
     if (check_opt(options) == -1) {
-        errorl("Error in argument parsing.\n");
         free(options);
         return 84;
     }
     server = create_server(options);
-    print_opt(options);
     free(options);
-    if (server) {
+    if (server)
         return zappy_server(server);
-    } else {
+    else
         return 84;
-    }
 }
 #endif /* TEST */

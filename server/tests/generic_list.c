@@ -23,9 +23,24 @@ list_t *append_x(int how)
 
 void print_int(const void *data)
 {
-    int *value = data;
+    const int *value = data;
 
     cr_log_info("%d\n", *value);
+}
+
+void times_10(void *data, const void *nothing)
+{
+    int *value = ((int *) data);
+
+    *value *= 10;
+}
+
+void times_x(void *data, const void *x)
+{
+    int *times = ((int *) x);
+    int *value = ((int *) data);
+
+    *value *= *times;
 }
 
 Test(generic_list, creation) {
@@ -101,4 +116,33 @@ Test(generic_list, print) {
     list_t *client = append_x(20);
 
     print_list(client, print_int);
+}
+
+Test(generic_list, map) {
+    list_t *list = append_x(20);
+
+    map(list, times_10, NULL);
+
+    int *one = pop_list(list, 0);
+    int *two = pop_list(list, 0);
+    int *three = pop_list(list, 0);
+
+    cr_assert(*one == 0);
+    cr_assert(*two == 10);
+    cr_assert(*three == 20);
+}
+
+Test(generic_list, map_2) {
+    list_t *list = append_x(20);
+    int ten = 10;
+
+    map(list, times_x, &ten);
+
+    int *one = pop_list(list, 0);
+    int *two = pop_list(list, 0);
+    int *three = pop_list(list, 0);
+
+    cr_assert(*one == 0);
+    cr_assert(*two == 10);
+    cr_assert(*three == 20);
 }

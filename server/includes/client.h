@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include "generic_list.h"
 
+
 /*
 ** Define directions that can have a player.
 */
@@ -20,11 +21,13 @@ enum DIRECTION {
     DOWN    = 3
 };
 
+static const int INVENTORY_SIZE = 7;
+
 /*
 ** Define a client inventory
 ** each of it's field is a props gatherable on the map.
 */
-typedef struct inventory_s {
+struct inventory_s {
     unsigned int linemate;
     unsigned int deraumere;
     unsigned int sibur;
@@ -32,6 +35,11 @@ typedef struct inventory_s {
     unsigned int phiras;
     unsigned int thystame;
     unsigned int food;
+};
+
+typedef union inventory_u {
+    struct inventory_s inv;
+    unsigned int inv_arr[7];
 } inventory_t;
 
 /*
@@ -53,86 +61,28 @@ typedef struct pos_s {
 ** -> level: The number of time the player have evolved.
 ** -> direction: Where the player is facing.
 ** -> position: [x, y] position defining on which tile the player is positioned.
+** -> cooldown: Time that left to before launching the new incante.
+** -> to_send: When cooldown is over this will be executed.
 */
 typedef struct client_s {
-    size_t id;
+    int id;
     list_t *commands;
     unsigned int level;
     unsigned int direction;
     pos_t position;
     inventory_t inventory;
+    int cooldown;
+    char *to_exec;
 } client_t;
 
-client_t *client_create(size_t id);
+// Utility function.
+int client_cmp(const void *entry, const void *id);
 
-void add_command(client_t *client, char *command);
-int process_command(client_t *client);
+client_t *client_create(int id);
+void client_delete(client_t *client);
+
+int add_command(client_t *client, char *command);
 size_t len_command(client_t *client);
 
-void print_client(const client_t *client);
+void print_client(client_t *client);
 void print_client_list(const void *data);
-
-/*
-** Client commands.
-*/
-
-/*
-** Moving command
-**  response:   ok
-**  time limit: 7/f
-*/
-char *forward(client_t *client);
-char *left(client_t *client);
-char *right(client_t *client);
-
-/*
-** Look command
-**  response:   [player, tile1-content, tile2-content, ...]
-**  time limit: 7/f
-*/
-char *look(client_t *client);
-
-/*
-** Inventory command
-**  response:   [linemate X, demeraute Y, ..., phiras Z]
-**      -> where `X` `Y` `Z` number possesed by the player.
-**  time limit: 1/f
-*/
-char *inventory(client_t *client);
-
-/*
-** Broadcast [text] command
-**  response:   ok
-**  time limit: 7/f
-*/
-char *broadcast(client_t *client, const char *text);
-
-/*
-** Fork command
-**  response:   ok
-**  time limit: 42/f
-*/
-char *fork_client();
-
-/*
-** Eject command
-**  response:   ok/ko
-**  time limit: 7/f
-*/
-char *eject();
-
-/*
-** Map interaction command
-**  response:   ok/ko
-**  time limit: 7/f
-*/
-char *take(client_t *client);
-char *set(client_t *client);
-
-/*
-** Incantation command
-**  response:   Elevation underway\nCurrent level: X/ko
-**      -> where X is the client->level
-**  time limit: 300/f
-*/
-char *incante(client_t *client);
