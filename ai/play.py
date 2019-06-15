@@ -4,9 +4,11 @@ from ai.parse_inventory import parse_inventory
 from ai.parse_inventory import Inventory
 from ai.parse_vision import parse_vision
 from ai.parse_vision import Vision
+from ai.parse_vision import verif_look_response
 import socket
 import sys
 from typing import List
+import time
 
 
 class Player:
@@ -81,13 +83,57 @@ class Player:
 
     def recv_msg(self) -> str:
         """Return received message from server."""
-        return (self.server_socket.recv(1024).decode())
+        received = self.server_socket.recv(1024).decode()
+        if (received == "dead\n"):
+            print("Player is dead.")
+            exit(0)
+        while (received[len(received) - 1] != '\n'):
+            # print("HAVEN'T RECEIVED ALL")
+            received = received + self.server_socket.recv(1024).decode()
+            # print("FINAL = ", received)
+        return (received)
+
+    def get_other_player_nb_on_same_tile(self) -> int:
+        """Return nb of other player on same tile."""
+        print("1111")
+        self.send_msg("Look")
+        response = self.recv_msg()
+        if (verif_look_response(response) is False):
+            print("Bad response from server.\n", response)
+            print("Pass.")
+            return (-1)
+        response = response.replace("[ ", "")
+        response = response.replace(" ]", "")
+        array = str(response).split(",")
+        player = 0
+        tile_1 = array[0]
+        splited = tile_1.split(" ")
+        for i in splited:
+            # print("On tile 1 -> ", i)
+            if (str(i) == "player"):
+                player = player + 1
+        return (player)
+
+    def check_ok_ko_response(self, response: str) -> True:
+        """Verify if response is `ok` or `ko` else command don't count."""
+        if (response == "ok\n" or response == "ko\n"):
+            return (True)
+        else:
+            return (False)
 
     def check_inventory(self) -> Inventory:
         """Check what's is in my Inventory."""
+        print("Check Inventory.")
         self.send_msg("Inventory")
-        new_data = self.recv_msg()
-        inventory = parse_inventory(new_data)
+        print("+++++++++++++++++++++++++++++++")
+        response = self.recv_msg()
+        # print("Wesh -> ", response)
+        inventory = parse_inventory(response)
+        if (inventory is None):
+            print("Bad response from server.\n", response)
+            print("Pass.")
+            # time.sleep(5)
+            return
         return (inventory)
 
     def look_around(self) -> List[Vision]:
@@ -101,10 +147,12 @@ class Player:
         """Take an object and add it to my inventory."""
         self.send_msg("Take " + object)
         print("Take " + object)
-        print("Unit of time before taking the object ->", self.units_of_time)
+        # print("Unit of time before taking the object ->", self.units_of_time)
         self.units_of_time = int(self.units_of_time) - 7
-        print("Unit of time after taking the object  ->", self.units_of_time)
+        # print("Unit of time after taking the object  ->", self.units_of_time)
         response = self.recv_msg()
+        if (self.check_ok_ko_response(response) is False):
+            return (-1)
         if (response != "ok\n"):
             print("Response is ->", response)
             print("Can't take the object :(.")
@@ -126,6 +174,7 @@ class Player:
                 self.inventory.phiras = str(int(self.inventory.phiras) + 1)
             elif object == "thystame":
                 self.inventory.thystame = str(int(self.inventory.thystame) + 1)
+            return (1)
         return (2)
 
     def get_stone_nb(self, stone: str) -> int:
@@ -155,7 +204,9 @@ class Player:
         """Determine what stone to pick up."""
         level = actual_level - 1
         environment = self.look_around()
+        print("Look around for stone:")
         print(*environment, sep="\n")
+        print("\nDetermine what stone to pick up.")
         # for tile_nb in environment: # Move to a better tile
         actual_tile = environment[0]
         if (int(actual_tile.food) > 0 and
@@ -179,55 +230,84 @@ class Player:
         elif (int(actual_tile.thystame) > 0 and
               self.should_take("tystame") is True):
             return(self.take_object("thystame"))
+        print("\nCan't take any stone.\n")
+        if (int(actual_tile.food) > 0):
+            print("So will take a food.\n")
+            return(self.take_object("food"))
         return(0)
 
-    def move_forward(self) -> None:
+    def move_forward(self) -> int:
         """Move player `Forward`."""
         print("\nPlayer move `Forward`.")
         self.send_msg("Forward")
         response = self.recv_msg()
+        if (self.check_ok_ko_response(response) is False):
+            print("Bad response from server.\n", response)
+            print("Pass.")
+            return (-1)
         print("Response for player move ->", response)
+        return (0)
 
-    def turn_right(self) -> None:
+    def turn_right(self) -> int:
         """Make player turn `Right`."""
         print("\nPlayer move `Right`.")
         self.send_msg("Right")
         response = self.recv_msg()
+        if (self.check_ok_ko_response(response) is False):
+            print("Bad response from server.\n", response)
+            print("Pass.")
+            return (-1)
         print("Response for player move ->", response)
+        return (0)
 
-    def turn_left(self) -> None:
+    def turn_left(self) -> int:
         """Make player turn `Left`."""
         print("\nPlayer move `Left`.")
         self.send_msg("Left")
         response = self.recv_msg()
+        if (self.check_ok_ko_response(response) is False):
+            print("Bad response from server.\n", response)
+            print("Pass.")
+            return (-1)
         print("Response for player move ->", response)
+        return (0)
 
-    def where_to_move(self) -> None:
+    def where_to_move(self) -> None:  # not finished
         """Determine if player move forward, turn right or left."""
-        self.move_forward()
+        print("In where to move.")
+        if (self.move_forward() == -1):
+            return
         # self.turn_left()
         # self.turn_right()
         # raise NotImplementedError
+
+    def elevate(self) -> None:
+        """Verify if player can elevate and do it."""
+        print("\nIn elevate function.\n")
 
     def life_loop(self) -> None:
         """Player life."""
         print("Begin of loop.\n")
         i = 0
         while (i < 500):
-            print("LOOP\n")
+            print("\n+++\nLOOP\n")
             self.inventory = self.check_inventory()
-            print(self.inventory, "\n")
-            self.units_of_time = int(self.inventory.food) * 126
-            # environment = self.look_around()
-            # print(*environment, sep="\n")
+            if (self.inventory is None):
+                continue
+            print(self.inventory)
             print("")
-            # self.take_object("food")
+            self.units_of_time = int(self.inventory.food) * 126
 
-            print("MY STUFF -> ", self.inventory)
+            # print("MY STUFF -> ", self.inventory)
 
             self.choose_stone_to_take(self.actual_level)
-            print(self.inventory)
+            # print(self.inventory)
+
+            self.elevate()
 
             self.where_to_move()
+
+            # print("Other player nb -> ",
+            #       self.get_other_player_nb_on_same_tile())
 
             i = i + 1

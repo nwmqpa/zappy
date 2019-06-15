@@ -11,7 +11,6 @@ class Inventory:
                  deraumere: str, sibur: str, mendiane: str,
                  phiras: str, thystame: str) -> None:
         """Init stones."""
-        # self.content = {}
         self.food = food
         self.linemate = linemate
         self.deraumere = deraumere
@@ -59,8 +58,27 @@ class Inventory:
         return str(self)
 
 
+def verif_inventory_response(line: str) -> bool:
+    """Verify if response have a good format."""
+    splitted_line = line.split(" ")
+    if (len(splitted_line) != 16):
+        return (False)
+    if ("food" not in line or
+            "linemate" not in line or
+            "deraumere" not in line or
+            "sibur" not in line or
+            "mendiane" not in line or
+            "phiras" not in line or
+            "thystame" not in line):
+        return (False)
+    return (True)
+
+
 def parse_inventory(line: str) -> Inventory:
     """Parse Inventory answer sent by server and return an inventory object."""
+    # print("line response inventory -> ", line)
+    if (verif_inventory_response(line) is False):
+        return
     line = line.replace("[ ", "")
     line = line.replace(" ]", "")
     array = str(line).split(",")

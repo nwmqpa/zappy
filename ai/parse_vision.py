@@ -42,6 +42,17 @@ class Vision:
         return str(self)
 
 
+def verif_look_response(line: str) -> bool:
+    """Verify if response have a good format."""
+    splitted_line = line.split(",")
+    print("line    -> ", line)
+    if (line[0] != '[' or line[len(line) - 2] != ']'):
+        return (False)
+    # if (len(splitted_line) == 16):
+    #     return (True)
+    return (True)
+
+
 def parse_vision(line: str) -> List[Vision]:
     """Look arround in return array with present object."""
     environment = []
@@ -54,6 +65,7 @@ def parse_vision(line: str) -> List[Vision]:
         splited = x.split(" ")
         food = linemate = deraumere = sibur = mendiane = phiras = thystame = 0
         for i in splited:
+            # print("I -> ", i)
             if (str(i) == "food"):
                 food = food + 1
             elif (str(i) == "linemate"):
