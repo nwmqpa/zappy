@@ -22,8 +22,12 @@ map_t *create_map(unsigned int width, unsigned int height)
 }
 
 
-inline tile_t *get_tile_map(map_t *map, unsigned int x, unsigned int y)
+inline tile_t *get_tile_map(map_t *map, int x, int y)
 {
+    if (x < 0)
+        x = map->width + x;
+    if (y < 0)
+        y = map->height + y;
     pos_t xy = {
         x % map->width,
         y % map->height
