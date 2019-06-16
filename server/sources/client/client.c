@@ -45,6 +45,7 @@ void client_delete(client_t *client)
     free(client->to_exec);
     empty_list(client->commands, free);
     dprintf(client->id, "dead\n");
+    close(client->id);
 }
 
 void print_client(client_t *client)
