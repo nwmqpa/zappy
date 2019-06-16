@@ -5,6 +5,44 @@
 ** protocols
 */
 
+/// \mainpage Zappy documentation
+///
+/// \section intro_sec Documentation
+///
+/// This is the Zappy graphic protocol.
+///
+/// \section install_sec Ideologie
+///
+/// The protocol has been built on 3 main concept
+/// - Simplicity
+/// - Efficiency
+/// - Scalability
+///
+/// \subsection Simplicity
+///
+/// There is a enum for:
+/// - Errors: `HANDLING_ERRORS`
+/// - Client requests: `GRAPHIC_PACKETS_FROM_CLIENT`
+/// - Server requests: `GRAPHIC_PACKETS_FROM_SERVER`
+///
+/// A simple packet is composed of a
+/// packet_header and the struct linked to it's `id`.
+///
+/// \subsection Efficiency
+///
+/// The efficiency of the protocol lay on the binary format.
+/// String based protocol is good for Web-API but in our case
+/// we don't need to encode our object in some kind of string format like JSON
+/// because both ends of the sockets are `C/C++` so we can read directly to a
+/// struct.
+/// (Dont't Serialization and Deserialization)
+///
+/// \subsection Scalability
+///
+/// The scalability lay on the `CLT_CUSTOM` and `SRV_CUSTOM` requests `id`
+/// The packet_header subid field of the header permit to handle custom form of data.
+///
+
 #pragma once
 
 #include <stdint.h>
