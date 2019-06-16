@@ -96,6 +96,9 @@ debug:	re
 
 cmd_gen: $(ROOT)/$(COMPILER_COMMAND)
 
+doc:
+	$(V)doxygen $(ROOT)/../ci/doc.cfg
+
 $(ROOT)/$(COMPILER_COMMAND): $(PATSUBST_JSON)
 	$(V)printf "$(WHITE)Creating $(BLUE)$(COMPILER_COMMAND)$(WHITE).\n"
 	$(V)sed -e '1s/^/[$\n/' -e '$$s/,$$/$\n]/' $(PATSUBST_JSON) > $(ROOT)/$(COMPILER_COMMAND)
@@ -115,6 +118,7 @@ fclean:			clean
 			$(V)printf "$(WHITE)Cleaning $(GREEN)linked $(WHITE)files$(DEFAULT)\n"
 			$(V)rm -f $(ROOT)/$(NAME) $(BUILD_DIR)/$(NAME)
 			$(V)rm -f $(ROOT)/test $(BUILD_DIR)/test
+			$(V)rm -rf $(ROOT)/documentation
 			$(V)for dir in $(PREFIXED_MODULS); do \
 				make --no-print-directory -C $$dir fclean; \
 			done
