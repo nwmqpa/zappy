@@ -5,6 +5,44 @@
 ** protocols
 */
 
+/// \mainpage Zappy documentation
+///
+/// \section intro_sec Documentation
+///
+/// This is the Zappy graphic protocol.
+///
+/// \section install_sec Ideologie
+///
+/// The protocol has been built on 3 main concept
+/// - Simplicity
+/// - Efficiency
+/// - Scalability
+///
+/// \subsection Simplicity
+///
+/// There is a enum for:
+/// - Errors: `HANDLING_ERRORS`
+/// - Client requests: `GRAPHIC_PACKETS_FROM_CLIENT`
+/// - Server requests: `GRAPHIC_PACKETS_FROM_SERVER`
+///
+/// A simple packet is composed of a
+/// packet_header and the struct linked to it's `id`.
+///
+/// \subsection Efficiency
+///
+/// The efficiency of the protocol lay on the binary format.
+/// String based protocol is good for Web-API but in our case
+/// we don't need to encode our object in some kind of string format like JSON
+/// because both ends of the sockets are `C/C++` so we can read directly to a
+/// struct.
+/// (Dont't Serialization and Deserialization)
+///
+/// \subsection Scalability
+///
+/// The scalability lay on the `CLT_CUSTOM` and `SRV_CUSTOM` requests `id`
+/// The packet_header subid field of the header permit to handle custom form of data.
+///
+
 #pragma once
 
 #include <stdint.h>
@@ -15,9 +53,8 @@
 extern "C" {
 #endif
 
-/*
-** DANGLING_HANDLER -> Handler function is NULL
-*/
+/// DANGLING_HANDLER -> Handler function is NULL
+///
 enum HANDLING_ERRORS {
     NO_ERROR                = 0,
     TOO_FEW_PARAMETERS      = 1,
@@ -26,19 +63,17 @@ enum HANDLING_ERRORS {
     DANGLING_HANDLER        = 4
 };
 
-/*
-** Enumeration of all base messages
-** for the Graphic Protocol
-*/
-
+/// Enumeration of all base messages
+/// for the Graphic Protocol
+///
 enum GRAPHIC_PACKETS_FROM_CLIENT {
-/*
-** Usable to determine the degree of change of a client.
-*/
+///
+/// Usable to determine the degree of change of a client.
+///
     CLT_PROTOCOL_ADDONS     = 1,
-/*
-** Base Zappy commands.
-*/
+///
+/// Base Zappy commands.
+///
     CLT_MAP_SIZE            = 2,
     CLT_TILE_CONTENT        = 3,
     CLT_MAP_CONTENT         = 4,
@@ -48,20 +83,20 @@ enum GRAPHIC_PACKETS_FROM_CLIENT {
     CLT_PLAYER_INVENTORY    = 8,
     CLT_TIME_UNIT_REQUEST   = 9,
     CLT_TIME_UNIT_CHANGE    = 10,
-/*
-** Special commands reserved for addons.
-*/
+///
+/// Special commands reserved for addons.
+///
     CLT_CUSTOM              = 11
 };
 
 enum GRAPHIC_PACKETS_FROM_SERVER {
-/*
-** Usable to determine the degree of change of a server.
-*/
+///
+/// Usable to determine the degree of change of a server.
+///
     SRV_PROTOCOL_ADDONS     = 12,
-/*
-** Base Zappy commands.
-*/
+///
+/// Base Zappy commands.
+///
     SRV_MAP_SIZE            = 13,
     SRV_TILE_CONTENT        = 14,
     SRV_TEAMS_NAMES         = 15,
@@ -87,15 +122,15 @@ enum GRAPHIC_PACKETS_FROM_SERVER {
     SRV_MESSAGE_FROM_SRV    = 35,
     SRV_UNKNOWN_COMMAND     = 36,
     SRV_COMMAND_PARAMETER   = 37,
-/*
-** Special command reserved for addons.
-*/
+///
+/// Special command reserved for addons.
+///
     SRV_CUSTOM              = 40
 };
 
-/*
-** Enum for the orientation values used.
-*/
+///
+/// Enum for the orientation values used.
+///
 
 enum ORIENTATION {
     NORTH = 1,
@@ -104,18 +139,18 @@ enum ORIENTATION {
     WEST  = 4
 };
 
-/*
-** Enum for the incantation result.
-*/
+///
+/// Enum for the incantation result.
+///
 
 enum RESULT {
     KO = 0,
     OK = 1
 };
 
-/*
-** Enum for the resources number.
-*/
+///
+/// Enum for the resources number.
+///
 
 enum RESOURCE_NUMBER {
     FOOD        = 0,
@@ -127,22 +162,22 @@ enum RESOURCE_NUMBER {
     THYSTAME    = 6
 };
 
-/*
-** Each change to this document will need an incrementation of this value.
-*/
+///
+/// Each change to this document will need an incrementation of this value.
+///
 #define PROTOCOL_VERSION    0x2
 
 
-/*
-** Will be present before each data transfer
-** -> id is the ID of the packet transfered
-** (report to GRAPHIC_PACKETS_FROM_CLIENT or GRAPHIC_PACKETS_FROM_SERVER)
-** -> version is the protocol version (fallback to PROTOCOL_VERSION)
-** -> size is the size of the chunk of data transfered. Doesn't include the
-** packet header.
-** -> subid is only used when id is set on SRV_CUSTOM or CLT_CUSTOM.
-**  Indicate the handler to use for a custom packet.
-*/
+///
+/// Will be present before each data transfer
+/// -> id is the ID of the packet transfered
+/// (report to GRAPHIC_PACKETS_FROM_CLIENT or GRAPHIC_PACKETS_FROM_SERVER)
+/// -> version is the protocol version (fallback to PROTOCOL_VERSION)
+/// -> size is the size of the chunk of data transfered. Doesn't include the
+/// packet header.
+/// -> subid is only used when id is set on SRV_CUSTOM or CLT_CUSTOM.
+///  Indicate the handler to use for a custom packet.
+///
 struct packet_header {
     uint8_t  id;
     uint8_t  version;
@@ -152,19 +187,19 @@ struct packet_header {
 
 typedef struct packet_header pkt_header_t;
 
-/*
-** Handle a const payload. Must be const for subsequent treatment.
-** Return an error flag in case of error (HANDLING_ERRORS).
-*/
+///
+/// Handle a const payload. Must be const for subsequent treatment.
+/// Return an error flag in case of error (HANDLING_ERRORS).
+///
 typedef int (*data_handler)(const char *data);
 
-/*
-** Will be used to handle a const char *, representing the size sized data
-** to be handled.
-** -> id is the ID of the packets to handle.
-** -> subid is the subID of the packets to handle if ID is (SRV|CLT)_CUSTOM
-** -> handler is a function pointer to the handler.
-*/
+///
+/// Will be used to handle a const char *, representing the size sized data
+/// to be handled.
+/// -> id is the ID of the packets to handle.
+/// -> subid is the subID of the packets to handle if ID is (SRV|CLT)_CUSTOM
+/// -> handler is a function pointer to the handler.
+///
 struct packet_handler {
     uint8_t  id;
     uint16_t subid;
@@ -173,46 +208,46 @@ struct packet_handler {
 
 typedef struct packet_handler pkt_handler_t;
 
-/*
-** Monolithic structure used to register packet handlers.
-** handlers must be NULL-terminated;
-*/
+///
+/// Monolithic structure used to register packet handlers.
+/// handlers must be NULL-terminated;
+///
 struct packet_handler_register {
-    pkt_handler_t **handlers;
+    pkt_handler_t ///handlers;
 };
 
 typedef struct packet_handler_register phr_t;
 
-/*
-** Subsequent call for the same ID (or subid) will add the packet handler
-** to the list of packet handler for this specific packet.
-*/
+///
+/// Subsequent call for the same ID (or subid) will add the packet handler
+/// to the list of packet handler for this specific packet.
+///
 void register_pkt_handler(phr_t *registrar, pkt_handler_t *handler);
 
-/*
-** Will unregister the specific packet handler based on the function pointer
-** and the id/subid.
-*/
+///
+/// Will unregister the specific packet handler based on the function pointer
+/// and the id/subid.
+///
 void unregister_pkt_handler(phr_t *registrat, pkt_handler_t *handler);
 
-/*
-** Start of packet structures.
-*/
+///
+/// Start of packet structures.
+///
 
-/*
-** Client map size packet.
-** Simple request on client side.
-*/
+///
+/// Client map size packet.
+/// Simple request on client side.
+///
 
 struct clt_map_size {
 };
 
 typedef struct clt_map_size clt_map_size_t;
 
-/*
-** Server map size packet
-** Answer from server with the map size on x and y.
-*/
+///
+/// Server map size packet
+/// Answer from server with the map size on x and y.
+///
 
 struct srv_map_size {
     unsigned int x;
@@ -221,10 +256,10 @@ struct srv_map_size {
 
 typedef struct srv_map_size srv_map_size_t;
 
-/*
-** Client tile content packet.
-** Request on client side with the coordinate of the tile to request.
-*/
+///
+/// Client tile content packet.
+/// Request on client side with the coordinate of the tile to request.
+///
 
 struct clt_tile_content {
     unsigned int x;
@@ -233,10 +268,10 @@ struct clt_tile_content {
 
 typedef struct clt_tile_content clt_tile_content_t;
 
-/*
-** Server tile content.
-** Contains all informations about the tile content.
-*/
+///
+/// Server tile content.
+/// Contains all informations about the tile content.
+///
 
 struct srv_tile_content {
     unsigned int x;
@@ -252,31 +287,31 @@ struct srv_tile_content {
 
 typedef struct srv_tile_content srv_tile_content_t;
 
-/*
-** Client map content packet.
-** Simple request on client side.
-*/
+///
+/// Client map content packet.
+/// Simple request on client side.
+///
 
 struct clt_map_content {
 };
 
 typedef struct clt_map_content clt_map_content_t;
 
-/*
-** Client team name packet.
-** Simple request on client side.
-*/
+///
+/// Client team name packet.
+/// Simple request on client side.
+///
 
 struct clt_teams_names {
 };
 
 typedef struct clt_teams_names clt_teams_names_t;
 
-/*
-** Server teams names packet.
-** Contain the team name.
-** Additionnal values are appended after each struct.
-*/
+///
+/// Server teams names packet.
+/// Contain the team name.
+/// Additionnal values are appended after each struct.
+///
 
 struct srv_teams_names {
     char team_name[128];
@@ -284,9 +319,9 @@ struct srv_teams_names {
 
 typedef struct srv_teams_names srv_teams_names_t;
 
-/*
-** Server new connection packet.
-*/
+///
+/// Server new connection packet.
+///
 
 struct srv_new_player_connect {
     unsigned int player_num;
@@ -299,10 +334,10 @@ struct srv_new_player_connect {
 
 typedef struct srv_new_player_connect srv_new_player_connect_t;
 
-/*
-** Client player position packet.
-** Request the position of the player determined by the number.
-*/
+///
+/// Client player position packet.
+/// Request the position of the player determined by the number.
+///
 
 struct clt_player_pos {
     unsigned int player_num;
@@ -310,9 +345,9 @@ struct clt_player_pos {
 
 typedef struct clt_player_pos clt_player_pos_t;
 
-/*
-** Server player position packet.
-*/
+///
+/// Server player position packet.
+///
 
 struct srv_player_pos {
     unsigned int player_num;
@@ -323,10 +358,10 @@ struct srv_player_pos {
 
 typedef struct srv_player_pos srv_player_pos_t;
 
-/*
-** Client player level packet.
-** Request the level of the player determined by the number.
-*/
+///
+/// Client player level packet.
+/// Request the level of the player determined by the number.
+///
 
 struct clt_player_level {
     unsigned int player_num;
@@ -334,9 +369,9 @@ struct clt_player_level {
 
 typedef struct clt_player_level clt_player_level_t;
 
-/*
-** Server player level packet.
-*/
+///
+/// Server player level packet.
+///
 
 struct srv_player_level {
     unsigned int player_num;
@@ -345,18 +380,18 @@ struct srv_player_level {
 
 typedef struct srv_player_level srv_player_level_t;
 
-/*
-** Client player inventory packet.
-** Request the inventory of the player determined by the number.
-*/
+///
+/// Client player inventory packet.
+/// Request the inventory of the player determined by the number.
+///
 
 struct clt_player_inventory {
     unsigned int player_num;
 };
 
-/*
-** Server player inventory packet.
-*/
+///
+/// Server player inventory packet.
+///
 
 struct srv_player_inventory {
     unsigned int player_num;
@@ -373,9 +408,9 @@ struct srv_player_inventory {
 
 typedef struct srv_player_inventory srv_player_inventory_t;
 
-/*
-** Server expulsion packet.
-*/
+///
+/// Server expulsion packet.
+///
 
 struct srv_player_expulsion {
     unsigned int player_num;
@@ -383,9 +418,9 @@ struct srv_player_expulsion {
 
 typedef struct srv_player_expulsion srv_player_expulsion_t;
 
-/*
-** Server broadcast packet.
-*/
+///
+/// Server broadcast packet.
+///
 
 struct srv_broadcast_msg {
     unsigned int player_num;
@@ -394,9 +429,9 @@ struct srv_broadcast_msg {
 
 typedef struct srv_broadcast_msg srv_broadcast_msg_t;
 
-/*
-** Server start of incantation packet.
-*/
+///
+/// Server start of incantation packet.
+///
 
 struct srv_start_incantation {
     unsigned int x;
@@ -407,9 +442,9 @@ struct srv_start_incantation {
 
 typedef struct srv_start_incantation_msg srv_start_incantation_msg_t;
 
-/*
-** Server end of incantation packet.
-*/
+///
+/// Server end of incantation packet.
+///
 
 struct srv_end_incantation {
     unsigned int x;
@@ -419,9 +454,9 @@ struct srv_end_incantation {
 
 typedef struct srv_end_incantation_msg srv_end_incantation_msg_t;
 
-/*
-** Server "egg laying by the player" packet.
-*/
+///
+/// Server "egg laying by the player" packet.
+///
 
 struct srv_player_egg_laying {
     unsigned int player_num;
@@ -429,9 +464,9 @@ struct srv_player_egg_laying {
 
 typedef struct srv_player_egg_laying srv_player_egg_laying_t;
 
-/*
-** Server resource dropping packet.
-*/
+///
+/// Server resource dropping packet.
+///
 
 struct srv_player_resource_dropped {
     unsigned int player_num;
@@ -440,9 +475,9 @@ struct srv_player_resource_dropped {
 
 typedef struct srv_player_resource_dropped srv_player_resource_dropped_t;
 
-/*
-** Server resource collected packet.
-*/
+///
+/// Server resource collected packet.
+///
 
 struct srv_player_resource_collected {
     unsigned int player_num;
@@ -451,9 +486,9 @@ struct srv_player_resource_collected {
 
 typedef struct srv_player_resource_collected srv_player_resource_collected_t;
 
-/*
-** Server player dead packet.
-*/
+///
+/// Server player dead packet.
+///
 
 struct srv_player_death {
     unsigned int player_num;
@@ -461,9 +496,9 @@ struct srv_player_death {
 
 typedef struct srv_player_death srv_player_death_t;
 
-/*
-** Server player layed egg packet.
-*/
+///
+/// Server player layed egg packet.
+///
 
 struct srv_player_egg_layed {
     unsigned int player_num;
@@ -474,9 +509,9 @@ struct srv_player_egg_layed {
 
 typedef struct srv_player_egg_layed srv_player_egg_layed_t;
 
-/*
-** Server egg hatching packet.
-*/
+///
+/// Server egg hatching packet.
+///
 
 struct srv_player_egg_hatching {
     unsigned int egg_num;
@@ -484,9 +519,9 @@ struct srv_player_egg_hatching {
 
 typedef struct srv_player_egg_hatching srv_player_egg_hatching_t;
 
-/*
-** Server player egg connection.
-*/
+///
+/// Server player egg connection.
+///
 
 struct srv_player_egg_connection {
     unsigned int egg_num;
@@ -494,9 +529,9 @@ struct srv_player_egg_connection {
 
 typedef struct srv_player_egg_connection srv_player_egg_connection_t;
 
-/*
-** Server death of hatched egg.
-*/
+///
+/// Server death of hatched egg.
+///
 
 struct srv_hatched_egg_death {
     unsigned int egg_num;
@@ -504,9 +539,9 @@ struct srv_hatched_egg_death {
 
 typedef struct srv_hatched_egg_death srv_hatched_egg_death_t;
 
-/*
-** Server end of the game packet.
-*/
+///
+/// Server end of the game packet.
+///
 
 struct srv_end_game {
     char winning_team[128];
@@ -514,9 +549,9 @@ struct srv_end_game {
 
 typedef struct srv_end_game srv_end_game_t;
 
-/*
-** Message from server.
-*/
+///
+/// Message from server.
+///
 
 struct srv_global_message {
     char message[256];
@@ -524,18 +559,18 @@ struct srv_global_message {
 
 typedef struct srv_global_message srv_global_message_t;
 
-/*
-** Server unknwon command packet.
-*/
+///
+/// Server unknwon command packet.
+///
 
 struct srv_unknown_command {
 };
 
 typedef struct srv_unknown_command srv_unknown_command_t;
 
-/*
-** Ŝerver bad parameters.
-*/
+///
+/// Server bad parameters.
+///
 
 struct srv_bad_parameters {
 };
