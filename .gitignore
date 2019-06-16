@@ -14,5 +14,6 @@ zappy_serve_test*
 */build/test
 .mypy_cache
 server/compile_commands.json
+*/documentation
 
 server/.cquery
