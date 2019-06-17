@@ -63,21 +63,22 @@ int main(void)
     tmpSize.x = 5;
     tmpSize.y = 5;
 
-    WindowCreator tmp("Test");
+    WindowCreator tmp("Test", 800, 600);
 
-    Case testCase0(&tmpTile0, &tmpSize);
-    Case testCase1(&tmpTile1, &tmpSize);
-    Case testCase2(&tmpTile2, &tmpSize);
-    Case testCase3(&tmpTile3, &tmpSize);
-    Case testCase4(&tmpTile4, &tmpSize);
+    Tile testCase0(&tmpTile0, &tmpSize, "resources/Item_700.png", tmp.getRender());
+    Tile testCase1(&tmpTile1, &tmpSize, "resources/Item_700.png", tmp.getRender());
+    Tile testCase2(&tmpTile2, &tmpSize, "resources/Item_700.png", tmp.getRender());
+    Tile testCase3(&tmpTile3, &tmpSize, "resources/Item_700.png", tmp.getRender());
+    Tile testCase4(&tmpTile4, &tmpSize, "resources/Item_700.png", tmp.getRender());
 
-    std::vector<Case> tmpC;
-    tmpC.push_back(testCase0);
-    tmpC.push_back(testCase1);
-    tmpC.push_back(testCase2);
-    tmpC.push_back(testCase3);
-    tmpC.push_back(testCase4);
+    std::vector<Tile *> tmpC;
+    tmpC.push_back(&testCase0);
+    tmpC.push_back(&testCase1);
+    tmpC.push_back(&testCase2);
+    tmpC.push_back(&testCase3);
+    tmpC.push_back(&testCase4);
 
-    tmp.Life(tmpC);
+    tmp.updateTileList(tmpC);
+    tmp.life();
     return (0);
 }

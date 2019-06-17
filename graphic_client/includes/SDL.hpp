@@ -17,21 +17,32 @@ class WindowCreator {
         WindowCreator(const char *name = "Zappy", int x = 800, int y = 600);
         ~WindowCreator();
 
-        bool Inits(Uint32 SDL = SDL_INIT_VIDEO, Uint32 IMG = IMG_INIT_PNG);
+        bool inits(Uint32 SDL = SDL_INIT_EVERYTHING, Uint32 IMG = IMG_INIT_PNG);
 
-        void Life(std::vector<Case>);
-        bool Update();
+        void life();
 
-        void Destroy();
+        void update();
+        void server_event();
+        void client_event();
 
+        void addX(int);
+        void addY(int);
+        void scale(int);
 
-        SDL_Surface *GetWindow() {return screen;}
+        void updateTileList(std::vector<Tile *>value) {tileList = value;}
+
+        void drawTile();
+
+        void destroy();
+
+        SDL_Renderer *getRender() {return renderer;}
     private:
         bool heart;
 
+        std::vector<Tile *>tileList;
+        const char *name;
         SDL_Renderer *renderer;
         SDL_Window *window;
-        SDL_Surface *screen;
         SDL_Event event;
 };
 

@@ -5,8 +5,8 @@
 ** Graphical Client
 */
 
-#ifndef CASE_HPP_
-    #define CASE_HPP_
+#ifndef TILE_HPP_
+    #define TILE_HPP_
 
 #include "Animation.hpp"
 #include "SDL2/SDL.h"
@@ -14,21 +14,35 @@
 #include "protocols.h"
 #include <vector>
 
-class Case {
+class Tile {
     public:
-        Case(srv_tile_content_t *, srv_map_size_t *);
-        ~Case();
+        Tile(srv_tile_content_t *, srv_map_size_t *, std::string, SDL_Renderer *);
+        ~Tile();
 
-        void setTile(srv_tile_content_t *);
+        void updateTile();
         srv_tile_content_t *getTile() {return tile;}
-        void draw(SDL_Surface *);
+        void draw(SDL_Renderer *, SDL_Window *);
+
+        void setPosX(int value) {posx = value;}
+        void setPosY(int value) {posy = value;}
+        void setScale(int value) {scale = value;}
+        int getPosX() {return posx;}
+        int getPosY() {return posy;}
+        int getScale() {return scale;}
+
 
     private:
-        SDL_Surface *back;
+        SDL_Surface *IMG;
+        SDL_Texture *texture;
+        SDL_Texture *tmp;
+
         SDL_Rect pos;
         srv_tile_content_t *tile;
         srv_map_size_t *map;
 
+        int scale;
+        int posx;
+        int posy;
         int x;
         int y;
 };
