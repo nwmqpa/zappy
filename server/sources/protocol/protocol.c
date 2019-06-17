@@ -63,7 +63,7 @@ static int handle(pkt_header_t *pkt, server_t *server, int sock)
             return handlers[i]->handler((const void *) &data);
         }
     }
-    debugl("Request not find it's a custom");
+    debugl("Request not find it's a custom.\n");
     return -1;
 }
 
