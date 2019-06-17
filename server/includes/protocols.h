@@ -1,9 +1,9 @@
-/*
-** EPITECH PROJECT, 2018
-** protocols
-** File description:
-** protocols
-*/
+///
+/// EPITECH PROJECT, 2018
+/// protocols
+/// File description:
+/// protocols
+///
 
 /// \mainpage Zappy documentation
 ///
@@ -46,13 +46,23 @@
 #pragma once
 
 #include <stdint.h>
+#include <stddef.h>
 
-#pragma pack(1)
+#ifdef __clang__
+#   pragma pack(1)
+#endif /* __clang__ */
+
+#if defined (__GNUC__) && (__GNUC__ >= 7)
+#   define PACKED __attribute__((packed))
+#else
+#   define PACKED
+#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+///
 /// DANGLING_HANDLER -> Handler function is NULL
 ///
 enum HANDLING_ERRORS {
@@ -63,9 +73,11 @@ enum HANDLING_ERRORS {
     DANGLING_HANDLER        = 4
 };
 
+///
 /// Enumeration of all base messages
 /// for the Graphic Protocol
 ///
+
 enum GRAPHIC_PACKETS_FROM_CLIENT {
 ///
 /// Usable to determine the degree of change of a client.
@@ -165,8 +177,11 @@ enum RESOURCE_NUMBER {
 ///
 /// Each change to this document will need an incrementation of this value.
 ///
-#define PROTOCOL_VERSION    0x2
 
+#define PROTOCOL_VERSION    0x6
+
+#define SHORT_MSG_LEN 128
+#define LONG_MSG_LEN 1024
 
 ///
 /// Will be present before each data transfer
@@ -178,7 +193,8 @@ enum RESOURCE_NUMBER {
 /// -> subid is only used when id is set on SRV_CUSTOM or CLT_CUSTOM.
 ///  Indicate the handler to use for a custom packet.
 ///
-struct packet_header {
+
+struct PACKED packet_header {
     uint8_t  id;
     uint8_t  version;
     uint16_t size;
@@ -187,11 +203,13 @@ struct packet_header {
 
 typedef struct packet_header pkt_header_t;
 
+#define PKT_HDR_LEN sizeof(struct packet_header)
+
 ///
 /// Handle a const payload. Must be const for subsequent treatment.
 /// Return an error flag in case of error (HANDLING_ERRORS).
 ///
-typedef int (*data_handler)(const char *data);
+typedef int (*data_handler)(const void *data);
 
 ///
 /// Will be used to handle a const char *, representing the size sized data
@@ -200,24 +218,29 @@ typedef int (*data_handler)(const char *data);
 /// -> subid is the subID of the packets to handle if ID is (SRV|CLT)_CUSTOM
 /// -> handler is a function pointer to the handler.
 ///
-struct packet_handler {
+struct PACKED packet_handler {
     uint8_t  id;
     uint16_t subid;
+    char *name;
     data_handler handler;
 };
 
 typedef struct packet_handler pkt_handler_t;
 
+#define PKT_HANDLER_LEN sizeof(struct packet_handler)
+
 ///
 /// Monolithic structure used to register packet handlers.
 /// handlers must be NULL-terminated;
 ///
-struct packet_handler_register {
-    pkt_handler_t ///handlers;
+struct PACKED packet_handler_register {
+    size_t size;
+    pkt_handler_t **handlers;
 };
 
 typedef struct packet_handler_register phr_t;
 
+#define PKT_HANDLER_REG_LEN sizeof(struct packet_handler_register)
 ///
 /// Subsequent call for the same ID (or subid) will add the packet handler
 /// to the list of packet handler for this specific packet.
@@ -239,41 +262,48 @@ void unregister_pkt_handler(phr_t *registrat, pkt_handler_t *handler);
 /// Simple request on client side.
 ///
 
-struct clt_map_size {
+struct PACKED clt_map_size {
+    char tmp;
 };
 
 typedef struct clt_map_size clt_map_size_t;
+
+#define CLT_MAP_SIZE_LEN sizeof(struct clt_map_size)
 
 ///
 /// Server map size packet
 /// Answer from server with the map size on x and y.
 ///
 
-struct srv_map_size {
+struct PACKED srv_map_size {
     unsigned int x;
     unsigned int y;
 };
 
 typedef struct srv_map_size srv_map_size_t;
 
+#define SRV_MAP_SIZE_LEN sizeof(struct srv_map_size)
+
 ///
 /// Client tile content packet.
 /// Request on client side with the coordinate of the tile to request.
 ///
 
-struct clt_tile_content {
+struct PACKED clt_tile_content {
     unsigned int x;
     unsigned int y;
 };
 
 typedef struct clt_tile_content clt_tile_content_t;
 
+#define CLT_TILE_CONTENT_LEN sizeof(struct clt_tile_content)
+
 ///
 /// Server tile content.
 /// Contains all informations about the tile content.
 ///
 
-struct srv_tile_content {
+struct PACKED srv_tile_content {
     unsigned int x;
     unsigned int y;
     unsigned int q0;
@@ -283,29 +313,38 @@ struct srv_tile_content {
     unsigned int q4;
     unsigned int q5;
     unsigned int q6;
+    unsigned int players;
 };
 
 typedef struct srv_tile_content srv_tile_content_t;
+
+#define SRV_TILE_CONTENT_LEN sizeof(struct srv_tile_content)
 
 ///
 /// Client map content packet.
 /// Simple request on client side.
 ///
 
-struct clt_map_content {
+struct PACKED clt_map_content {
+    char tmp;
 };
 
 typedef struct clt_map_content clt_map_content_t;
+
+#define CLT_MAP_CONTENT_LEN sizeof(struct clt_map_content)
 
 ///
 /// Client team name packet.
 /// Simple request on client side.
 ///
 
-struct clt_teams_names {
+struct PACKED clt_teams_names {
+    char tmp;
 };
 
 typedef struct clt_teams_names clt_teams_names_t;
+
+#define CLT_TEAMS_NAMES_LEN sizeof(struct clt_teams_names)
 
 ///
 /// Server teams names packet.
@@ -313,87 +352,101 @@ typedef struct clt_teams_names clt_teams_names_t;
 /// Additionnal values are appended after each struct.
 ///
 
-struct srv_teams_names {
-    char team_name[128];
+struct PACKED srv_teams_names {
+    char team_name[SHORT_MSG_LEN];
 };
 
 typedef struct srv_teams_names srv_teams_names_t;
+
+#define SRV_TEAMS_NAMES_LEN sizeof(struct srv_teams_names)
 
 ///
 /// Server new connection packet.
 ///
 
-struct srv_new_player_connect {
+struct PACKED srv_new_player_connect {
     unsigned int player_num;
     unsigned int x;
     unsigned int y;
-    ORIENTATION orientation;
+    enum ORIENTATION orientation;
     unsigned int level;
-    char team_name[128];
+    char team_name[SHORT_MSG_LEN];
 };
 
 typedef struct srv_new_player_connect srv_new_player_connect_t;
+
+#define SRV_NEW_PLAYER_CONNECT_LEN sizeof(struct srv_new_player_connect)
 
 ///
 /// Client player position packet.
 /// Request the position of the player determined by the number.
 ///
 
-struct clt_player_pos {
+struct PACKED clt_player_pos {
     unsigned int player_num;
 };
 
 typedef struct clt_player_pos clt_player_pos_t;
 
+#define CLT_PLAYER_POS_LEN sizeof(struct clt_player_pos)
+
 ///
 /// Server player position packet.
 ///
 
-struct srv_player_pos {
+struct PACKED srv_player_pos {
     unsigned int player_num;
     unsigned int x;
     unsigned int y;
-    ORIENTATION orientation;
+    enum ORIENTATION orientation;
 };
 
 typedef struct srv_player_pos srv_player_pos_t;
+
+#define SRV_PLAYER_POS_LEN sizeof(struct srv_player_pos)
 
 ///
 /// Client player level packet.
 /// Request the level of the player determined by the number.
 ///
 
-struct clt_player_level {
+struct PACKED clt_player_level {
     unsigned int player_num;
 };
 
 typedef struct clt_player_level clt_player_level_t;
 
+#define CLT_PLAYER_LEVEL_LEN sizeof(struct clt_player_level)
+
 ///
 /// Server player level packet.
 ///
 
-struct srv_player_level {
+struct PACKED srv_player_level {
     unsigned int player_num;
     unsigned int level;
 };
 
 typedef struct srv_player_level srv_player_level_t;
 
+#define SRV_PLAYER_LEVEL_LEN sizeof(struct srv_player_level)
+
 ///
 /// Client player inventory packet.
 /// Request the inventory of the player determined by the number.
 ///
 
-struct clt_player_inventory {
+struct PACKED clt_player_inventory {
     unsigned int player_num;
 };
+
+#define CLT_PLAYER_INVENTORY_LEN sizeof(struct clt_player_inventory)
 
 ///
 /// Server player inventory packet.
 ///
 
-struct srv_player_inventory {
+struct PACKED srv_player_inventory {
     unsigned int player_num;
     unsigned int x;
     unsigned int y;
@@ -408,32 +461,38 @@ struct srv_player_inventory {
 
 typedef struct srv_player_inventory srv_player_inventory_t;
 
+#define SRV_PLAYER_INVENTORY_LEN sizeof(struct srv_player_inventory)
+
 ///
 /// Server expulsion packet.
 ///
 
-struct srv_player_expulsion {
+struct PACKED srv_player_expulsion {
     unsigned int player_num;
 };
 
 typedef struct srv_player_expulsion srv_player_expulsion_t;
 
+#define SRV_PLAYER_EXPULSION_LEN sizeof(struct srv_player_expulsion)
+
 ///
 /// Server broadcast packet.
 ///
 
-struct srv_broadcast_msg {
+struct PACKED srv_broadcast_msg {
     unsigned int player_num;
-    char message[1024];
+    char message[LONG_MSG_LEN];
 };
 
 typedef struct srv_broadcast_msg srv_broadcast_msg_t;
+
+#define SRV_BROADCAST_MSG_LEN sizeof(struct srv_broadcast_msg)
 
 ///
 /// Server start of incantation packet.
 ///
 
-struct srv_start_incantation {
+struct PACKED srv_start_incantation {
     unsigned int x;
     unsigned int y;
     unsigned int level;
@@ -442,65 +501,77 @@ struct srv_start_incantation {
 
 typedef struct srv_start_incantation_msg srv_start_incantation_msg_t;
 
+#define SRV_START_INCANTATION_LEN sizeof(struct srv_start_incantation)
+
 ///
 /// Server end of incantation packet.
 ///
 
-struct srv_end_incantation {
+struct PACKED srv_end_incantation {
     unsigned int x;
     unsigned int y;
-    RESULT result;
+    enum RESULT result;
 };
 
 typedef struct srv_end_incantation_msg srv_end_incantation_msg_t;
+
+#define SRV_END_INCANTATION_LEN sizeof(struct srv_end_incantation)
 
 ///
 /// Server "egg laying by the player" packet.
 ///
 
-struct srv_player_egg_laying {
+struct PACKED srv_player_egg_laying {
     unsigned int player_num;
 };
 
 typedef struct srv_player_egg_laying srv_player_egg_laying_t;
 
+#define SRV_PLAYER_EGG_LAYING_LEN sizeof(struct srv_player_egg_laying)
+
 ///
 /// Server resource dropping packet.
 ///
 
-struct srv_player_resource_dropped {
+struct PACKED srv_player_resource_dropped {
     unsigned int player_num;
-    RESOURCE_NUMBER resource;
+    enum RESOURCE_NUMBER resource;
 };
 
 typedef struct srv_player_resource_dropped srv_player_resource_dropped_t;
+
+#define SRV_PLAYER_RESOURCE_DROPPED_LEN sizeof(struct srv_player_resource_dropped)
 
 ///
 /// Server resource collected packet.
 ///
 
-struct srv_player_resource_collected {
+struct PACKED srv_player_resource_collected {
     unsigned int player_num;
-    RESOURCE_NUMBER resource;
+    enum RESOURCE_NUMBER resource;
 };
 
 typedef struct srv_player_resource_collected srv_player_resource_collected_t;
+
+#define SRV_PLAYER_RESOURCE_COLLECTED_LEN sizeof(struct srv_player_resource_collected)
 
 ///
 /// Server player dead packet.
 ///
 
-struct srv_player_death {
+struct PACKED srv_player_death {
     unsigned int player_num;
 };
 
 typedef struct srv_player_death srv_player_death_t;
 
+#define SRV_PLAYER_DEATH_LEN sizeof(struct srv_player_death)
+
 ///
 /// Server player layed egg packet.
 ///
 
-struct srv_player_egg_layed {
+struct PACKED srv_player_egg_layed {
     unsigned int player_num;
     unsigned int egg_num;
     unsigned int x;
@@ -509,77 +580,97 @@ struct srv_player_egg_layed {
 
 typedef struct srv_player_egg_layed srv_player_egg_layed_t;
 
+#define SRV_PLAYER_EGG_LAYED_LEN sizeof(struct srv_player_egg_layed)
+
 ///
 /// Server egg hatching packet.
 ///
 
-struct srv_player_egg_hatching {
+struct PACKED srv_player_egg_hatching {
     unsigned int egg_num;
 };
 
 typedef struct srv_player_egg_hatching srv_player_egg_hatching_t;
 
+#define SRV_PLAYER_EGG_HATCHING_LEN sizeof(struct srv_player_egg_hatching)
+
 ///
 /// Server player egg connection.
 ///
 
-struct srv_player_egg_connection {
+struct PACKED srv_player_egg_connection {
     unsigned int egg_num;
 };
 
 typedef struct srv_player_egg_connection srv_player_egg_connection_t;
 
+#define SRV_PLAYER_EGG_CONNECTION_LEN sizeof(struct srv_player_egg_connection)
+
 ///
 /// Server death of hatched egg.
 ///
 
-struct srv_hatched_egg_death {
+struct PACKED srv_hatched_egg_death {
     unsigned int egg_num;
 };
 
 typedef struct srv_hatched_egg_death srv_hatched_egg_death_t;
 
+#define SRV_HATCHED_EGG_DEATH_LEN sizeof(struct srv_hatched_egg_death)
+
 ///
 /// Server end of the game packet.
 ///
 
-struct srv_end_game {
-    char winning_team[128];
+struct PACKED srv_end_game {
+    char winning_team[SHORT_MSG_LEN];
 };
 
 typedef struct srv_end_game srv_end_game_t;
+
+#define SRV_END_GAME_LEN sizeof(struct srv_end_game)
 
 ///
 /// Message from server.
 ///
 
-struct srv_global_message {
-    char message[256];
+struct PACKED srv_global_message {
+    char message[LONG_MSG_LEN];
 };
 
 typedef struct srv_global_message srv_global_message_t;
+
+#define SRV_GLOBAL_MESSAGE_LEN sizeof(struct srv_global_message)
 
 ///
 /// Server unknwon command packet.
 ///
 
-struct srv_unknown_command {
+struct PACKED srv_unknown_command {
+    char tmp;
 };
 
 typedef struct srv_unknown_command srv_unknown_command_t;
+
+#define SRV_UNKNOWN_COMMAND_LEN sizeof(struct srv_unknown_command)
 
 ///
 /// Server bad parameters.
 ///
 
-struct srv_bad_parameters {
+struct PACKED srv_bad_parameters {
+    char tmp;
 };
 
 typedef struct srv_bad_parameters srv_bad_parameters_t;
+
+#define SRV_BAD_PARAMETERS_LEN sizeof(struct srv_bad_parameters)
 
 #ifdef __cplusplus
 }
 #endif
 
-#pragma options align=reset
+#ifdef __clang__
+#   pragma options align=reset
+#endif /* __clang__ */
 

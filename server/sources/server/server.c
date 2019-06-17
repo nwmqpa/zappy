@@ -9,6 +9,7 @@
 #include "server.h"
 #include "logger.h"
 #include "client.h"
+#include "protocols_graphic.h"
 
 static void add_fd(server_t *server)
 {
@@ -74,6 +75,7 @@ server_t *create_server(options_t *options)
     server->freq = options->freq;
     server->client_per_team = options->client_nb;
     server->map = create_map(server->width, server->height);
+    register_all_handlers(server);
     add_fd(server);
     setup_teams(server, options);
     return server;

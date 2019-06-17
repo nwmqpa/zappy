@@ -16,6 +16,7 @@
 #include "options.h"
 #include "generic_list.h"
 #include "map.h"
+#include "protocols.h"
 
 typedef struct team_s {
     char *name;
@@ -36,6 +37,7 @@ typedef struct server_s {
     list_t *clients;
     int client_per_team;
     map_t *map;
+    phr_t reg;
 } server_t;
 
 typedef struct time_server_s {

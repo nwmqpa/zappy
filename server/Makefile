@@ -50,7 +50,11 @@ SOURCES		=	main.c \
 				map/map.c \
 				map/tile.c \
 				utils/utils.c \
-				client/connect_nbr.c
+				client/connect_nbr.c \
+				protocol/protocol.c \
+				protocol/player.c \
+				protocol/team.c \
+				protocol/map.c
 
 TEST_SOURCES	=	client_command.c \
 					generic_list.c \
@@ -71,7 +75,7 @@ LINK_MODULES	=	$(addprefix -l, $(MODULES))
 
 
 WARNINGS	=	-Wall -Wextra
-CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) -fdiagnostics-color=always -D _GNU_SOURCE -Wno-unused-parameter
+CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) -fdiagnostics-color=always -D _GNU_SOURCE -Wno-unused-parameter -Wno-unknown-pragmas
 LDFLAGS		=	-L $(BUILD_DIR) $(LINK_MODULES)
 
 DEFAULT		=	\e[0m
