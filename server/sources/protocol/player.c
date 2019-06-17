@@ -42,3 +42,27 @@ int player_pos(const void *data)
     write(*sock, &response, PKT_HDR_LEN + SRV_PLAYER_POS_LEN);
     return 0;
 }
+
+int player_level(const void *data)
+{
+    client_t *client = NULL;
+    clt_player_level_t payload;
+    int sock = *((int *) data);
+    server_t *server = (server_t *) (data + sizeof(int));
+    struct {
+        pkt_header_t header;
+        srv_player_level_t paylaod;
+    } response = {{
+            .id = SRV_PLAYER_LEVEL,
+            .subid = 0,
+            .version = PROTOCOL_VERSION,
+            .size = SRV_PLAYER_LEVEL_LEN}, {0}
+    };
+
+    read(sock, &payload, CLT_PLAYER_LEVEL_LEN);
+    response.paylaod.player_num = payload.player_num;
+    client = get_cmp_list(server->clients, client_cmp,
+            (void *) &payload.player_num);
+    response.paylaod.level = client->level;
+    return write(sock, &response, PKT_HDR_LEN + SRV_PLAYER_LEVEL_LEN);
+}
