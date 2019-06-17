@@ -50,7 +50,13 @@ SOURCES		=	main.c \
 				map/map.c \
 				map/tile.c \
 				utils/utils.c \
-				client/connect_nbr.c
+				client/connect_nbr.c \
+				protocol/protocol.c \
+				protocol/player.c \
+				protocol/team.c \
+				protocol/map.c \
+				protocol/custom.c \
+				protocol/time.c
 
 TEST_SOURCES	=	client_command.c \
 					generic_list.c \
@@ -71,7 +77,7 @@ LINK_MODULES	=	$(addprefix -l, $(MODULES))
 
 
 WARNINGS	=	-Wall -Wextra
-CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) -fdiagnostics-color=always -D _GNU_SOURCE -Wno-unused-parameter
+CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) -fdiagnostics-color=always -D _GNU_SOURCE -Wno-unused-parameter -Wno-unknown-pragmas
 LDFLAGS		=	-L $(BUILD_DIR) $(LINK_MODULES)
 
 DEFAULT		=	\e[0m
@@ -96,6 +102,9 @@ debug:	re
 
 cmd_gen: $(ROOT)/$(COMPILER_COMMAND)
 
+doc:
+	$(V)doxygen $(ROOT)/../ci/doc.cfg
+
 $(ROOT)/$(COMPILER_COMMAND): $(PATSUBST_JSON)
 	$(V)printf "$(WHITE)Creating $(BLUE)$(COMPILER_COMMAND)$(WHITE).\n"
 	$(V)sed -e '1s/^/[$\n/' -e '$$s/,$$/$\n]/' $(PATSUBST_JSON) > $(ROOT)/$(COMPILER_COMMAND)
@@ -115,6 +124,7 @@ fclean:			clean
 			$(V)printf "$(WHITE)Cleaning $(GREEN)linked $(WHITE)files$(DEFAULT)\n"
 			$(V)rm -f $(ROOT)/$(NAME) $(BUILD_DIR)/$(NAME)
 			$(V)rm -f $(ROOT)/test $(BUILD_DIR)/test
+			$(V)rm -rf $(ROOT)/documentation
 			$(V)for dir in $(PREFIXED_MODULS); do \
 				make --no-print-directory -C $$dir fclean; \
 			done

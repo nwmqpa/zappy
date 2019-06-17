@@ -9,6 +9,7 @@
 #include "server.h"
 #include "logger.h"
 #include "client.h"
+#include "protocols_graphic.h"
 
 static void add_fd(server_t *server)
 {
@@ -53,7 +54,7 @@ static void setup_network(server_t *server, options_t *options)
     server->epoll_fd_graphic = epoll_create1(0);
     if (server->socket_client == -1 || server->socket_graphic == -1 ||
     server->epoll_fd_client == -1 || server->epoll_fd_graphic == -1) {
-        fatall("Cannot connect quitting Zappy!\n");
+        fatall("Cannot connect, quitting Zappy!\n");
         free(server);
         exit(84);
     }
@@ -69,10 +70,14 @@ server_t *create_server(options_t *options)
     }
     setup_network(server, options);
     server->clients = create_list();
+    server->graphic_clients = create_list();
     server->width = options->width;
     server->height = options->height;
+    server->freq = options->freq;
     server->client_per_team = options->client_nb;
     server->map = create_map(server->width, server->height);
+    memset(&server->reg, 0, sizeof(phr_t));
+    register_all_handlers(server);
     add_fd(server);
     setup_teams(server, options);
     return server;
