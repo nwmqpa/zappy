@@ -21,9 +21,8 @@ static void handle_cooldown(client_t *client, server_t *server, int elapsed)
         dprintf(client->id, "%s\n", to_send);
         free(client->to_exec);
         client->to_exec = NULL;
-    } else {
-        prepare_command(client);
     }
+    prepare_command(client);
 }
 
 // TODO: Handle client death.
