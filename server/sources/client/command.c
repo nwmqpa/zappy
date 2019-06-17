@@ -9,22 +9,22 @@
 #include "client_commands.h"
 
 static const command_t COMMANDS[] = {
-    {"Fork", fork_client, 4, 42},
-    {"Eject", eject, 5, 7},
-    {"Forward", forward, 7, 7},
-    {"Left", left, 4, 7},
-    {"Right", right, 5, 7},
-    {"Look", look, 4, 7},
-    {"Incante", incante, 7, 300},
-    {"Connect_nbr", connect_nbr, 11, 0},
-    {"Inventory", inventory, 9, 1},
+    {"Fork", fork_client, 4, 42.0},
+    {"Eject", eject, 5, 7.0},
+    {"Forward", forward, 7, 7.0},
+    {"Left", left, 4, 7.0},
+    {"Right", right, 5, 7.0},
+    {"Look", look, 4, 7.0},
+    {"Incante", incante, 7, 300.0},
+    {"Connect_nbr", connect_nbr, 11, 0.0},
+    {"Inventory", inventory, 9, 1.0},
     {NULL, NULL, 0, 0}
 };
 
 static const command_param_t COMMANDS_PARAM[] = {
-    {"Broadcast", broadcast, 9, 7},
-    {"Take", take, 4, 7},
-    {"Set", set, 3, 7},
+    {"Broadcast", broadcast, 9, 7.0},
+    {"Take", take, 4, 7.0},
+    {"Set", set, 3, 7.0},
     {NULL, NULL, 0, 0}
 };
 
@@ -66,12 +66,12 @@ static char *iter_command(client_t *client, server_t *server,
     return strdup("ko");
 }
 
-int get_cooldown(const char *cmd)
+double get_cooldown(const char *cmd)
 {
     for (int i = 0; COMMANDS_PARAM[i].name; ++i)
         if (strncmp(COMMANDS_PARAM[i].name, cmd, COMMANDS_PARAM[i].len) == 0)
             return COMMANDS_PARAM[i].cooldown;
-    for (int i = 0; COMMANDS_PARAM[i].name; ++i)
+    for (int i = 0; COMMANDS[i].name; ++i)
         if (strncmp(COMMANDS[i].name, cmd, COMMANDS[i].len) == 0)
             return COMMANDS[i].cooldown;
     return -1;
