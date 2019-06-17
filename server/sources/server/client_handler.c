@@ -36,8 +36,8 @@ void handle_protocol(client_t *client, server_t *server)
         client->position.x = x;
         client->position.y = y;
     }
-    dprintf(client->id, "%d\n", free_space - 1);
-    dprintf(client->id, "%d %d\n", server->width, server->height);
+    dprintf(client->id, "%d\n%d %d\n", free_space - 1, server->width,
+            server->height);
 }
 
 int on_connect_client(int socket, void *data)
