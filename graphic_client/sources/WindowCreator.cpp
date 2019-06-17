@@ -7,13 +7,18 @@
 
 #include "SDL.hpp"
 
-WindowCreator::WindowCreator(const char *name, int x, int y, Uint32 flags)
+WindowCreator::WindowCreator(const char *WINname, int x, int y)
 {
-    if (Inits()) {
+    if (inits()) {
+        heart = true;
+        name = WINname;
         window = SDL_CreateWindow(name, SDL_WINDOWPOS_UNDEFINED,
-                SDL_WINDOWPOS_UNDEFINED, x, y, flags);
-        if (window != NULL)
-            screen = SDL_GetWindowSurface(window);
+                SDL_WINDOWPOS_UNDEFINED, x, y, SDL_WINDOW_RESIZABLE);
+        if (window == NULL)
+            printf("Window Error%s\n", SDL_GetError());
+        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+        if (renderer == NULL)
+            printf("Renderer Error%s\n", SDL_GetError());
     }
     /*Initialisation de la fenêtre et des modules de SDL*/
 }
@@ -21,7 +26,7 @@ WindowCreator::WindowCreator(const char *name, int x, int y, Uint32 flags)
 WindowCreator::~WindowCreator()
 {}
 
-bool WindowCreator::Inits(Uint32 SDL, Uint32 IMG)
+bool WindowCreator::inits(Uint32 SDL, Uint32 IMG)
 {
     if (SDL_Init(SDL) < 0) {
         printf("SDL Error: %s.\n", SDL_GetError());
@@ -33,30 +38,97 @@ bool WindowCreator::Inits(Uint32 SDL, Uint32 IMG)
     return true;
 }
 
-void WindowCreator::Life()
+void WindowCreator::client_event()
+{
+    while (SDL_PollEvent(&event) != 0) {
+        switch (event.type) {
+            case SDL_QUIT:
+                destroy();
+                break;
+            case SDL_KEYDOWN:
+                switch (event.key.keysym.sym) {
+                    case SDLK_DOWN:
+                        addY(10);
+                        break;
+                    case SDLK_UP:
+                        addY(-10);
+                        break;
+                    case SDLK_LEFT:
+                        addX(-10);
+                        break;
+                    case SDLK_RIGHT:
+                        addX(10);
+                        break;
+                    case SDLK_KP_PLUS:
+                        scale(10);
+                        break;
+                    case SDLK_KP_MINUS:
+                        scale(-10);
+                        break;
+                }
+
+        }
+    }
+}
+
+void WindowCreator::scale(int value)
+{
+    int old;
+
+    for (int i = 0; i < tileList.size(); i++) {
+        old = tileList[i]->getScale();
+        tileList[i]->setScale(old += value);
+    }
+}
+
+void WindowCreator::addY(int value)
+{
+    int old;
+
+    for (unsigned int i = 0; i < tileList.size(); i++) {
+        old = tileList[i]->getPosY();
+        tileList[i]->setPosY(old += value);
+    }
+}
+
+void WindowCreator::addX(int value)
+{
+    int old = 0;
+
+    for (unsigned int i = 0; i < tileList.size(); i++) {
+        old = tileList[i]->getPosX();
+        tileList[i]->setPosX(old += value);
+    }
+}
+
+void WindowCreator::server_event()
+{
+//
+}
+
+void WindowCreator::drawTile()
+{
+    for (unsigned int i = 0; i < tileList.size(); i++)
+        tileList[i]->draw(renderer, window);
+}
+
+void WindowCreator::life()
 {
     while (heart) {
-        while (SDL_PollEvent(&event) != 0) {
-            switch (event.type) {
-                case SDL_QUIT:
-                    Destroy();
-            }
-        }
-        if (!Update())
-            Destroy();
+        SDL_RenderClear(renderer);
+        update();
+        SDL_RenderPresent(renderer);
     }
 }
 
-bool WindowCreator::Update()
+void WindowCreator::update()
 {
-    if (SDL_UpdateWindowSurface(window) < 0) {
-        printf("Update Error: %s.\n", SDL_GetError());
-        return false;
-    }
-    return true;
+    server_event();
+    drawTile();
+    client_event();
 }
 
-void WindowCreator::Destroy()
+void WindowCreator::destroy()
 {
     SDL_DestroyWindow(window);
     IMG_Quit();
