@@ -27,3 +27,5 @@ int player_pos(const void *data);
 
 int time_request(const void *data);
 int time_change(const void *data);
+
+int invalid_custom(const void *data);
