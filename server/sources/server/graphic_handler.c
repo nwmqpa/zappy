@@ -36,14 +36,10 @@ int on_delete_graphic(int socket, void *data)
     int *sock = pop_cmp_list(server->graphic_clients, graph_cmp,
             (void *) &socket);
     dprintf(*sock, "GoodBye.\n");
-    //close(*sock);
     return 0;
 }
 
 int on_active_graphic(int socket, void *data)
 {
-    server_t *server = (server_t *) data;
-
-    debugl("Graphic client sent a message.\n");
-    return handle_packet(socket, server);
+    return handle_packet(socket, (server_t *) data);
 }

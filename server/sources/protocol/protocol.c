@@ -29,6 +29,7 @@ void register_pkt_handler(phr_t *registrar, pkt_handler_t *handler)
         for (; registrar->handlers[num_handlers]; num_handlers++);
     registrar->handlers = realloc(registrar->handlers,
     sizeof(pkt_handler_t *) * (num_handlers + 2));
+    memset(registrar->handlers + num_handlers, 0, sizeof(pkt_handler_t *) * 2);
     if (!registrar->handlers) {
         fatall("Cannot allocate memory for packet handlers.");
         exit(84);
@@ -62,13 +63,16 @@ static int handle(pkt_header_t *pkt, server_t *server, int sock)
             return handlers[i]->handler((const void *) &data);
         }
     }
-    debugl("Request not find it's a custom.\n");
+    debugl("Handler not found.\n");
     return -1;
 }
 
 int handle_packet(int socket, server_t *server)
 {
     pkt_header_t packet;
-    read(socket, &packet, PKT_HDR_LEN);
-    return handle(&packet, server, socket);
+    if (read(socket, &packet, PKT_HDR_LEN) == 0)
+        return -1;
+    debugl("Graphic client sent a message.\n");
+    handle(&packet, server, socket);
+    return 0;
 }
