@@ -93,9 +93,8 @@ class Player:
             # print("FINAL = ", received)
         return (received)
 
-    def get_other_player_nb_on_same_tile(self) -> int:
+    def other_player_nb_on_tile(self) -> int:
         """Return nb of other player on same tile."""
-        print("1111")
         self.send_msg("Look")
         response = self.recv_msg()
         if (verif_look_response(response) is False):
@@ -105,27 +104,25 @@ class Player:
         response = response.replace("[ ", "")
         response = response.replace(" ]", "")
         array = str(response).split(",")
-        player = 0
+        player_nb = -1
         tile_1 = array[0]
         splited = tile_1.split(" ")
         for i in splited:
-            # print("On tile 1 -> ", i)
             if (str(i) == "player"):
-                player = player + 1
-        return (player)
+                player_nb = player_nb + 1
+        return (player_nb)
 
     def check_ok_ko_response(self, response: str) -> True:
         """Verify if response is `ok` or `ko` else command don't count."""
         if (response == "ok\n" or response == "ko\n"):
             return (True)
-        else:
-            return (False)
+        return (False)
 
     def check_inventory(self) -> Inventory:
         """Check what's is in my Inventory."""
         print("Check Inventory.")
         self.send_msg("Inventory")
-        print("+++++++++++++++++++++++++++++++")
+        # print("+++++++++++++++++++++++++++++++")
         response = self.recv_msg()
         # print("Wesh -> ", response)
         inventory = parse_inventory(response)
@@ -147,9 +144,7 @@ class Player:
         """Take an object and add it to my inventory."""
         self.send_msg("Take " + object)
         print("Take " + object)
-        # print("Unit of time before taking the object ->", self.units_of_time)
-        self.units_of_time = int(self.units_of_time) - 7
-        # print("Unit of time after taking the object  ->", self.units_of_time)
+        # self.units_of_time = int(self.units_of_time) - 7
         response = self.recv_msg()
         if (self.check_ok_ko_response(response) is False):
             return (-1)
@@ -177,26 +172,58 @@ class Player:
             return (1)
         return (2)
 
-    def get_stone_nb(self, stone: str) -> int:
-        """Return number of this stone in inventory."""
-        # print(self.inventory.get_item(stone))
-        return(self.inventory.get_item(stone))
+    def set_object(self, object: str) -> int:
+        """Set an object on tile and remove it from inventory."""
+        self.send_msg("Set " + object)
+        print("Set " + object)
+        # self.units_of_time = int(self.units_of_time) - 7
+        response = self.recv_msg()
+        if (self.check_ok_ko_response(response) is False):
+            return (-1)
+        if (response != "ok\n"):
+            print("Response is ->", response)
+            print("Can't set the object :(.")
+            return(-1)
+        else:
+            print("Response is ->", response)
+            print("Remove `" + object + "` from inventory.")
+            if object == "food":
+                self.inventory.food = str(int(self.inventory.food) - 1)
+            elif object == "linemate":
+                self.inventory.linemate = str(int(self.inventory.linemate) - 1)
+            elif object == "deraumere":
+                self.inventory.deraumere = str(int(self.inventory.deraumere)+1)
+            elif object == "sibur":
+                self.inventory.sibur = str(int(self.inventory.sibur) - 1)
+            elif object == "mendiane":
+                self.inventory.mendiane = str(int(self.inventory.mendiane) - 1)
+            elif object == "phiras":
+                self.inventory.phiras = str(int(self.inventory.phiras) - 1)
+            elif object == "thystame":
+                self.inventory.thystame = str(int(self.inventory.thystame) - 1)
+            return (1)
+        return (2)
+
+    # def get_stone_nb(self, stone: str) -> int:
+    #     """Return number of this stone in inventory."""
+    #     # print(self.inventory.get_item(stone))
+    #     return(self.inventory.get_item(stone))
 
     def should_take(self, stone: str) -> bool:
         """Return True if we have to pickup this stone, else return False."""
-        if (stone == "food" and self.get_stone_nb("food") < 10):
+        if (stone == "food" and int(self.inventory.food) < 10):
             return (True)
-        elif (stone == "linemate" and self.get_stone_nb("linemate") < 9):
+        elif (stone == "linemate" and int(self.inventory.linemate) < 9):
             return (True)
-        elif (stone == "deraumere" and self.get_stone_nb("deraumere") < 8):
+        elif (stone == "deraumere" and int(self.inventory.deraumere) < 8):
             return (True)
-        elif (stone == "sibur" and self.get_stone_nb("sibur") < 10):
+        elif (stone == "sibur" and int(self.inventory.sibur) < 10):
             return (True)
-        elif (stone == "mendiane" and self.get_stone_nb("mendiane") < 5):
+        elif (stone == "mendiane" and int(self.inventory.mendiane) < 5):
             return (True)
-        elif (stone == "phiras" and self.get_stone_nb("phiras") < 6):
+        elif (stone == "phiras" and int(self.inventory.phiras) < 6):
             return (True)
-        elif (stone == "thystame" and self.get_stone_nb("thystame") < 1):
+        elif (stone == "thystame" and int(self.inventory.thystame) < 1):
             return (True)
         return(False)
 
@@ -228,7 +255,7 @@ class Player:
               self.should_take("phiras") is True):
             return(self.take_object("phiras"))
         elif (int(actual_tile.thystame) > 0 and
-              self.should_take("tystame") is True):
+              self.should_take("thystame") is True):
             return(self.take_object("thystame"))
         print("\nCan't take any stone.\n")
         if (int(actual_tile.food) > 0):
@@ -281,19 +308,119 @@ class Player:
         # self.turn_right()
         # raise NotImplementedError
 
+    def verif_stones(self, inventory: Inventory,
+                     stones_combinations: List) -> bool:
+        """Verif if my inventory allow me to elevate."""
+        if (int(inventory.linemate) >= stones_combinations["linemate"] and
+            int(inventory.deraumere) >= stones_combinations["deraumere"] and
+            int(inventory.sibur) >= stones_combinations["sibur"] and
+            int(inventory.mendiane) >= stones_combinations["mendiane"] and
+            int(inventory.phiras) >= stones_combinations["phiras"] and
+                int(inventory.thystame) >= stones_combinations["thystame"]):
+            return (True)
+        return (False)
+
+    def put_stones(self, stones_combinations: List) -> None:
+        """Put on tile stones to elevate."""
+        stones_names = ["linemate",
+                        "deraumere",
+                        "sibur",
+                        "mendiane",
+                        "phiras",
+                        "thystame"]
+        stone_nb = 0
+        for stone in stones_names:
+            # print("__________---------------------------> ", stone)
+            stone_nb = stones_combinations[stone]
+            while (stone_nb > 0):
+                self.set_object(stone)
+                stone_nb = stone_nb - 1
+
+    def incantation(self) -> bool:
+        """Start incantation to elevate level."""
+        print("\nPlayer ask for Incantation.")
+        self.send_msg("Incantationt")
+        response = self.recv_msg()
+        print("Response for `Incantation`:", response)
+        if (response == "ko\n"):
+            print("Level still -> ", self.actual_level)
+            return (False)
+        else:
+            return (True)
+
     def elevate(self) -> None:
-        """Verify if player can elevate and do it."""
+        """Verify if player can elevate."""
         print("\nIn elevate function.\n")
+        level = self.actual_level
+        if (level == 1 and self.verif_stones(self.inventory,
+            self.stones_combinations[level - 1]) is True and
+                self.other_player_nb_on_tile() == 0):
+            print("Actual level == 1")
+            print("Player elevate to level 2 !")
+            # print(self.look_around())
+            self.put_stones(self.stones_combinations[level - 1])
+            # print("+++++++++++++++++++++++++++++++++=")
+            # print(self.look_around())
+            if (self.incantation() is True):
+                self.actual_level = 2
+        elif (level == 2 and self.verif_stones(self.inventory,
+              self.stones_combinations[level - 1]) is True and
+                self.other_player_nb_on_tile() == 1):
+            print("Actual level == 2")
+            print("Player elevate to level 3 !")
+            self.put_stones(self.stones_combinations[level - 1])
+            if (self.incantation() is True):
+                self.actual_level = 3
+        elif (level == 3 and self.verif_stones(self.inventory,
+              self.stones_combinations[level - 1]) is True and
+                self.other_player_nb_on_tile() == 1):
+            print("Actual level == 3")
+            print("Player elevate to level 4 !")
+            self.put_stones(self.stones_combinations[level - 1])
+            if (self.incantation() is True):
+                self.actual_level = 4
+        elif (level == 4 and self.verif_stones(self.inventory,
+              self.stones_combinations[level - 1]) is True and
+                self.other_player_nb_on_tile() == 3):
+            print("Actual level == 4")
+            print("Player elevate to level 5 !")
+            self.put_stones(self.stones_combinations[level - 1])
+            if (self.incantation() is True):
+                self.actual_level = 5
+        elif (level == 5 and self.verif_stones(self.inventory,
+              self.stones_combinations[level - 1]) is True and
+                self.other_player_nb_on_tile() == 3):
+            print("Actual level == 5")
+            print("Player elevate to level 6 !")
+            self.put_stones(self.stones_combinations[level - 1])
+            if (self.incantation() is True):
+                self.actual_level = 6
+        elif (level == 6 and self.verif_stones(self.inventory,
+              self.stones_combinations[level - 1]) is True and
+                self.other_player_nb_on_tile() == 5):
+            print("Actual level == 6")
+            print("Player elevate to level 7 !")
+            self.put_stones(self.stones_combinations[level - 1])
+            if (self.incantation() is True):
+                self.actual_level = 7
+        elif (level == 7 and self.verif_stones(self.inventory,
+              self.stones_combinations[level - 1]) is True and
+                self.other_player_nb_on_tile() == 5):
+            print("Actual level == 7")
+            print("Player elevate to level 8 !")
+            self.put_stones(self.stones_combinations[level - 1])
+            if (self.incantation() is True):
+                self.actual_level = 8
 
     def life_loop(self) -> None:
         """Player life."""
         print("Begin of loop.\n")
         i = 0
-        while (i < 500):
+        while (i < 1000):
             print("\n+++\nLOOP\n")
             self.inventory = self.check_inventory()
-            if (self.inventory is None):
-                continue
+            # if (self.inventory is None):
+            #     continue
             print(self.inventory)
             print("")
             self.units_of_time = int(self.inventory.food) * 126
@@ -308,6 +435,6 @@ class Player:
             self.where_to_move()
 
             # print("Other player nb -> ",
-            #       self.get_other_player_nb_on_same_tile())
+            #       self.other_player_nb_on_tile())
 
             i = i + 1

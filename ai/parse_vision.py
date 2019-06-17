@@ -45,11 +45,8 @@ class Vision:
 def verif_look_response(line: str) -> bool:
     """Verify if response have a good format."""
     splitted_line = line.split(",")
-    print("line    -> ", line)
     if (line[0] != '[' or line[len(line) - 2] != ']'):
         return (False)
-    # if (len(splitted_line) == 16):
-    #     return (True)
     return (True)
 
 
