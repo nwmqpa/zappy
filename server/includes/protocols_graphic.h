@@ -24,3 +24,9 @@ int tile_content(const void *data);
 int teams_name(const void *data);
 
 int player_pos(const void *data);
+int player_level(const void *data);
+
+int time_request(const void *data);
+int time_change(const void *data);
+
+int invalid_custom(const void *data);
