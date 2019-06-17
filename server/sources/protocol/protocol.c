@@ -7,33 +7,46 @@
 
 #include "protocols_graphic.h"
 
-static const int HANDLER_NBR = 10;
+static const pkt_handler_t PACKET_HANDLERS[CLT_CUSTOM] = {
+    {CLT_PROTOCOL_ADDONS, 0, "protocol_addons", 0x0},
+    {CLT_MAP_SIZE, 0, "map_size", map_size},
+    {CLT_TILE_CONTENT, 0, "tile_content", tile_content},
+    {CLT_MAP_CONTENT, 0, "map_content", map_content},
+    {CLT_TEAMS_NAMES, 0, "teams_name", teams_name},
+    {CLT_PLAYER_POSITION, 0, "player_pos", player_pos},
+    {CLT_PLAYER_LEVEL, 0, "player_level", 0x0},
+    {CLT_PLAYER_INVENTORY, 0, "player_inventory", 0x0},
+    {CLT_TIME_UNIT_REQUEST, 0, "time_unit_request", 0x0},
+    {CLT_TIME_UNIT_CHANGE, 0, "time_unit_change", 0x0},
+    {CLT_CUSTOM, 0, "clt_custom", 0x0}
+};
 
-static const pkt_handler_t MAP_SIZE_H = {CLT_MAP_SIZE, 0, "map_size", map_size};
 
-static const pkt_handler_t TILE_CONTENT_H =
-    {CLT_TILE_CONTENT, 0, "tile_content", tile_content};
+void register_pkt_handler(phr_t *registrar, pkt_handler_t *handler)
+{
+    size_t num_handlers = 0;
 
-static const pkt_handler_t MAP_CONTENT_H =
-    {CLT_MAP_CONTENT, 0, "map_content", map_content};
-
-static const pkt_handler_t TEAMS_NAME_H =
-    {CLT_TEAMS_NAMES, 0, "teams_name", teams_name};
-
-static const pkt_handler_t PLAYER_POS_H =
-    {CLT_PLAYER_POSITION, 0, "player_pos", player_pos};
-
-static const pkt_handler_t LAST_H = {0, 0, NULL, NULL};
+    if (registrar->handlers)
+        for (; registrar->handlers[num_handlers]; num_handlers++);
+    registrar->handlers = realloc(registrar->handlers,
+    sizeof(pkt_handler_t *) * (num_handlers + 2));
+    if (!registrar->handlers) {
+        fatall("Cannot allocate memory for packet handlers.");
+        exit(84);
+    }
+    debugl("Registering `%s` packet handler.\n", handler->name);
+    registrar->handlers[num_handlers] = handler;
+}
 
 void register_all_handlers(server_t *server)
 {
-    server->reg.handlers = malloc(sizeof(pkt_handler_t *) * HANDLER_NBR);
-    server->reg.handlers[0] = &MAP_SIZE_H;
-    server->reg.handlers[1] = &TILE_CONTENT_H;
-    server->reg.handlers[2] = &MAP_CONTENT_H;
-    server->reg.handlers[3] = &TEAMS_NAME_H;
-    server->reg.handlers[4] = &PLAYER_POS_H;
-    server->reg.handlers[5] = &LAST_H;
+    pkt_handler_t *temp = 0x0;
+
+    for (size_t i = 0; i < CLT_CUSTOM; i++) {
+        temp = malloc(sizeof(pkt_handler_t));
+        memcpy(temp, &(PACKET_HANDLERS[i]), sizeof(pkt_handler_t));
+        register_pkt_handler(&(server->reg), temp);
+    }
 }
 
 static int handle(pkt_header_t *pkt, server_t *server, int sock)
