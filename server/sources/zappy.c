@@ -57,7 +57,6 @@ void tick_system(server_t *server)
     name.elapsed = (new.tv_sec - old.tv_sec) * 1e9;
     name.elapsed = (name.elapsed + (new.tv_nsec - old.tv_nsec)) * 1e-9;
     name.elapsed *= server->freq;
-    debugl("Time elapsed in the previous tick: %f\n", name.elapsed);
     clock_gettime(CLOCK_MONOTONIC, &old);
     map(server->clients, handle_player_tick, &name);
 }
@@ -65,10 +64,8 @@ void tick_system(server_t *server)
 static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
         server_t *server)
 {
-    void *graphic_data = NULL;
-
     while (42) {
-        if (dispatch(graphic, graphic_data) == -1 ||
+        if (dispatch(graphic, (void *) server) == -1 ||
                 dispatch(client, server) == -1) {
             infol("Closing server after an error.\n");
             return -1;
