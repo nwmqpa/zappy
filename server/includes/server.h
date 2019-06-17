@@ -22,11 +22,6 @@ typedef struct team_s {
     int *clients;
 } team_t;
 
-typedef struct {
-    int elapsed;
-    server_t *server;
-} time_server_t;
-
 int check_free_space(team_t *team, int max_client, int new_client);
 
 typedef struct server_s {
@@ -42,6 +37,12 @@ typedef struct server_s {
     int client_per_team;
     map_t *map;
 } server_t;
+
+typedef struct time_server_s {
+    double elapsed;
+    server_t *server;
+} time_server_t;
+
 
 // Create server and initiliaze it from options.
 server_t *create_server(options_t *options);

@@ -71,7 +71,7 @@ typedef struct client_s {
     unsigned int direction;
     pos_t position;
     inventory_t inventory;
-    int cooldown;
+    double cooldown;
     char *to_exec;
     int need_to_eat;
 } client_t;
