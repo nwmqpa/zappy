@@ -53,7 +53,7 @@ static void setup_network(server_t *server, options_t *options)
     server->epoll_fd_graphic = epoll_create1(0);
     if (server->socket_client == -1 || server->socket_graphic == -1 ||
     server->epoll_fd_client == -1 || server->epoll_fd_graphic == -1) {
-        fatall("Cannot connect quitting Zappy!\n");
+        fatall("Cannot connect, quitting Zappy!\n");
         free(server);
         exit(84);
     }
