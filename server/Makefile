@@ -50,7 +50,10 @@ SOURCES		=	main.c \
 				map/map.c \
 				map/tile.c \
 				utils/utils.c \
-				client/connect_nbr.c
+				client/connect_nbr.c \
+				protocol/protocol.c \
+				protocol/player.c \
+				protocol/team.c
 
 TEST_SOURCES	=	client_command.c \
 					generic_list.c \
