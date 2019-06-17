@@ -8,8 +8,10 @@
 #include "protocols_graphic.h"
 #include "server.h"
 
-int map_size(map_t *map, int sock)
+int map_size(const void *data)
 {
+    server_t *server = (server_t *) (data + sizeof(int));
+    int *sock = (int *) data;
     struct {
         pkt_header_t header;
         srv_map_size_t payload;
@@ -21,16 +23,16 @@ int map_size(map_t *map, int sock)
             .size = SRV_MAP_SIZE_LEN
         },
         {
-            .x = map->width,
-            .y = map->height
+            .x = server->map->width,
+            .y = server->map->height
         }
     };
 
-    write(sock, &response, SRV_MAP_SIZE_LEN + PKT_HDR_LEN);
+    write(*sock, &response, SRV_MAP_SIZE_LEN + PKT_HDR_LEN);
     return 0;
 }
 
-int map_content(map_t *map, int sock)
+int map_content(const void *data)
 {
     return 0;
 }
@@ -50,27 +52,27 @@ static void fill_payload(tile_t *tile, srv_tile_content_t *payload,
     payload->players = tile->nb_player;
 }
 
-int tile_content(map_t *map, int sock)
+int tile_content(const void *data)
 {
+    int *sock = (int *) data;
+    map_t *map = ((server_t *) (data + sizeof(int)))->map;
     clt_tile_content_t payload;
     tile_t *tile = NULL;
     struct {
         pkt_header_t header;
         srv_tile_content_t payload;
     } response = {
-        {
-            .id = SRV_MAP_SIZE,
+        {   .id = SRV_MAP_SIZE,
             .subid = 0,
             .version = PROTOCOL_VERSION,
-            .size = SRV_MAP_SIZE_LEN
-        },
+            .size = SRV_MAP_SIZE_LEN},
         {0}
     };
 
-    read(sock, &payload, CLT_TILE_CONTENT_LEN);
+    read(*sock, &payload, CLT_TILE_CONTENT_LEN);
     tile = get_tile_map(map, payload.x, payload.y);
     fill_payload(tile, &response.payload, payload.x, payload.y);
-    write(sock, &response, PKT_HDR_LEN + SRV_TILE_CONTENT_LEN);
+    write(*sock, &response, PKT_HDR_LEN + SRV_TILE_CONTENT_LEN);
     return 0;
 }
 
