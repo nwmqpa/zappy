@@ -18,14 +18,14 @@ typedef struct command_s {
     char *name;
     cmd_func function;
     int len;
-    int cooldown;
+    double cooldown;
 } command_t;
 
 typedef struct command_param_s {
     char *name;
     cmd_param_func function;
     int len;
-    int cooldown;
+    double cooldown;
 } command_param_t;
 
 int prepare_command(client_t *client);

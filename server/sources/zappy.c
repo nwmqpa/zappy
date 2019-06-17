@@ -5,6 +5,7 @@
 ** zappy source file main loop.
 */
 
+#include <time.h>
 #include "zappy.h"
 #include "logger.h"
 #include "dispatcher.h"
@@ -21,18 +22,14 @@ static void handle_cooldown(client_t *client, server_t *server, int elapsed)
         dprintf(client->id, "%s\n", to_send);
         free(client->to_exec);
         client->to_exec = NULL;
-    } else {
-        prepare_command(client);
     }
+    prepare_command(client);
 }
 
 // TODO: Handle client death.
 static void handle_player_tick(void *data, const void *params)
 {
-    struct {
-        int elapsed;
-        server_t *server;
-    } const *parameters = params;
+    const time_server_t *parameters = (time_server_t *) params;
     client_t *client = data;
     int elapsed_time = parameters->elapsed;
 
@@ -50,21 +47,25 @@ static void handle_player_tick(void *data, const void *params)
 
 void tick_system(server_t *server)
 {
-    struct {
-        int elapsed;
-        server_t *server;
-    } name = { 1, server };
+    static struct timespec old = {0};
+    struct timespec new = {0};
+    time_server_t name = (time_server_t) { 0, server };
 
+    if (memcmp(&old, &new, sizeof(old)) == 0)
+        clock_gettime(CLOCK_MONOTONIC, &old);
+    clock_gettime(CLOCK_MONOTONIC, &new);
+    name.elapsed = (new.tv_sec - old.tv_sec) * 1e9;
+    name.elapsed = (name.elapsed + (new.tv_nsec - old.tv_nsec)) * 1e-9;
+    name.elapsed *= server->freq;
+    clock_gettime(CLOCK_MONOTONIC, &old);
     map(server->clients, handle_player_tick, &name);
 }
 
 static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
         server_t *server)
 {
-    void *graphic_data = NULL;
-
     while (42) {
-        if (dispatch(graphic, graphic_data) == -1 ||
+        if (dispatch(graphic, server) == -1 ||
                 dispatch(client, server) == -1) {
             infol("Closing server after an error.\n");
             return -1;
