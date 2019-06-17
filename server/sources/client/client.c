@@ -67,7 +67,7 @@ void print_client(client_t *client)
             "   inventory: %s\n"
             "   position: (x: %d, y: %d)\n"
             "   level: %d\n"
-            "   cooldown: %d\n"
+            "   cooldown: %f\n"
             "   to_exec: %s\n"
             "   direction: %s\n"
             "}\n"
