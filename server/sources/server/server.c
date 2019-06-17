@@ -71,6 +71,7 @@ server_t *create_server(options_t *options)
     server->clients = create_list();
     server->width = options->width;
     server->height = options->height;
+    server->freq = options->freq;
     server->client_per_team = options->client_nb;
     server->map = create_map(server->width, server->height);
     add_fd(server);
