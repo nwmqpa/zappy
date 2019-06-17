@@ -18,7 +18,8 @@ INCLUDE_DIR	=	$(ROOT)/includes
 
 MODULES		=
 
-SOURCES		=		WindowCreator.cpp	\
+SOURCES		=		Case.cpp	\
+					WindowCreator.cpp	\
 					main.cpp
 
 TEST_SOURCES	=
@@ -34,7 +35,7 @@ PATSUBST_MODULS =	$(patsubst  $(SRC_DIR)/%, $(BUILD_DIR)/lib%.a, $(PREFIXED_MODU
 LINK_MODULES	=	$(addprefix -l, $(MODULES))
 
 
-WARNINGS	=	-Wall -Wextra -lSDL2 -lSDL2_image
+WARNINGS	=	-Wall -Wextra -lSDL2 -lSDL2_image -g
 CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) -fdiagnostics-color=always -D _GNU_SOURCE
 LDFLAGS		=	-L $(BUILD_DIR) $(LINK_MODULES) -lSDL2 -lSDL2_image
 

@@ -7,63 +7,38 @@
 
 #include "Case.hpp"
 
-Case::Case(srv_tile_content_t *tileset, SDL_Surface *screen, srv_map_size_t *map)
+Case::Case(srv_tile_content_t *tileSet, srv_map_size_t *mapData)
 {
-    _tile = tileset;
-    _x = tileset->x;
-    _y = tileset->y;
-    _back = IMG_Load("resources/Item_700.png");
+    tile = tileSet;
+    map = mapData;
+    x = tileSet->x;
+    y = tileSet->y;
+    back = IMG_Load("resources/Item_700.png");
 
-    _pos.x = (screen->w / 2 - (map->x / 2)) +
-        (tileset->x - tileset->y) * (_back->w / 2) - 0;
-    _pos.y = (screen->h / 2 - (map->y / 2)) +
-        (tileset->x + tileset->y) * (_back->h / 2) - 0;
-
-    SDL_BlitSurface(_back, NULL, screen, &_pos);
     /*récupération de données et affichage du background de la case*/
 }
 
 Case::~Case()
 {}
 
-void Case::setTile(srv_tile_content_t *tile)
+void Case::setTile(srv_tile_content_t *newTile)
 {
-    _tile = tile;
+    tile = newTile;
 }
 
-void Case::draw()
+void Case::draw(SDL_Surface *screen)
 {
-    std::vector<Animation>::iterator it;
+    pos.x = (screen->w / 2 - (map->x / 2)) +
+        (tile->x - tile->y) * (back->w / 2) - 0;
+    pos.y = (screen->h / 2 - (map->y / 2)) +
+        (tile->x + tile->y) * (back->h / 2) - 0;
+    SDL_BlitSurface(back,
+                    NULL,
+                    screen,
+                    &pos);
+    //std::vector<Animation>::iterator it;
 
     //for (; it != _resources.end(); it++)
     //    *it->draw();
     /*Affichage de chaque ressource sur une case*/
-}
-
-void Case::AddComponent(RESOURCE_NUMBER number, int value)
-{
-    switch (number) {
-        case 0:
-            _tile->q0 += value;
-            break;
-        case 1:
-            _tile->q1 += value;
-            break;
-        case 2:
-            _tile->q2 += value;
-            break;
-        case 3:
-            _tile->q3 += value;
-            break;
-        case 4:
-            _tile->q4 += value;
-            break;
-        case 5:
-            _tile->q5 += value;
-            break;
-        case 6:
-            _tile->q6 += value;
-            break;
-    }
-    /*Gestion des ressources sur une case*/
 }

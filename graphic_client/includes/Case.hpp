@@ -16,22 +16,21 @@
 
 class Case {
     public:
-        Case(srv_tile_content_t *, SDL_Surface *, srv_map_size_t *);
+        Case(srv_tile_content_t *, srv_map_size_t *);
         ~Case();
 
         void setTile(srv_tile_content_t *);
-        srv_tile_content_t *getTile() {return _tile;}
-        void draw();
-        void AddComponent(RESOURCE_NUMBER id, int value);
+        srv_tile_content_t *getTile() {return tile;}
+        void draw(SDL_Surface *);
 
     private:
-        SDL_Surface *_back;
-        SDL_Rect _pos;
-        srv_tile_content_t *_tile;
+        SDL_Surface *back;
+        SDL_Rect pos;
+        srv_tile_content_t *tile;
+        srv_map_size_t *map;
 
-        int _x;
-        int _y;
-        std::vector<Animation> _resources;
+        int x;
+        int y;
 };
 
 #endif

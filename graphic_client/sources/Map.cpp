@@ -9,39 +9,46 @@
 
 Map::Map()
 {
-    getSize();
-    generateMap();
+    map_size = getSize;
 }
 
 Map::~Map()
 {}
 
-void Map::getSize()
+bool Map::getSize()
 {
-    _map_size = getMapsrv();
+    pkt_header_t request;
 
-    return (_map_size != 0);
+    request.id = GRAPHIC_PACKETS_FROM_SERVER::SRV_MAP_SIZE;
+    request.version = PROTOCOL_VERSION;
+
+    /*Mise en place de la structure "Packet Handler"*/
+
+    if (!getInfoFromServer(/*Packet Handler*/)) {
+        printf("Error DataCollect: Size.\n");
+        return false;
+    }
     /*Récupération de la taille de la carte*/
 }
 
-void Map::generateMap()
+bool Map::getCaseData()
 {
-    try {
-        for (unsigned int i = 0; i < (_map_size->x * _map_size->y); i += 1) {
-            /*Récupération de la composition des chaque case (srv_tile_content_t)*/
-            //srv_tile_content_t *tmp = &case;
-            if (_map.size() > 0 && _map[i]->getTile() != tmp)
-                _map[i]->setTile(tmp);
-            else
-                _map.push_back(new Case(tmp, _screen));
-        }
-    } catch (std::exception *error) {
-        _isAlive = false;
+
+}
+
+void Map::UpdateCaseData()
+{
+    for (int caseNbr = 0; caseNbr < (map_size.x * map_size.y); caseNbr++) {
+        caseData = getCaseData();
+        if (map.size() == caseNbr)
+            map.push_back(new Case(caseData));
+        else if (caseData != map[i])
+            map[i].setData(caseData);
     }
     /*Génération et update des informations des cases de la carte*/
 }
 
-void Map::getMapFromServer()
+void Map::getInfoFromServer(/*struct de demande de donnée(packet)*/)
 {
     SOCKET sock;
     SOCKADDR_IN sin;
