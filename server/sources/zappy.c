@@ -31,7 +31,7 @@ static void handle_player_tick(void *data, const void *params)
 {
     const time_server_t *parameters = (time_server_t *) params;
     client_t *client = data;
-    int elapsed_time = parameters->elapsed;
+    double elapsed_time = parameters->elapsed;
 
     client->cooldown -= elapsed_time;
     client->need_to_eat -= elapsed_time;
@@ -43,6 +43,7 @@ static void handle_player_tick(void *data, const void *params)
     }
     if (client->cooldown <= 0)
         handle_cooldown(client, parameters->server, elapsed_time);
+    debugl("Client cooldown %f.\n", client->cooldown);
 }
 
 void tick_system(server_t *server)
