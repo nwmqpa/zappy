@@ -35,6 +35,7 @@ typedef struct server_s {
     int freq;
     team_t **teams;
     list_t *clients;
+    list_t *graphic_clients;
     int client_per_team;
     map_t *map;
     phr_t reg;
