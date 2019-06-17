@@ -22,6 +22,11 @@ typedef struct team_s {
     int *clients;
 } team_t;
 
+typedef struct {
+    int elapsed;
+    server_t *server;
+} time_server_t;
+
 int check_free_space(team_t *team, int max_client, int new_client);
 
 typedef struct server_s {
@@ -31,6 +36,7 @@ typedef struct server_s {
     int epoll_fd_graphic;
     int socket_client;
     int socket_graphic;
+    int freq;
     team_t **teams;
     list_t *clients;
     int client_per_team;
