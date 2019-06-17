@@ -7,21 +7,33 @@
 
 #include "protocols_graphic.h"
 
-static const phr_t REGISTER = {
-    .size = 0,
-    .handlers = {
-        {CLT_MAP_SIZE, 0, "map_size", map_size},
-        {CLT_TILE_CONTENT, 0, "tile_content", tile_content},
-        {CLT_MAP_CONTENT, 0, "map_content", map_content},
-        {CLT_TEAMS_NAMES, 0, "teams_name", teams_name},
-        {CLT_PLAYER_POSITION, 0, "player_pos", player_pos},
-        {0, 0, NULL, NULL}
-    }
-};
+static const int HANDLER_NBR = 10;
 
-static void register_all_handlers(server_t *server)
+static const pkt_handler_t MAP_SIZE_H = {CLT_MAP_SIZE, 0, "map_size", map_size};
+
+static const pkt_handler_t TILE_CONTENT_H =
+    {CLT_TILE_CONTENT, 0, "tile_content", tile_content};
+
+static const pkt_handler_t MAP_CONTENT_H =
+    {CLT_MAP_CONTENT, 0, "map_content", map_content};
+
+static const pkt_handler_t TEAMS_NAME_H =
+    {CLT_TEAMS_NAMES, 0, "teams_name", teams_name};
+
+static const pkt_handler_t PLAYER_POS_H =
+    {CLT_PLAYER_POSITION, 0, "player_pos", player_pos};
+
+static const pkt_handler_t LAST_H = {0, 0, NULL, NULL};
+
+void register_all_handlers(server_t *server)
 {
-
+    server->reg.handlers = malloc(sizeof(pkt_handler_t *) * HANDLER_NBR);
+    server->reg.handlers[0] = &MAP_SIZE_H;
+    server->reg.handlers[1] = &TILE_CONTENT_H;
+    server->reg.handlers[2] = &MAP_CONTENT_H;
+    server->reg.handlers[3] = &TEAMS_NAME_H;
+    server->reg.handlers[4] = &PLAYER_POS_H;
+    server->reg.handlers[5] = &LAST_H;
 }
 
 static int handle(pkt_header_t *pkt, server_t *server, int sock)
@@ -30,12 +42,12 @@ static int handle(pkt_header_t *pkt, server_t *server, int sock)
         int sock;
         server_t *server;
     } data = { .sock = sock, .server = server };
-    pkt_handler_t **reg = REGISTER.handlers;
+    pkt_handler_t **handlers = server->reg.handlers;
 
-    for (int i = 0; reg[i]->handler; ++i) {
-        if (reg[i]->id == pkt->id) {
-            debugl("Running server request %s.\n", reg[i]->name);
-            return reg[i]->handler((const void *) &data);
+    for (int i = 0; handlers[i]; ++i) {
+        if (handlers[i]->id == pkt->id) {
+            debugl("Running server request %s.\n", handlers[i]->name);
+            return handlers[i]->handler((const void *) &data);
         }
     }
     debugl("Request not find it's a custom");
