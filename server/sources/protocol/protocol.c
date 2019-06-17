@@ -16,11 +16,10 @@ static const pkt_handler_t PACKET_HANDLERS[CLT_CUSTOM] = {
     {CLT_PLAYER_POSITION, 0, "player_pos", player_pos},
     {CLT_PLAYER_LEVEL, 0, "player_level", 0x0},
     {CLT_PLAYER_INVENTORY, 0, "player_inventory", 0x0},
-    {CLT_TIME_UNIT_REQUEST, 0, "time_unit_request", 0x0},
-    {CLT_TIME_UNIT_CHANGE, 0, "time_unit_change", 0x0},
-    {CLT_CUSTOM, 0, "clt_custom", 0x0}
+    {CLT_TIME_UNIT_REQUEST, 0, "time_unit_request", time_request},
+    {CLT_TIME_UNIT_CHANGE, 0, "time_unit_change", time_change},
+    {CLT_CUSTOM, 0, "clt_custom", invalid_custom}
 };
-
 
 void register_pkt_handler(phr_t *registrar, pkt_handler_t *handler)
 {
