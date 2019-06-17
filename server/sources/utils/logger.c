@@ -9,18 +9,18 @@
 
 // The log const is defining how the log is shown.
 //                        [Date - hour | level] message
-static const char *LOG = "[%s | %s] %s";
+static const char *LOG = "%s[%s | %s] %s\e[0m";
 
 static const char *LEVEL_NAME[] = {"FATAL", "ERROR", "WARN", "INFO", "DEBUG"};
 
-char *get_log(int log_level, const char *str)
+char *get_log(int log_level, const char *color, const char *str)
 {
     char *ret = NULL;
     time_t epoch = time(NULL);
     char *time_str = ctime(&epoch);
 
     time_str[24] = 0;
-    asprintf(&ret, LOG, time_str, LEVEL_NAME[log_level], str);
+    asprintf(&ret, LOG, color, time_str, LEVEL_NAME[log_level], str);
     return ret;
 }
 
@@ -36,7 +36,7 @@ int get_log_level()
 void fatall(const char *str, ...)
 {
     int log_level = get_log_level();
-    char *log = get_log(FATAL_LOG, str);
+    char *log = get_log(FATAL_LOG, "\e[31m", str);
 
     if (log_level >= FATAL_LOG) {
         va_list ap;
@@ -50,7 +50,7 @@ void fatall(const char *str, ...)
 void errorl(const char *str, ...)
 {
     int log_level = get_log_level();
-    char *log = get_log(ERROR_LOG, str);
+    char *log = get_log(ERROR_LOG, "\e[91m", str);
 
     if (log_level >= ERROR_LOG) {
         va_list ap;
@@ -64,7 +64,7 @@ void errorl(const char *str, ...)
 void warnl(const char *str, ...)
 {
     int log_level = get_log_level();
-    char *log = get_log(FATAL_LOG, str);
+    char *log = get_log(WARN_LOG, "\e[33m", str);
 
     if (log_level >= WARN_LOG) {
         va_list ap;
@@ -78,7 +78,7 @@ void warnl(const char *str, ...)
 void infol(const char *str, ...)
 {
     int log_level = get_log_level();
-    char *log = get_log(INFO_LOG, str);
+    char *log = get_log(INFO_LOG, "\e[92m", str);
 
     if (log_level >= INFO_LOG) {
         va_list ap;
@@ -92,7 +92,7 @@ void infol(const char *str, ...)
 void debugl(const char *str, ...)
 {
     int log_level = get_log_level();
-    char *log = get_log(DEBUG_LOG, str);
+    char *log = get_log(DEBUG_LOG, "\e[94m", str);
 
     if (log_level >= DEBUG_LOG) {
         va_list ap;
