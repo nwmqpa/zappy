@@ -92,7 +92,7 @@ void infol(const char *str, ...)
 void debugl(const char *str, ...)
 {
     int log_level = get_log_level();
-    char *log = get_log(INFO_LOG, str);
+    char *log = get_log(DEBUG_LOG, str);
 
     if (log_level >= DEBUG_LOG) {
         va_list ap;
