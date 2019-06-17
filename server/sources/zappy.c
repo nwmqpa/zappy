@@ -65,7 +65,7 @@ static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
         server_t *server)
 {
     while (42) {
-        if (dispatch(graphic, (void *) server) == -1 ||
+        if (dispatch(graphic, server) == -1 ||
                 dispatch(client, server) == -1) {
             infol("Closing server after an error.\n");
             return -1;
