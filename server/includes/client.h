@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include "generic_list.h"
 
+
 /*
 ** Define directions that can have a player.
 */
@@ -61,7 +62,7 @@ typedef struct pos_s {
 ** -> direction: Where the player is facing.
 ** -> position: [x, y] position defining on which tile the player is positioned.
 ** -> cooldown: Time that left to before launching the new incante.
-** -> to_send: When cooldown is over this will be send to the player.
+** -> to_send: When cooldown is over this will be executed.
 */
 typedef struct client_s {
     int id;
@@ -70,15 +71,19 @@ typedef struct client_s {
     unsigned int direction;
     pos_t position;
     inventory_t inventory;
-    int cooldown;
-    char *to_send;
+    double cooldown;
+    double need_to_eat;
+    char *to_exec;
 } client_t;
 
-client_t *client_create(size_t id);
+// Utility function.
+int client_cmp(const void *entry, const void *id);
+
+client_t *client_create(int id);
+void client_delete(client_t *client);
 
 int add_command(client_t *client, char *command);
 size_t len_command(client_t *client);
 
-void print_client(const client_t *client);
+void print_client(client_t *client);
 void print_client_list(const void *data);
-void move_client(client_t *client, int x, int y, pos_t size);

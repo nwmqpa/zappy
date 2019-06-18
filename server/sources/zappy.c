@@ -5,36 +5,69 @@
 ** zappy source file main loop.
 */
 
+#include <time.h>
 #include "zappy.h"
 #include "logger.h"
 #include "dispatcher.h"
 #include "handlers.h"
 #include "client_commands.h"
 
+static void handle_cooldown(client_t *client, server_t *server, int elapsed)
+{
+    char *to_send = NULL;
+
+    client->cooldown = 0;
+    if (client->to_exec) {
+        to_send = process_command(client, server);
+        dprintf(client->id, "%s\n", to_send);
+        free(to_send);
+        free(client->to_exec);
+        client->to_exec = NULL;
+    }
+    prepare_command(client);
+}
+
+// TODO: Handle client death.
 static void handle_player_tick(void *data, const void *params)
 {
+    const time_server_t *parameters = (time_server_t *) params;
     client_t *client = data;
-    const int *elapsed_time = params;
+    double elapsed_time = parameters->elapsed;
 
-    client->cooldown -= *elapsed_time;
-    if (client->cooldown < 0)
-        client->cooldown = -1;
+    client->cooldown -= elapsed_time;
+    client->need_to_eat -= elapsed_time;
+    if (client->need_to_eat <= 0 && client->inventory.inv.food == 0) {
+        client_delete(client);
+    } else if (client->need_to_eat <= 0) {
+        client->inventory.inv.food -= 1;
+        client->need_to_eat = 126;
+    }
+    if (client->cooldown <= 0)
+        handle_cooldown(client, parameters->server, elapsed_time);
 }
 
 void tick_system(server_t *server)
 {
-    int elapsed_time = 1;
-    map(server->clients, handle_player_tick, NULL);
+    static struct timespec old = {0};
+    struct timespec new = {0};
+    time_server_t name = (time_server_t) { 0, server };
+
+    if (memcmp(&old, &new, sizeof(old)) == 0)
+        clock_gettime(CLOCK_MONOTONIC, &old);
+    clock_gettime(CLOCK_MONOTONIC, &new);
+    name.elapsed = (new.tv_sec - old.tv_sec) * 1e9;
+    name.elapsed = (name.elapsed + (new.tv_nsec - old.tv_nsec)) * 1e-9;
+    name.elapsed *= server->freq;
+    clock_gettime(CLOCK_MONOTONIC, &old);
+    map(server->clients, handle_player_tick, &name);
 }
 
 static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
         server_t *server)
 {
-    void *graphic_data = NULL;
-
     while (42) {
-        if (dispatch(graphic, graphic_data) == -1 ||
-        dispatch(client, server) == -1) {
+        if (dispatch(graphic, server) == -1 ||
+                dispatch(client, server) == -1) {
             infol("Closing server after an error.\n");
             return -1;
         }

@@ -7,8 +7,9 @@
 
 #include <string.h>
 #include "map.h"
+#include "logger.h"
 
-static const unsigned int MAX_RAND_TILE = 20;
+static const unsigned int MAX_RAND_TILE = 3;
 
 static const char *RESOURCES_NAME[] = {
     "linemate",
@@ -17,7 +18,8 @@ static const char *RESOURCES_NAME[] = {
     "mendiane",
     "phiras",
     "thystame",
-    "food"
+    "food",
+    NULL
 };
 
 void set_tile(tile_t *new)
@@ -33,8 +35,9 @@ void set_tile(tile_t *new)
 
 void add_player(tile_t *tile, int id)
 {
-    int *new = malloc(sizeof(int) * tile->nb_player + 1);
+    int *new = malloc(sizeof(int) * (tile->nb_player + 1));
 
+    debugl("Adding client %d there is %d players.\n", id, tile->nb_player);
     for (unsigned int i = 0; i < tile->nb_player; ++i)
         new[i] = tile->player_ids[i];
     new[tile->nb_player] = id;
@@ -43,34 +46,38 @@ void add_player(tile_t *tile, int id)
     tile->player_ids = new;
 }
 
-static void update_meta(size_t *total_len, int *nb_elem, int value)
+static void insert_inventory(char **res, const inventory_t *inv)
 {
-    *total_len += value;
-    (*nb_elem)++;
+    char *tmp = NULL;
+
+    for (int i = 0; i < INVENTORY_SIZE; ++i) {
+        if (inv->inv_arr[i] == 0)
+            continue;
+        for (unsigned int y = 0; y < inv->inv_arr[i]; ++y) {
+            asprintf(&tmp, "%s%s ", *res ? *res : " ", RESOURCES_NAME[i]);
+            free(*res);
+            *res = tmp;
+            tmp = NULL;
+        }
+    }
 }
 
 char *tile_to_string(const tile_t *tile)
 {
     char *res = NULL;
-    char *stock[8] = {0};
-    int value;
-    size_t total_len = 0;
-    int nb_elem = 0;
+    char *tmp = NULL;
 
-    for (int i = 0; i < INVENTORY_SIZE; ++i) {
-        value = tile->inventory.inv_arr[i];
-        if (value > 0) {
-            asprintf(&stock[i], "%s:%d", RESOURCES_NAME[i], value);
-            update_meta(&total_len, &nb_elem, strlen(stock[i]) + 1);
+    for (unsigned int i = 0; i < tile->nb_player; ++i) {
+        if (tile->player_ids[i] != 0 && tile->player_ids[i] != -1 &&
+                tile->player_ids[i] != -2) {
+            tmp = res;
+            asprintf(&res, "%s%s", tmp ? tmp : " ", "player ");
+            free(tmp);
+            tmp = NULL;
         }
     }
-    if (tile->nb_player > 0) {
-        asprintf(&stock[7], "player:%d", tile->nb_player);
-        update_meta(&total_len, &nb_elem, strlen(stock[7]) + 1);
-    }
-    res = calloc(sizeof(char), total_len);
-    join_str(res, (const char **) stock, ' ', nb_elem);
-    return res;
+    insert_inventory(&res, &tile->inventory);
+    return res ? res : "";
 }
 
 void remove_player(tile_t *tile, int id)
