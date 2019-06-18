@@ -22,13 +22,16 @@ void *pop_list(list_t *list, size_t idx)
 {
     entry_t *entry;
     size_t i = 0;
+    void *data = NULL;
 
     LIST_FOREACH(entry, &list->head, next)
     {
         if (idx == i) {
             LIST_REMOVE(entry, next);
+            data = entry->data;
+            free(entry);
             list->size--;
-            return entry->data;
+            return data;
         }
         i++;
     }

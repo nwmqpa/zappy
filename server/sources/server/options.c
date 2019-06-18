@@ -63,7 +63,8 @@ options_t *create_opt(int argc, char *argv[])
                 break;
             case 'x':
                 options->width = atoi(optarg);
-                break; case 'y':
+                break;
+            case 'y':
                 options->height = atoi(optarg);
                 break;
             case 'n':
@@ -76,7 +77,7 @@ options_t *create_opt(int argc, char *argv[])
                 options->freq = atoi(optarg);
                 break;
             default:
-                fprintf(stderr, USAGE);
+                fprintf(stderr, "%s", USAGE);
                 exit(84);
         }
     }
