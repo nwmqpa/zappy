@@ -11,8 +11,10 @@
 
 int teams_name(const void *data)
 {
-    server_t *server = (server_t *) data + sizeof(int);
-    int *sock = (int *) data;
+    const struct {
+        int sock;
+        server_t *server;
+    } *datas = data;
     struct {
         pkt_header_t header;
         srv_teams_names_t payload;
@@ -25,10 +27,10 @@ int teams_name(const void *data)
         }, {{0}}
     };
 
-    for (int i = 0; server->teams[i]; ++i) {
-        memcpy(&response.payload.team_name, server->teams[i]->name,
-                strlen(server->teams[i]->name));
-        write(*sock, &response, PKT_HDR_LEN + SRV_TEAMS_NAMES_LEN);
+    for (int i = 0; datas->server->teams[i]; ++i) {
+        memcpy(&response.payload.team_name, datas->server->teams[i]->name,
+                strlen(datas->server->teams[i]->name));
+        write(datas->sock, &response, PKT_HDR_LEN + SRV_TEAMS_NAMES_LEN);
     }
     return 0;
 }
