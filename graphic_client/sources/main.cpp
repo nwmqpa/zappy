@@ -3,6 +3,7 @@
 #include <vector>
 #include "Protocol.hpp"
 
+#ifndef TEST
 int main(int argc, char *argv[])
 {
     if (argc != 3) {
@@ -91,3 +92,4 @@ int main(int argc, char *argv[])
     tmp.life();
     return (0);
 }
+#endif /* TEST */

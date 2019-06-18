@@ -25,13 +25,13 @@ SOURCES		=		Case.cpp	\
 					main.cpp \
 					Protocol.cpp
 
-TEST_SOURCES	=
+TEST_SOURCES	=	dummy.c
 
 
 PREFIXED_SRCS 	=	$(addprefix $(SRC_DIR)/, $(SOURCES))
 PREFIXED_TEST 	=	$(addprefix $(TEST_DIR)/, $(TEST_SOURCES))
 PATSUBST_OBJS	=	$(patsubst  $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(PREFIXED_SRCS))
-PATSUBST_OBJS_TEST	=	$(patsubst  $(TEST_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(PREFIXED_TEST))
+PATSUBST_OBJS_TEST	=	$(patsubst  $(TEST_DIR)/%.c, $(BUILD_DIR)/%.o, $(PREFIXED_TEST))
 PATSUBST_JSON	=	$(patsubst  $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o.json, $(PREFIXED_SRCS))
 LIBS_MODULES 	=	$(addprefix lib, $(addsuffix .a, $(MODULES)))
 PREFIXED_MODULS	=	$(addprefix $(SRC_DIR)/, $(MODULES))
@@ -129,7 +129,7 @@ $(BUILD_DIR)/%.o:	$(SRC_DIR)/%.cpp
 			$(V)mkdir -p $(dir $@)
 			$(V)$(CC) -o $@ -c $< $(CFLAGS)
 
-$(BUILD_DIR)/%.o:	$(TEST_DIR)/%.cpp
+$(BUILD_DIR)/%.o:	$(TEST_DIR)/%.c
 			$(V)printf "$(WHITE)Compiling $(RED)$<$(WHITE) => $(BLUE)$@$(DEFAULT)\n"
 			$(V)mkdir -p $(dir $@)
 			$(V)$(CC) -o $@ -c $< $(CFLAGS)
