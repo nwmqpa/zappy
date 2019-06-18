@@ -7,11 +7,11 @@
 
 #pragma once
 
-#include <socket.hpp>
 #include <string>
 #include <iostream>
 #include <netdb.h>
 #include "protocols.h"
+#include "socket.hpp"
 
 /// The protocol just ask for something but it's not blocking.
 /// The response will be handled when it is ready in the dispatcher.
@@ -24,6 +24,9 @@ public:
     void operator=(Protocol lhs) = delete;
     /// Removing default constructor.
     Protocol() = delete;
+
+    /// Return a copy of the socket.
+    int getSocket() const noexcept;
 
     bool askMapSize() const noexcept;
 

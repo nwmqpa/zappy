@@ -1,7 +1,8 @@
 #include "SDL.hpp"
 #include "protocols.h"
-#include <vector>
 #include "Protocol.hpp"
+#include "DataHandler.hpp"
+#include <vector>
 
 #ifndef TEST
 int main(int argc, char *argv[])
@@ -13,6 +14,15 @@ int main(int argc, char *argv[])
     auto protocol = Protocol(argv[1], atoi(argv[2]));
 
     protocol.askMapSize();
+
+    auto dataHandler = DataHandler<int>(protocol.getSocket(),
+            [](int &a){ std::cout << "Test: " << a << std::endl; });
+
+    int test = 12;
+
+    while (true) {
+        dataHandler.handle(test);
+    }
 
     srv_tile_content_t tmpTile0;
     tmpTile0.x = 0;

@@ -16,14 +16,14 @@ SRC_DIR 	=	$(ROOT)/sources
 
 INCLUDE_DIR	=	$(ROOT)/includes
 
-COMPILER_COMMAND = compiler_commands.json
+COMPILER_COMMAND = compile_commands.json
 
 MODULES		=
 
 SOURCES		=		Case.cpp	\
 					WindowCreator.cpp	\
-					main.cpp \
-					Protocol.cpp
+					Protocol.cpp \
+					main.cpp
 
 TEST_SOURCES	=	dummy.c
 
@@ -40,7 +40,7 @@ LINK_MODULES	=	$(addprefix -l, $(MODULES))
 
 
 WARNINGS	=	-Wall -Wextra -lSDL2 -lSDL2_image -g
-CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) -fdiagnostics-color=always -D _GNU_SOURCE
+CXXFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) -fdiagnostics-color=always -D _GNU_SOURCE
 LDFLAGS		=	-L $(BUILD_DIR) $(LINK_MODULES) -lSDL2 -lSDL2_image
 
 DEFAULT		=	\e[0m
@@ -56,11 +56,11 @@ V		=	@
 
 all:	$(ROOT)/$(NAME)
 
-test:			CFLAGS += -g -D TEST
+test:			CXXFLAGS += -g -D TEST
 test:			LDFLAGS += -lcriterion
 test:			$(ROOT)/test
 
-debug: 			CFLAGS += -g -D LOG_LEVEL=5
+debug: 			CXXFLAGS += -g -D LOG_LEVEL=5
 debug:			re
 
 cmd_gen: $(ROOT)/$(COMPILER_COMMAND)
@@ -118,7 +118,7 @@ $(BUILD_DIR)/$(NAME):	$(PATSUBST_OBJS) $(PATSUBST_MODULS) echo_build_parts
 $(BUILD_DIR)/%.o.json:	$(SRC_DIR)/%.cpp
 			$(V)printf "$(WHITE)Compiling command $(RED)$<$(WHITE) => $(BLUE)$@$(DEFAULT)\n"
 			$(V)mkdir -p $(dir $@)
-		    $(V)clang -MJ $@ -c $< $(CFLAGS)
+		    $(V)clang++ -MJ $@ -c $< $(CXXFLAGS)
 
 $(BUILD_DIR)/test:	$(PATSUBST_OBJS_TEST) $(PATSUBST_OBJS) $(PATSUBST_MODULS)
 			$(V)printf "$(WHITE)Linking $(BLUE)objects $(WHITE)into $(GREEN)test$(DEFAULT)\n"
@@ -127,12 +127,12 @@ $(BUILD_DIR)/test:	$(PATSUBST_OBJS_TEST) $(PATSUBST_OBJS) $(PATSUBST_MODULS)
 $(BUILD_DIR)/%.o:	$(SRC_DIR)/%.cpp
 			$(V)printf "$(WHITE)Compiling $(RED)$<$(WHITE) => $(BLUE)$@$(DEFAULT)\n"
 			$(V)mkdir -p $(dir $@)
-			$(V)$(CC) -o $@ -c $< $(CFLAGS)
+			$(V)$(CC) -o $@ -c $< $(CXXFLAGS)
 
 $(BUILD_DIR)/%.o:	$(TEST_DIR)/%.c
 			$(V)printf "$(WHITE)Compiling $(RED)$<$(WHITE) => $(BLUE)$@$(DEFAULT)\n"
 			$(V)mkdir -p $(dir $@)
-			$(V)$(CC) -o $@ -c $< $(CFLAGS)
+			$(V)$(CC) -o $@ -c $< $(CXXFLAGS)
 
 $(BUILD_DIR)/lib%.a:	$(SRC_DIR)/%
 			$(V)printf "$(WHITE)Compiling module $(MAGENTA)$<$(DEFAULT)\n"
