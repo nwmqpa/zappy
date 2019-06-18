@@ -16,11 +16,14 @@ SRC_DIR 	=	$(ROOT)/sources
 
 INCLUDE_DIR	=	$(ROOT)/includes
 
+COMPILER_COMMAND = compiler_commands.json
+
 MODULES		=
 
 SOURCES		=		Case.cpp	\
 					WindowCreator.cpp	\
-					main.cpp
+					main.cpp \
+					Protocol.cpp
 
 TEST_SOURCES	=
 
@@ -29,6 +32,7 @@ PREFIXED_SRCS 	=	$(addprefix $(SRC_DIR)/, $(SOURCES))
 PREFIXED_TEST 	=	$(addprefix $(TEST_DIR)/, $(TEST_SOURCES))
 PATSUBST_OBJS	=	$(patsubst  $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(PREFIXED_SRCS))
 PATSUBST_OBJS_TEST	=	$(patsubst  $(TEST_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(PREFIXED_TEST))
+PATSUBST_JSON	=	$(patsubst  $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o.json, $(PREFIXED_SRCS))
 LIBS_MODULES 	=	$(addprefix lib, $(addsuffix .a, $(MODULES)))
 PREFIXED_MODULS	=	$(addprefix $(SRC_DIR)/, $(MODULES))
 PATSUBST_MODULS =	$(patsubst  $(SRC_DIR)/%, $(BUILD_DIR)/lib%.a, $(PREFIXED_MODULS))
@@ -59,10 +63,20 @@ test:			$(ROOT)/test
 debug: 			CFLAGS += -g -D LOG_LEVEL=5
 debug:			re
 
+cmd_gen: $(ROOT)/$(COMPILER_COMMAND)
+
+$(ROOT)/$(COMPILER_COMMAND): $(PATSUBST_JSON)
+	$(V)printf "$(WHITE)Creating $(BLUE)$(COMPILER_COMMAND)$(WHITE).\n"
+	$(V)sed -e '1s/^/[$\n/' -e '$$s/,$$/$\n]/' $(PATSUBST_JSON) > $(ROOT)/$(COMPILER_COMMAND)
+	$(V)printf "$(WHITE)Cleaning $(BLUE)objects $(WHITE)files$(DEFAULT)\n"
+	$(V)rm *.o
+
+
 clean:
 			$(V)printf "$(WHITE)Cleaning $(BLUE)objects $(WHITE)files$(DEFAULT)\n"
 			$(V)rm -f $(PATSUBST_OBJS)
 			$(V)rm -f $(PATSUBST_OBJS_TEST)
+			$(V)rm -f $(PATSUBST_JSON)
 			$(V)for dir in $(PREFIXED_MODULS); do \
 				make --no-print-directory -C $$dir clean; \
 			done
@@ -70,6 +84,7 @@ clean:
 fclean:			clean
 			$(V)printf "$(WHITE)Cleaning $(GREEN)linked $(WHITE)files$(DEFAULT)\n"
 			$(V)rm -f $(ROOT)/$(NAME) $(BUILD_DIR)/$(NAME)
+			$(V)rm -f $(ROOT)/$(COMPILER_COMMAND)
 			$(V)rm -f $(ROOT)/test $(BUILD_DIR)/test
 			$(V)for dir in $(PREFIXED_MODULS); do \
 				make --no-print-directory -C $$dir fclean; \
@@ -99,6 +114,11 @@ $(ROOT)/test:		$(BUILD_DIR)/test
 $(BUILD_DIR)/$(NAME):	$(PATSUBST_OBJS) $(PATSUBST_MODULS) echo_build_parts
 			$(V)printf "$(WHITE)Linking $(BLUE)objects $(WHITE)into $(GREEN)$(NAME)$(DEFAULT)\n"
 			$(V)$(LD) -o $(BUILD_DIR)/$(NAME) $(PATSUBST_OBJS) $(LDFLAGS)
+
+$(BUILD_DIR)/%.o.json:	$(SRC_DIR)/%.cpp
+			$(V)printf "$(WHITE)Compiling command $(RED)$<$(WHITE) => $(BLUE)$@$(DEFAULT)\n"
+			$(V)mkdir -p $(dir $@)
+		    $(V)clang -MJ $@ -c $< $(CFLAGS)
 
 $(BUILD_DIR)/test:	$(PATSUBST_OBJS_TEST) $(PATSUBST_OBJS) $(PATSUBST_MODULS)
 			$(V)printf "$(WHITE)Linking $(BLUE)objects $(WHITE)into $(GREEN)test$(DEFAULT)\n"

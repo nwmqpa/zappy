@@ -1,9 +1,18 @@
 #include "SDL.hpp"
 #include "protocols.h"
 #include <vector>
+#include "Protocol.hpp"
 
-int main(void)
+int main(int argc, char *argv[])
 {
+    if (argc != 3) {
+        std::cout << "Usage: " << argv[0] << " <ip> <port>" << std::endl;
+        exit(84);
+    }
+    auto protocol = Protocol(argv[1], atoi(argv[2]));
+
+    protocol.askMapSize();
+
     srv_tile_content_t tmpTile0;
     tmpTile0.x = 0;
     tmpTile0.y = 0;
