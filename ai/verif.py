@@ -8,10 +8,11 @@ import ai.get_args
 
 def display_help() -> None:
     """Print usage."""
-    print("USAGE: ./zappy_ai -p port -n name -h machine\n"
-          "   port    is the port number\n"
-          "   name    is the name of the team\n"
-          "   machine is the name of the machine; localhost by default")
+    sys.stderr.write("USAGE: ./zappy_ai -p port -n name -h machine\n"
+                     "   port    is the port number\n"
+                     "   name    is the name of the team\n"
+                     "   machine is the name of the machine; "
+                     "localhost by default\n")
 
 
 def basic_verif() -> None:
