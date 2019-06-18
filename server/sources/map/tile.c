@@ -48,11 +48,16 @@ void add_player(tile_t *tile, int id)
 
 static void insert_inventory(char **res, const inventory_t *inv)
 {
+    char *tmp = NULL;
+
     for (int i = 0; i < INVENTORY_SIZE; ++i) {
         if (inv->inv_arr[i] == 0)
             continue;
         for (unsigned int y = 0; y < inv->inv_arr[i]; ++y) {
-            asprintf(res, "%s%s ", *res ? *res : " ", RESOURCES_NAME[i]);
+            asprintf(&tmp, "%s%s ", *res ? *res : " ", RESOURCES_NAME[i]);
+            free(*res);
+            *res = tmp;
+            tmp = NULL;
         }
     }
 }
@@ -60,11 +65,15 @@ static void insert_inventory(char **res, const inventory_t *inv)
 char *tile_to_string(const tile_t *tile)
 {
     char *res = NULL;
+    char *tmp = NULL;
 
     for (unsigned int i = 0; i < tile->nb_player; ++i) {
         if (tile->player_ids[i] != 0 && tile->player_ids[i] != -1 &&
                 tile->player_ids[i] != -2) {
-            asprintf(&res, "%s%s", res ? res : " ", "player ");
+            tmp = res;
+            asprintf(&res, "%s%s", tmp ? tmp : " ", "player ");
+            free(tmp);
+            tmp = NULL;
         }
     }
     insert_inventory(&res, &tile->inventory);

@@ -71,13 +71,17 @@ static char *get_vision_content(server_t *server, unsigned int level,
 
     for (unsigned int i = 1; i <= level; ++i) {
         new = get_view_level(i, position, server->map, direction);
-        if (tmp != NULL)
+        if (tmp != NULL) {
             asprintf(&buffer, "%s,%s", tmp, new);
-        else
+            free(tmp);
+            free(new);
+        } else {
             buffer = new;
+        }
         tmp = buffer;
     }
     asprintf(&buffer, "[%s]", tmp);
+    free(tmp);
     return buffer;
 }
 

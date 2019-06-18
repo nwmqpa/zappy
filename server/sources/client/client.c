@@ -36,7 +36,7 @@ client_t *client_create(int id)
     new->id = id;
     new->inventory.inv.food = 10;
     new->level = 1;
-    new->need_to_eat = 126;
+    new->need_to_eat = 126.0;
     new->cooldown = 0.0;
     return new;
 }
@@ -46,7 +46,6 @@ void client_delete(client_t *client)
     free(client->to_exec);
     empty_list(client->commands, free);
     dprintf(client->id, "dead\n");
-    close(client->id);
 }
 
 void print_client(client_t *client)

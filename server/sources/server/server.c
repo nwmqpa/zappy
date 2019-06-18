@@ -42,6 +42,7 @@ static void setup_teams(server_t *server, options_t *options)
         server->teams[i]->name = options->name[i];
         server->teams[i]->clients = calloc(sizeof(int), options->client_nb);
     }
+    free(options->name);
     server->teams[i] = NULL;
 }
 

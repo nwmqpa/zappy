@@ -72,8 +72,8 @@ typedef struct client_s {
     pos_t position;
     inventory_t inventory;
     double cooldown;
+    double need_to_eat;
     char *to_exec;
-    int need_to_eat;
 } client_t;
 
 // Utility function.
