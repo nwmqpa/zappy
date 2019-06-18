@@ -18,7 +18,6 @@ class Broadcast_listener(Thread):
 
     def run(self) -> str:
         """Code to execute during thread execution."""
-
         print("IN RUN THRAD OF BROADCAST.")
         received = ""
         while (received.split(" ")[0] != "message"):
