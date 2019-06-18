@@ -23,7 +23,7 @@ def basic_verif() -> None:
         sys.exit(0)
     elif (len(sys.argv) != 7):
         display_help()
-        raise Exception("zappy_ai: Too few arguments.")
+        raise Exception("zappy_ai: Too few arguments.\n")
 
 
 def verif_args_values(opt: ai.get_args.Options) -> None:
