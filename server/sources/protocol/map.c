@@ -10,8 +10,11 @@
 
 int map_size(const void *data)
 {
-    server_t *server = (server_t *) (data + sizeof(int));
-    int *sock = (int *) data;
+    const struct {
+        int sock;
+        server_t *server;
+    } *datas = data;
+
     struct {
         pkt_header_t header;
         srv_map_size_t payload;
@@ -23,12 +26,12 @@ int map_size(const void *data)
             .size = SRV_MAP_SIZE_LEN
         },
         {
-            .x = server->map->width,
-            .y = server->map->height
+            .x = datas->server->width,
+            .y = datas->server->height
         }
     };
 
-    write(*sock, &response, SRV_MAP_SIZE_LEN + PKT_HDR_LEN);
+    write(datas->sock, &response, SRV_MAP_SIZE_LEN + PKT_HDR_LEN);
     return 0;
 }
 
@@ -54,8 +57,11 @@ static void fill_payload(tile_t *tile, srv_tile_content_t *payload,
 
 int tile_content(const void *data)
 {
-    int *sock = (int *) data;
-    map_t *map = ((server_t *) (data + sizeof(int)))->map;
+    const struct {
+        int sock;
+        server_t *server;
+    } *datas = data;
+
     clt_tile_content_t payload;
     tile_t *tile = NULL;
     struct {
@@ -69,10 +75,10 @@ int tile_content(const void *data)
         {0}
     };
 
-    read(*sock, &payload, CLT_TILE_CONTENT_LEN);
-    tile = get_tile_map(map, payload.x, payload.y);
+    read(datas->sock, &payload, CLT_TILE_CONTENT_LEN);
+    tile = get_tile_map(datas->server->map, payload.x, payload.y);
     fill_payload(tile, &response.payload, payload.x, payload.y);
-    write(*sock, &response, PKT_HDR_LEN + SRV_TILE_CONTENT_LEN);
+    write(datas->sock, &response, PKT_HDR_LEN + SRV_TILE_CONTENT_LEN);
     return 0;
 }
 

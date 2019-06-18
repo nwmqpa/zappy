@@ -11,9 +11,11 @@
 
 int time_request(const void *data)
 {
-    int *sock = (int *) data;
-    server_t *server = (server_t *) (data + sizeof(int));
     clt_time_unit_request_t payload;
+    const struct {
+        int sock;
+        server_t *server;
+    } *datas = data;
     struct {
         pkt_header_t header;
         srv_time_unit_request_t payload;
@@ -25,19 +27,21 @@ int time_request(const void *data)
         {0}
     };
 
-    read(*sock, &payload, CLT_TIME_UNIT_REQUEST_LEN);
-    response.payload.freq = server->freq;
-    write(*sock, &response, PKT_HDR_LEN + SRV_TIME_UNIT_REQUEST_LEN);
+    read(datas->sock, &payload, CLT_TIME_UNIT_REQUEST_LEN);
+    response.payload.freq = datas->server->freq;
+    write(datas->sock, &response, PKT_HDR_LEN + SRV_TIME_UNIT_REQUEST_LEN);
     return 0;
 }
 
 int time_change(const void *data)
 {
-    int *sock = (int *) data;
-    server_t *server = (server_t *) (data + sizeof(int));
     clt_time_unit_change_t payload;
+    const struct {
+        int sock;
+        server_t *server;
+    } *datas = data;
 
-    read(*sock, &payload, CLT_TIME_UNIT_REQUEST_LEN);
-    server->freq = payload.freq;
+    read(datas->sock, &payload, CLT_TIME_UNIT_REQUEST_LEN);
+    datas->server->freq = payload.freq;
     return 0;
 }

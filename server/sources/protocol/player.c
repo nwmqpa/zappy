@@ -23,9 +23,11 @@ static void fill_payload(clt_player_pos_t *id, srv_player_pos_t *payload,
 
 int player_pos(const void *data)
 {
-    int *sock = (int *) data;
-    server_t *server = (server_t *) (data + sizeof(int));
     clt_player_pos_t payload;
+    const struct {
+        int sock;
+        server_t *server;
+    } *datas = data;
     struct {
         pkt_header_t header;
         srv_player_pos_t payload;
@@ -37,9 +39,9 @@ int player_pos(const void *data)
         {0}
     };
 
-    read(*sock, &payload, CLT_PLAYER_POS_LEN);
-    fill_payload(&payload, &response.payload, server);
-    write(*sock, &response, PKT_HDR_LEN + SRV_PLAYER_POS_LEN);
+    read(datas->sock, &payload, CLT_PLAYER_POS_LEN);
+    fill_payload(&payload, &response.payload, datas->server);
+    write(datas->sock, &response, PKT_HDR_LEN + SRV_PLAYER_POS_LEN);
     return 0;
 }
 
@@ -47,8 +49,10 @@ int player_level(const void *data)
 {
     client_t *client = NULL;
     clt_player_level_t payload;
-    int sock = *((int *) data);
-    server_t *server = (server_t *) (data + sizeof(int));
+    const struct {
+        int sock;
+        server_t *server;
+    } *datas = data;
     struct {
         pkt_header_t header;
         srv_player_level_t paylaod;
@@ -59,10 +63,10 @@ int player_level(const void *data)
             .size = SRV_PLAYER_LEVEL_LEN}, {0}
     };
 
-    read(sock, &payload, CLT_PLAYER_LEVEL_LEN);
+    read(datas->sock, &payload, CLT_PLAYER_LEVEL_LEN);
     response.paylaod.player_num = payload.player_num;
-    client = get_cmp_list(server->clients, client_cmp,
+    client = get_cmp_list(datas->server->clients, client_cmp,
             (void *) &payload.player_num);
     response.paylaod.level = client->level;
-    return write(sock, &response, PKT_HDR_LEN + SRV_PLAYER_LEVEL_LEN);
+    return write(datas->sock, &response, PKT_HDR_LEN + SRV_PLAYER_LEVEL_LEN);
 }
