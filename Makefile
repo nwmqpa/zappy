@@ -1,8 +1,11 @@
 
+GRAPHIC_LINUX	=	zappy_graphic_linux
 SERVER		=	zappy_server
 AI		=	zappy_ai
 
 ROOT		=	.
+
+GRAPHIC_DIR	=	$(ROOT)/graphic_client
 
 SERVER_DIR	=	$(ROOT)/server
 
@@ -19,9 +22,12 @@ CYAN		=	\e[1;96m
 
 V		=	@
 
-all:			$(SERVER) $(AI)
+all:			$(SERVER) $(AI) $(GRAPHIC_LINUX)
 
-			
+$(GRAPHIC_LINUX):	$(GRAPHIC_DIR)/$(GRAPHIC_LINUX)
+			$(V)printf "$(WHITE)Copying $(GREEN)$(GRAPHIC_LINUX) from $(BLUE)$(GRAPHIC_DIR)$(WHITE) folder $(DEFAULT)\n"
+			$(V)cp $(GRAPHIC_DIR)/$(GRAPHIC_LINUX) $(GRAPHIC_LINUX)
+
 $(SERVER):		$(SERVER_DIR)/$(SERVER)
 			$(V)printf "$(WHITE)Copying $(GREEN)$(SERVER)$(WHITE) from $(BLUE)$(SERVER_DIR)$(WHITE) folder$(DEFAULT)\n"
 			$(V)cp $(SERVER_DIR)/$(SERVER) $(SERVER)
@@ -29,6 +35,9 @@ $(SERVER):		$(SERVER_DIR)/$(SERVER)
 $(AI):			$(AI_DIR)/$(AI)
 			$(V)printf "$(WHITE)Copying $(GREEN)$(AI)$(WHITE) from $(BLUE)$(AI_DIR)$(WHITE) folder$(DEFAULT)\n"
 			$(V)cp $(AI_DIR)/$(AI) $(AI)
+
+$(GRAPHIC_DIR)/%:
+			$(V)make --no-print-directory -C graphic_client $<
 
 $(SERVER_DIR)/$(SERVER):
 			$(V)printf "$(WHITE)Making $(GREEN)$(SERVER)$(DEFAULT)\n"

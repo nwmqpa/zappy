@@ -1,4 +1,4 @@
-NAME		=	graphic_ui
+NAME		=	zappy_graphic_linux
 
 CC		=	g++
 
