@@ -51,7 +51,7 @@ void register_all_handlers(server_t *server)
 
 static int handle(pkt_header_t *pkt, server_t *server, int sock)
 {
-    const struct data_s {
+    const struct {
         int sock;
         server_t *server;
     } data = { .sock = sock, .server = server };
