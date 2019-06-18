@@ -20,6 +20,7 @@ static void handle_cooldown(client_t *client, server_t *server, int elapsed)
     if (client->to_exec) {
         to_send = process_command(client, server);
         dprintf(client->id, "%s\n", to_send);
+        free(to_send);
         free(client->to_exec);
         client->to_exec = NULL;
     }
@@ -43,7 +44,6 @@ static void handle_player_tick(void *data, const void *params)
     }
     if (client->cooldown <= 0)
         handle_cooldown(client, parameters->server, elapsed_time);
-    debugl("Client cooldown %f.\n", client->cooldown);
 }
 
 void tick_system(server_t *server)
