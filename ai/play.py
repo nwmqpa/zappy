@@ -5,6 +5,7 @@ from ai.parse_inventory import Inventory
 from ai.parse_vision import parse_vision
 from ai.parse_vision import Vision
 from ai.parse_vision import verif_look_response
+from ai.listen_broadcasts import Broadcast_listener
 import socket
 import sys
 from typing import List
@@ -358,7 +359,7 @@ class Player:
             print("Actual level == 1")
             print("Player elevate to level 2 !")
             # print(self.look_around())
-            self.put_stones(self.stones_combinations[level - 1])
+            # self.put_stones(self.stones_combinations[level - 1])
             # print("+++++++++++++++++++++++++++++++++=")
             # print(self.look_around())
             if (self.incantation() is True):
@@ -368,7 +369,7 @@ class Player:
                 self.other_player_nb_on_tile() == 1):
             print("Actual level == 2")
             print("Player elevate to level 3 !")
-            self.put_stones(self.stones_combinations[level - 1])
+            # self.put_stones(self.stones_combinations[level - 1])
             if (self.incantation() is True):
                 self.actual_level = 3
         elif (level == 3 and self.verif_stones(self.inventory,
@@ -376,7 +377,7 @@ class Player:
                 self.other_player_nb_on_tile() == 1):
             print("Actual level == 3")
             print("Player elevate to level 4 !")
-            self.put_stones(self.stones_combinations[level - 1])
+            # self.put_stones(self.stones_combinations[level - 1])
             if (self.incantation() is True):
                 self.actual_level = 4
         elif (level == 4 and self.verif_stones(self.inventory,
@@ -384,7 +385,7 @@ class Player:
                 self.other_player_nb_on_tile() == 3):
             print("Actual level == 4")
             print("Player elevate to level 5 !")
-            self.put_stones(self.stones_combinations[level - 1])
+            # self.put_stones(self.stones_combinations[level - 1])
             if (self.incantation() is True):
                 self.actual_level = 5
         elif (level == 5 and self.verif_stones(self.inventory,
@@ -392,7 +393,7 @@ class Player:
                 self.other_player_nb_on_tile() == 3):
             print("Actual level == 5")
             print("Player elevate to level 6 !")
-            self.put_stones(self.stones_combinations[level - 1])
+            # self.put_stones(self.stones_combinations[level - 1])
             if (self.incantation() is True):
                 self.actual_level = 6
         elif (level == 6 and self.verif_stones(self.inventory,
@@ -400,7 +401,7 @@ class Player:
                 self.other_player_nb_on_tile() == 5):
             print("Actual level == 6")
             print("Player elevate to level 7 !")
-            self.put_stones(self.stones_combinations[level - 1])
+            # self.put_stones(self.stones_combinations[level - 1])
             if (self.incantation() is True):
                 self.actual_level = 7
         elif (level == 7 and self.verif_stones(self.inventory,
@@ -408,7 +409,7 @@ class Player:
                 self.other_player_nb_on_tile() == 5):
             print("Actual level == 7")
             print("Player elevate to level 8 !")
-            self.put_stones(self.stones_combinations[level - 1])
+            # self.put_stones(self.stones_combinations[level - 1])
             if (self.incantation() is True):
                 self.actual_level = 8
 
@@ -428,13 +429,9 @@ class Player:
             # print("MY STUFF -> ", self.inventory)
 
             self.choose_stone_to_take(self.actual_level)
-            # print(self.inventory)
 
             self.elevate()
 
             self.where_to_move()
-
-            # print("Other player nb -> ",
-            #       self.other_player_nb_on_tile())
 
             i = i + 1

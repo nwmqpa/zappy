@@ -76,9 +76,9 @@ def verif_inventory_response(line: str) -> bool:
 
 def parse_inventory(line: str) -> Inventory:
     """Parse Inventory answer sent by server and return an inventory object."""
-    # print("Line response inventory -> ", line)
+    # print("line response inventory -> ", line)
     if (verif_inventory_response(line) is False):
-        return (None)
+        return
     line = line.replace("[ ", "")
     line = line.replace(" ]", "")
     array = str(line).split(",")
