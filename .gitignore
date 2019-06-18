@@ -1,5 +1,6 @@
 zappy_ai
 zappy_server
+zappy_graphic_linux
 .vscode/*
 *.o
 *.a
@@ -13,6 +14,7 @@ zappy_serve_test*
 */test
 */build/test
 .mypy_cache
+
 server/compile_commands.json
 */documentation
 
