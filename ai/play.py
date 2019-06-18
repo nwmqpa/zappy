@@ -9,6 +9,8 @@ from ai.listen_broadcasts import Broadcast_listener
 import socket
 import sys
 from typing import List
+from typing import Dict
+from typing import Optional
 import time
 
 
@@ -18,7 +20,6 @@ class Player:
     def __init__(self, server_socket: socket.socket) -> None:
         """Set basic infos."""
         self.server_socket = server_socket
-        self.inventory = Inventory
         self.units_of_time = 0
         self.actual_level = 1
         self.stones_combinations = [{
@@ -113,7 +114,7 @@ class Player:
                 player_nb = player_nb + 1
         return (player_nb)
 
-    def check_ok_ko_response(self, response: str) -> True:
+    def check_ok_ko_response(self, response: str) -> bool:
         """Verify if response is `ok` or `ko` else command don't count."""
         if (response == "ok\n" or response == "ko\n"):
             return (True)
@@ -310,7 +311,7 @@ class Player:
         # raise NotImplementedError
 
     def verif_stones(self, inventory: Inventory,
-                     stones_combinations: List) -> bool:
+                     stones_combinations: Dict[str, int]) -> bool:
         """Verif if my inventory allow me to elevate."""
         if (int(inventory.linemate) >= stones_combinations["linemate"] and
             int(inventory.deraumere) >= stones_combinations["deraumere"] and
@@ -321,7 +322,7 @@ class Player:
             return (True)
         return (False)
 
-    def put_stones(self, stones_combinations: List) -> None:
+    def put_stones(self, stones_combinations: Dict[str, int]) -> None:
         """Put on tile stones to elevate."""
         stones_names = ["linemate",
                         "deraumere",
@@ -417,6 +418,7 @@ class Player:
         """Player life."""
         print("Begin of loop.\n")
         i = 0
+        thread_1 = Broadcast_listener()
         while (i < 1000):
             print("\n+++\nLOOP\n")
             self.inventory = self.check_inventory()
@@ -434,4 +436,10 @@ class Player:
 
             self.where_to_move()
 
+            # # Création des threads
+            # Lancement des threads
+            thread_1.start()
+            # Attend que les threads se terminent
+
             i = i + 1
+        thread_1.join()
