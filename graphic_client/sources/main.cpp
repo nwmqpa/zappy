@@ -5,6 +5,7 @@
 #include <vector>
 #include <unistd.h>
 #include <iostream>
+#include <errno.h>
 
 #ifdef __SWITCH__
 #   include <switch.h>
@@ -53,7 +54,8 @@ int main(int argc, char *argv[])
 
     auto dataHandler = DataHandler<int>(protocol.getSocket(), [](int sock, int &a) {
         pkt_header_t header;
-        if (read(sock, &header, PKT_HDR_LEN) == 0)
+        int ret = read(sock, &header, PKT_HDR_LEN);
+        if (ret == 0 || (ret == -1 && errno != EAGAIN))
             return false;
         std::cout << "Request: " << std::to_string(header.id) << ". [" << a << "]" << std::endl;
         if (header.id == SRV_MAP_SIZE) {
