@@ -17,3 +17,11 @@ typedef struct event_s {
 
 int add_event(server_t *server, int id, void *payload);
 void handle_events(server_t *server);
+
+// Functions
+
+void event_egg_layed(client_t *client, server_t *server);
+void event_new_player(client_t *client, server_t *server);
+void event_player_death(client_t *client, server_t *server);
+void event_player_connected_egg(client_t *client, server_t *server);
+void event_end_game(const char *winning_team, server_t *server);

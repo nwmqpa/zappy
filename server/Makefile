@@ -47,6 +47,7 @@ SOURCES		=	main.c \
 				utils/dispatcher.c \
 				utils/debug.c \
 				utils/logger_func.c \
+				utils/srv_events_player.c \
 				server/graphic_handler.c \
 				server/client_handler.c \
 				server/teams.c \
