@@ -1,4 +1,5 @@
 #include "WindowCreator.hpp"
+#include "Game.hpp"
 #include "protocols.h"
 #include "Protocol.hpp"
 #include "DataHandler.hpp"
@@ -48,7 +49,10 @@ int main(int argc, char *argv[])
         std::cout << "Usage: " << argv[0] << " <ip> <port>" << std::endl;
         exit(84);
     }
-    auto protocol = Protocol(argv[1], atoi(argv[2]));
+
+    Game game(atoi(argv[2]), argv[1]);
+
+    /*auto protocol = Protocol(argv[1], atoi(argv[2]));
 
     auto dataHandler = DataHandler<int>(protocol.getSocket(), [](int sock, int &a) {
         pkt_header_t header;
@@ -73,7 +77,6 @@ int main(int argc, char *argv[])
     int a = 0;
 
     tmp.life(dataHandler, protocol, a);
-/*
     auto rock_surface = SDL_LoadBMP(REALPATH("rock.bmp"));
     auto rock_texture = SDL_CreateTextureFromSurface(tmp.getRender(), rock_surface);
 

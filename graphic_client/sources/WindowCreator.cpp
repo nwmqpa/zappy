@@ -16,7 +16,6 @@ WindowCreator::WindowCreator(std::string &name, int x, int y)
 #else
     if (inits()) {
 #endif
-        heart = true;
 #ifdef __SWITCH__
         SDL_CreateWindowAndRenderer(1280, 720, 0, &window, &renderer);
 #else
@@ -46,13 +45,6 @@ bool WindowCreator::inits(Uint32 sdl, Uint32 img)
     }
     return true;
 }
-
-void WindowCreator::setProtocol(auto newProtocol)
-{
-    protocol = newProtocol;
-}
-
-void WindowCreator
 
 void WindowCreator::client_event()
 {
@@ -87,11 +79,6 @@ void WindowCreator::client_event()
     }
 }
 
-void WindowCreator::updateTileList(std::vector<Tile *> value)
-{
-    tileList = value;
-}
-
 void WindowCreator::scale(int value)
 {
     int old;
@@ -122,64 +109,34 @@ void WindowCreator::addX(int value)
     }
 }
 
-void WindowCreator::server_event()
-{
-    if (tileList.empty())
-        protocol.askMapSize();
-    for (int x = 0, y = 0; (x + y) < (map.x + map.y); x++)
-        protocol.askTileContent(x, y);
-}
-
 void WindowCreator::drawTile()
 {
     for (unsigned int i = 0; i < tileList.size(); i++)
         tileList[i]->draw(renderer, window);
 }
 
-void WindowCreator::life(auto dataHandler, auto protocol, int a)
+void WindowCreator::display()
 {
-    while (dataHandler.handle(a)) {
-        SDL_RenderClear(renderer);
-        update();
-        SDL_RenderPresent(renderer);
-    }
+    SDL_RenderClear(renderer);
+    update();
+    SDL_RenderPresent(renderer);
 }
 
 void WindowCreator::update()
 {
-    server_event();
-    srvDataRecuperation();
     drawTile();
     client_event();
 }
 
-void WindowCreator::srvDataRecuperation(pkt_header_t header)
-{
-    std::vector<Tile *>::iterator it;
-
-    switch (header.id) {
-        case SRV_MAP_SIZE_LEN:
-            srv_map_size_t newMap;
-            read(sock, &newMap, SRV_MAP_SIZE_LEN);
-            addAllTile(newMap);
-            break;
-        case SRV_TILE_CONTENT:
-            srv_tile_content_t newTileContent;
-            read(sock, &newTileContent, SRV_TILE_CONTENT);
-            updateTile(newTileContent);
-            break;
-    }
-}
-
-void WindowCreator::addAllTile(srv_map_size_t newMap)
+/*void WindowCreator::addAllTile(srv_map_size_t newMap)
 {
     for (int i = 0; i < (newMap.x * newMap.y); i++) {
-        tileList.push_back(new Tile(REALPATH("back.bmp", renderer)));
+        tileList.push_back(new Tile(REALPATH("back.bmp"), renderer));
         tileList[i].setMapSize(*newMap);
     }
-}
+}*/
 
-void WindowCreator::updateTile(srv_tile_content_t newTileContent)
+/*void WindowCreator::updateTile(srv_tile_content_t newTileContent)
 {
     std::vector<Tile *>::iterator it;
 
@@ -190,12 +147,11 @@ void WindowCreator::updateTile(srv_tile_content_t newTileContent)
                 it.setTileContent(*newTileContent);
         }
     }
-}
+}*/
 
 void WindowCreator::destroy()
 {
     SDL_DestroyWindow(window);
     IMG_Quit();
     SDL_Quit();
-    heart = false;
 }

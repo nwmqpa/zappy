@@ -28,10 +28,9 @@ class WindowCreator {
 
         bool inits(Uint32 SDL = SDL_INIT_EVERYTHING, Uint32 IMG = IMG_INIT_PNG);
 
-        void life();
+        void display();
 
         void update();
-        void server_event();
         void client_event();
 
         void addX(int);
@@ -43,11 +42,8 @@ class WindowCreator {
 
         auto *getRender() { return renderer; }
         auto *getWindow() { return window; }
-        bool getHeart() { return heart; }
 
     private:
-        bool heart;
-
         std::vector<Tile *>tileList;
         std::string &name;
         SDL_Renderer *renderer;
