@@ -40,6 +40,7 @@ typedef struct server_s {
     map_t *map;
     phr_t reg;
     list_t *eggs;
+    list_t *events;
 } server_t;
 
 typedef struct time_server_s {

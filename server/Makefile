@@ -27,6 +27,7 @@ SOURCES		=	main.c \
 				server/server.c \
 				server/server_init.c \
 				server/server_debug.c \
+				server/events.c \
 				gen_list/basic.c \
 				gen_list/compare.c \
 				gen_list/filter.c \
