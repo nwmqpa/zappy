@@ -7,6 +7,7 @@
 
 #include "utils.h"
 #include "client.h"
+#include "egg.h"
 
 // Put the to_join joinned by join to insert.
 // Insert should be allocated.
@@ -30,6 +31,18 @@ int join_str(char *insert, const char **to_join, char join, size_t size)
     }
     insert[offset] = 0;
     return 0;
+}
+
+void get_info_egg(void *data, const void *nothing)
+{
+    egg_t *egg = data;
+
+    printf("Egg {\n"
+            "   position: (x: %d, y: %d)\n"
+            "   can_eclose: %s\n"
+            "   time_left: %f\n"
+            "}\n", egg->position.x, egg->position.y,
+            egg->can_eclose ? "true" : "false", egg->time_left);
 }
 
 int client_cmp(const void *entry, const void *id)
