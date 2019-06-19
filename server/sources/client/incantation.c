@@ -16,7 +16,6 @@ static int is_incant_possible(client_t *client, server_t *server)
 char *incante(client_t *client, server_t *server)
 {
     if (!is_incant_possible(client, server))
-        return "ko";
-    client->cooldown = 700;
-    return "Elevation underway\nCurrent level: %d";
+        return strdup("ko");
+    return strdup("Elevation underway\nCurrent level: %d");
 }

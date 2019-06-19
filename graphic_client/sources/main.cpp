@@ -1,5 +1,7 @@
 #include "SDL.hpp"
 #include "protocols.h"
+#include "Protocol.hpp"
+#include "DataHandler.hpp"
 #include <vector>
 #include <unistd.h>
 #include <iostream>
@@ -30,7 +32,8 @@ void init_joycons(void) {
 }
 #endif
 
-int main(void)
+#ifndef TEST
+int main(int argc, char *argv[])
 {
 #ifdef __SWITCH__
     atexit(SDL_Quit);
@@ -40,6 +43,32 @@ int main(void)
     init_romFS();
     init_joycons();
 #endif /* __SWITCH__ */
+    if (argc != 3) {
+        std::cout << "Usage: " << argv[0] << " <ip> <port>" << std::endl;
+        exit(84);
+    }
+    auto protocol = Protocol(argv[1], atoi(argv[2]));
+
+    protocol.askMapSize();
+
+    auto dataHandler = DataHandler<int>(protocol.getSocket(), [](int sock, int &a) {
+        pkt_header_t header;
+        if (read(sock, &header, PKT_HDR_LEN) == 0)
+            return false;
+        std::cout << "Request: " << std::to_string(header.id) << ". [" << a << "]" << std::endl;
+        if (header.id == SRV_MAP_SIZE) {
+            srv_map_size_t mapSize;
+            read(sock, &mapSize, SRV_MAP_SIZE_LEN);
+            std::cout << "x: " << mapSize.x << " y: " << mapSize.y << std::endl;
+        }
+        return true;
+    });
+
+    int test = 0;
+    while (dataHandler.handle(test)) {
+        test++;
+    }
+
     WindowCreator tmp("Test", 800, 600);
 
     auto rock_surface = SDL_LoadBMP(REALPATH("rock.bmp"));
@@ -60,3 +89,4 @@ int main(void)
     SDL_Quit();
     return (0);
 }
+#endif /* TEST */

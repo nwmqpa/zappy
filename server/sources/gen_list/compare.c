@@ -21,3 +21,16 @@ void *pop_cmp_list(list_t *list, cmp_func function, void *to_cmp)
     }
     return NULL;
 }
+
+void *get_cmp_list(list_t *list, cmp_func function, void *to_cmp)
+{
+    entry_t *entry;
+
+    LIST_FOREACH(entry, &list->head, next)
+    {
+        if (function(entry->data, to_cmp)) {
+            return entry->data;
+        }
+    }
+    return NULL;
+}

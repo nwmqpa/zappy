@@ -9,21 +9,23 @@
 #include "client_commands.h"
 
 static const command_t COMMANDS[] = {
-    {"fork", fork_client, 4},
-    {"eject", eject, 5},
-    {"forward", forward, 7},
-    {"left", left, 4},
-    {"right", forward, 5},
-    {"look", look, 4},
-    {"incante", incante, 7},
-    {NULL, NULL, 0}
+    {"Fork", fork_client, 4, 42.0},
+    {"Eject", eject, 5, 7.0},
+    {"Forward", forward, 7, 7.0},
+    {"Left", left, 4, 7.0},
+    {"Right", right, 5, 7.0},
+    {"Look", look, 4, 7.0},
+    {"Incante", incante, 7, 300.0},
+    {"Connect_nbr", connect_nbr, 11, 0.0},
+    {"Inventory", inventory, 9, 1.0},
+    {NULL, NULL, 0, 0}
 };
 
 static const command_param_t COMMANDS_PARAM[] = {
-    {"broadcast", broadcast, 9},
-    {"take", take, 4},
-    {"set", set, 3},
-    {NULL, NULL, 0}
+    {"Broadcast", broadcast, 9, 7.0},
+    {"Take", take, 4, 7.0},
+    {"Set", set, 3, 7.0},
+    {NULL, NULL, 0, 0}
 };
 
 int add_command(client_t *client, char *command)
@@ -41,10 +43,11 @@ int add_command(client_t *client, char *command)
     }
 }
 
-static char *iter_command(client_t *client, server_t *server, const char *command)
+static char *iter_command(client_t *client, server_t *server,
+        const char *command)
 {
     for (int i = 0; COMMANDS_PARAM[i].name; ++i) {
-        if (strncmp(COMMANDS_PARAM[i].name ,command,
+        if (strncmp(COMMANDS_PARAM[i].name, command,
                     COMMANDS_PARAM[i].len) == 0) {
             return COMMANDS_PARAM[i].function(client, server,
                     command + COMMANDS_PARAM[i].len);
@@ -55,20 +58,46 @@ static char *iter_command(client_t *client, server_t *server, const char *comman
             return COMMANDS[i].function(client, server);
         }
     }
+    if (strncmp("status", command, 6) == 0) {
+        debugl("Status %s\n", command);
+        return server_status(server, command + 6);
+    }
     errorl("Command not found %s.\n", command);
-    return "ko\n";
+    return strdup("ko");
 }
 
-int process_command(client_t *client, server_t *server)
+double get_cooldown(const char *cmd)
 {
-    char *command;
+    for (int i = 0; COMMANDS_PARAM[i].name; ++i)
+        if (strncmp(COMMANDS_PARAM[i].name, cmd, COMMANDS_PARAM[i].len) == 0)
+            return COMMANDS_PARAM[i].cooldown;
+    for (int i = 0; COMMANDS[i].name; ++i)
+        if (strncmp(COMMANDS[i].name, cmd, COMMANDS[i].len) == 0)
+            return COMMANDS[i].cooldown;
+    return -1;
+}
 
+int prepare_command(client_t *client)
+{
     if (is_empty_list(client->commands))
         return -1;
-    command = (char *) pop_list(client->commands, 0);
-    client->to_send = iter_command(client, server, command);
-    debugl("Handling command %s.\n", command);
+    client->to_exec = pop_list(client->commands, 0);
+    debugl("Preparing command %s.\n", client->to_exec);
+    client->cooldown = get_cooldown(client->to_exec);
+    if (client->cooldown == -1) {
+        errorl("Cannot find cooldown of %s.\n", client->to_exec);
+        return -1;
+    }
     return 0;
+}
+
+char *process_command(client_t *client, server_t *server)
+{
+    if (!client->to_exec || client->cooldown > 0) {
+        errorl("No command to exec");
+        return NULL;
+    }
+    return iter_command(client, server, client->to_exec);
 }
 
 size_t len_command(client_t *client)

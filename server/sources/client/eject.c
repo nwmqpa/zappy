@@ -36,16 +36,17 @@ char *eject(client_t *client, server_t *server)
     client_t *client_ptr = NULL;
     unsigned int nb_player = tile->nb_player;
 
-    client->cooldown = 7;
     for (unsigned int i = 0; i < nb_player; i++) {
         client_id = tile->player_ids[i];
         if (client_id == client->id)
             continue;
         remove_player(tile, client_id);
-        client_ptr = get_list(server->clients, i);
-        for (int i = 0; client_ptr != NULL && client_ptr->id != client_id; ++i)
-            client_ptr = get_list(server->clients, i);
+        client_ptr = get_cmp_list(server->clients, client_cmp, (void *) &client_id);
+        if (!client_ptr) {
+            errorl("Cannot find player %d.\n", client_id);
+            return strdup("ko");
+        }
         eject_client(client_ptr, server->map, client->position);
     }
-    return "ok";
+    return strdup("ok");
 }

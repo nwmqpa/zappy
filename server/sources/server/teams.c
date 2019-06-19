@@ -9,7 +9,7 @@
 #include "client.h"
 #include "logger.h"
 
-static int check_free_space(team_t *team, int max_client, int new_client)
+int check_free_space(team_t *team, int max_client, int new_client)
 {
     int ret = 0;
 
@@ -41,6 +41,16 @@ int add_client_to_team(server_t *server, client_t *client, const char *team)
     }
     infol("Not such team %s.\n", team);
     return -1;
+}
+
+void remove_client_from_team(team_t *team, client_t *client, server_t *server)
+{
+    for (int i = 0; server->client_per_team; ++i) {
+        if (client->id == team->clients[i]) {
+            team->clients[i] = 0;
+            return;
+        }
+    }
 }
 
 static int is_id_in_team(int id, team_t *team, int nb_client)

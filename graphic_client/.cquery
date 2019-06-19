@@ -1,0 +1,6 @@
+%clang
+
+# Includes
+
+-I./includes
+-I/usr/include/SDL/

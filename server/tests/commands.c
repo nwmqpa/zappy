@@ -22,6 +22,7 @@ server_t *setup_server(int x, int y)
 
 Test(commands, look_level3_with_only_food) {
     server_t *server = setup_server(4, 4);
+    client_t *client = client_create(3);
 
     for (int y = 0; y < 4; ++y) {
         for (int x = 0; x < 4; ++x) {
@@ -31,11 +32,14 @@ Test(commands, look_level3_with_only_food) {
             tile->inventory.inv.food = 1;
         }
     }
-    get_tile_map(server->map, 0, 0)->inventory.inv.linemate = 120;
-    client_t *client = client_create(3);
+    tile_t *tile =  get_tile_map(server->map, 0, 0);
+    tile->inventory.inv.linemate = 2;
     client->level = 3;
+    client->position.x = 0;
+    client->position.y = 0;
+    client->direction = LEFT;
     char *ret = look(client, server);
-    cr_assert_str_eq(ret, "[linemate:120 food:1,food:1,food:1,food:1,food:1,food:1,food:1,food:1,food:1]");
+    cr_assert_str_eq(ret, "[ linemate linemate food , food , food , food , food , food , food , food , food ]");
 }
 
 Test(commands, look_level2_with_some_things) {
@@ -53,7 +57,7 @@ Test(commands, look_level2_with_some_things) {
     client->direction = 3;
     get_tile_map(server->map, 0, 0)->inventory.inv.linemate = 42;
     char *ret = look(client, server);
-    cr_assert_str_eq(ret, "[linemate:42,,,]");
+    cr_assert_str_eq(ret, "[ linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate linemate ,,,]");
 }
 
 Test(commands, look_level2_direction) {
@@ -76,7 +80,7 @@ Test(commands, look_level2_direction) {
     get_tile_map(server->map, 1, 0)->inventory.inv.food = 3;
     get_tile_map(server->map, 2, 0)->inventory.inv.phiras = 4;
     char *ret = look(client, server);
-    cr_assert_str_eq(ret, "[linemate:1,deraumere:2,food:3,phiras:4]");
+    cr_assert_str_eq(ret, "[ linemate , deraumere deraumere , food food food , phiras phiras phiras phiras ]");
 }
 
 Test(commands, eject_basic) {
