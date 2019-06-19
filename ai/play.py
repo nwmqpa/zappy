@@ -5,7 +5,8 @@ from ai.parse_inventory import Inventory
 from ai.parse_vision import parse_vision
 from ai.parse_vision import Vision
 from ai.parse_vision import verif_look_response
-from ai.listen_broadcasts import Broadcast_listener
+# from ai.listen_broadcasts import Broadcast_listener
+from threading import Thread
 import socket
 import sys
 from typing import List
@@ -414,32 +415,39 @@ class Player:
             if (self.incantation() is True):
                 self.actual_level = 8
 
+    def listener(self) -> None:
+        """Threaded function to alwqys listen to server."""
+        print("----------- In broadcast listener -----------")
+        self.result = "foo"
+        received = self.server_socket.recv(1024).decode()
+        if (received == "dead\n"):
+            print("Player is dead.")
+            exit(0)
+        while (received[len(received) - 1] != '\n'):
+            received = received + self.server_socket.recv(1024).decode()
+        print("FINAL of thread = ", received)
+        self.response_from_thread = received
+
     def life_loop(self) -> None:
         """Player life."""
         print("Begin of loop.\n")
         i = 0
-        thread_1 = Broadcast_listener()
+        self.response_from_thread = ""
+        listening_thread = Thread(target=self.listener, args=())
+        listening_thread.start()
+        # print("1--> ".join(self.result))
+        # print("2--> ", self.result)
         while (i < 1000):
             print("\n+++\nLOOP\n")
             self.inventory = self.check_inventory()
-            # if (self.inventory is None):
-            #     continue
             print(self.inventory)
             print("")
-            self.units_of_time = int(self.inventory.food) * 126
-
+            # self.units_of_time = int(self.inventory.food) * 126
             # print("MY STUFF -> ", self.inventory)
+            # self.choose_stone_to_take(self.actual_level)
 
-            self.choose_stone_to_take(self.actual_level)
+            # self.elevate()
 
-            self.elevate()
-
-            self.where_to_move()
-
-            # # Création des threads
-            # Lancement des threads
-            thread_1.start()
-            # Attend que les threads se terminent
+            # self.where_to_move()
 
             i = i + 1
-        thread_1.join()
