@@ -130,9 +130,9 @@ $(BUILD_DIR)/%.o.json:	$(SRC_DIR)/%.cpp
 			$(V)mkdir -p $(dir $@)
 		    $(V)clang++ -MJ $@ -c $< $(CXXFLAGS)
 
-$(BUILD_DIR)/test:	$(PATSUBST_OBJS_TEST) $(PATSUBST_OBJS) $(PATSUBST_MODULS)
+$(BUILD_DIR)/test:	$(PATSUBST_OBJS_TEST) $(PATSUBST_MODULS)
 			$(V)printf "$(WHITE)Linking $(BLUE)objects $(WHITE)into $(GREEN)test$(DEFAULT)\n"
-			$(V)$(LD) -o $(BUILD_DIR)/test $(PATSUBST_OBJS) $(PATSUBST_OBJS_TEST) $(LDFLAGS)
+			$(V)$(LD) -o $(BUILD_DIR)/test $(PATSUBST_OBJS_TEST) $(LDFLAGS)
 
 $(BUILD_DIR)/%.o:	$(SRC_DIR)/%.cpp
 			$(V)printf "$(WHITE)Compiling $(RED)$<$(WHITE) => $(BLUE)$@$(DEFAULT)\n"

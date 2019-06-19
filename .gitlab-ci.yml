@@ -12,11 +12,23 @@ build_server:
     script:
         - make -C server/
         
-build_graphic_client:
+build_graphic_client_linux:
     stage: build
     allow_failure: true
+    variables:
+        PLATFORM: linux
     script:
-        - make -C graphic_client/
+        - make -C graphic_client
+
+build_graphic_client_switch:
+    stage: build
+    allow_failure: true
+    image: devkitpro/devkita64
+    variables:
+        PLATFORM: switch
+    script:
+        - make -C graphic_client
+
         
 unit_test_server:
     stage: unit_test
