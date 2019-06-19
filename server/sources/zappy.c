@@ -61,6 +61,12 @@ void tick_system(server_t *server)
     name.elapsed *= server->freq;
     clock_gettime(CLOCK_MONOTONIC, &old);
     map(server->clients, handle_player_tick, &name);
+    server->map->time_respawn -= name.elapsed;
+    if (server->map->time_respawn <= 0) {
+        infol("Respwaning ressources.\n");
+        server->map->time_respawn = TIME_RESPAWN;
+        respawn_ressources(server->map);
+    }
 }
 
 static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
