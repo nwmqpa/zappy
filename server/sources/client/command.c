@@ -99,8 +99,3 @@ char *process_command(client_t *client, server_t *server)
     }
     return iter_command(client, server, client->to_exec);
 }
-
-size_t len_command(client_t *client)
-{
-    return len_list(client->commands);
-}
