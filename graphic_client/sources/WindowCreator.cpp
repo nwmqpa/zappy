@@ -75,7 +75,7 @@ void WindowCreator::scale(int value)
 {
     int old;
 
-    for (int i = 0; i < tileList.size(); i++) {
+    for (unsigned int i = 0; i < tileList.size(); i++) {
         old = tileList[i]->getScale();
         tileList[i]->setScale(old += value);
     }
