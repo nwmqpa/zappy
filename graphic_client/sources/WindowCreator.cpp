@@ -5,22 +5,34 @@
 ** GraphicalClient
 */
 
+#include <iostream>
 #include "SDL.hpp"
 
 WindowCreator::WindowCreator(const char *WINname, int x, int y)
 {
+#ifdef __SWITCH__
+    if (inits(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK, IMG_INIT_PNG)) {
+#else
     if (inits()) {
+#endif
         heart = true;
         name = WINname;
-        window = SDL_CreateWindow(name, SDL_WINDOWPOS_UNDEFINED,
-                SDL_WINDOWPOS_UNDEFINED, x, y, SDL_WINDOW_RESIZABLE);
+#ifdef __SWITCH__
+        SDL_CreateWindowAndRenderer(1280, 720, 0, &window, &renderer);
+#else
+        window = SDL_CreateWindow(name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, x, y, SDL_WINDOW_RESIZABLE);
+#endif
         if (window == NULL)
             printf("Window Error%s\n", SDL_GetError());
+#ifndef __SWITCH__
         renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+#endif
         if (renderer == NULL)
             printf("Renderer Error%s\n", SDL_GetError());
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_RenderClear(renderer);
+        SDL_RenderPresent(renderer);
     }
-    /*Initialisation de la fenêtre et des modules de SDL*/
 }
 
 WindowCreator::~WindowCreator()
@@ -29,10 +41,10 @@ WindowCreator::~WindowCreator()
 bool WindowCreator::inits(Uint32 SDL, Uint32 IMG)
 {
     if (SDL_Init(SDL) < 0) {
-        printf("SDL Error: %s.\n", SDL_GetError());
+        std::cout << "SDL Error: " << SDL_GetError() << std::endl;
         return false;
     } else if (IMG_Init(IMG) < 0) {
-        printf("IMG Error: %s.\n", IMG_GetError());
+        std::cout << "IMG Error: " << IMG_GetError() << std::endl;
         return false;
     }
     return true;

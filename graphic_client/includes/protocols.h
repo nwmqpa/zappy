@@ -9,8 +9,6 @@
 
 #include <stdint.h>
 
-#pragma pack(1)
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -547,6 +545,3 @@ typedef struct srv_bad_parameters srv_bad_parameters_t;
 #ifdef __cplusplus
 }
 #endif
-
-#pragma options align=reset
-
