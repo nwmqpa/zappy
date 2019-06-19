@@ -6,6 +6,7 @@
 */
 
 #include "utils.h"
+#include "client.h"
 
 // Put the to_join joinned by join to insert.
 // Insert should be allocated.
@@ -29,4 +30,12 @@ int join_str(char *insert, const char **to_join, char join, size_t size)
     }
     insert[offset] = 0;
     return 0;
+}
+
+int client_cmp(const void *entry, const void *id)
+{
+    const client_t *client = entry;
+    int rhs = *((size_t *) id);
+
+    return client->id == rhs;
 }
