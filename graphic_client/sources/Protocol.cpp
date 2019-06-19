@@ -30,7 +30,7 @@ int Protocol::getSocket() const noexcept {
 
 void Protocol::setupSocket() {
     int ret = 0;
-    struct sockaddr_in data = {0};
+    struct sockaddr_in data = {};
 
     data.sin_family = AF_INET;
     data.sin_port = htons(_port);
