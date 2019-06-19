@@ -1,0 +1,50 @@
+TOPDIR ?= $(CURDIR)
+include $(DEVKITPRO)/libnx/switch_rules
+
+all	: $(NAME).nro
+
+NO_NACP		=
+
+LD		=	$(CXX)
+
+ROMFS	=	assets
+ARCH	:=	-march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
+
+CFLAGS	:=	-g -Wall -O2 -ffunction-sections \
+			$(ARCH) $(DEFINES)
+
+CFLAGS	+=	-D__SWITCH__ $(INCLUDE) `sdl2-config --cflags`  -I includes
+
+CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions 
+
+ASFLAGS	:=	-g $(ARCH)
+LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
+
+LIBS	:=	`sdl2-config --libs` -lSDL2_image `$(PORTLIBS)/bin/freetype-config --libs` -lSDL2_ttf -ljpeg -lpng
+
+
+ifneq ($(ROMFS),)
+export NROFLAGS += --romfsdir=$(CURDIR)/$(ROMFS)
+endif
+ifeq ($(strip $(NO_NACP)),)
+	export NROFLAGS += --nacp=$(CURDIR)/$(NAME).nacp
+endif
+
+LIBDIRS	:= $(PORTLIBS) $(LIBNX)
+
+CPPFILES	:= $(foreach dir,sources,$(notdir $(wildcard $(dir)/*.cpp)))
+
+export OFILES_BIN	:=	$(addsuffix .o,$(BINFILES))
+export OFILES_SRC	:=	$(PREFIXED_SRCS:.cpp=.o)
+export OFILES 		:= 	$(OFILES_BIN) $(OFILES_SRC)
+export DEPSDIR	:= $(CURDIR)/$(BUILD)
+
+DEPENDS	:= $(OFILES:.o=.d)
+
+ifeq ($(strip $(NO_NACP)),)
+$(NAME).nro	:	$(NAME).elf $(NAME).nacp
+else
+$(NAME).nro	:	$(NAME).elf
+endif
+
+$(NAME).elf	: $(OFILES)

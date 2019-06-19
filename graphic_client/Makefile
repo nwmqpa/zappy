@@ -1,8 +1,11 @@
-NAME		=	zappy_graphic_linux
+ifeq ($(strip $(PLATFORM)), )
+$(warning No platform has been specified.)
+$(warning Defaulting to `linux`)
+PLATFORM = linux
+endif
 
-CC		=	g++
-
-LD		=	g++
+BASE_NAME	=	zappy_graphic_
+NAME		=	$(addsuffix $(PLATFORM), $(BASE_NAME))
 
 AR		=	ar
 
@@ -35,13 +38,23 @@ PATSUBST_MODULS =	$(patsubst  $(SRC_DIR)/%, $(BUILD_DIR)/lib%.a, $(PREFIXED_MODU
 LINK_MODULES	=	$(addprefix -l, $(MODULES))
 
 
-WARNINGS	=	-Wall -Wextra -lSDL2 -lSDL2_image -g
-CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) -fdiagnostics-color=always -D _GNU_SOURCE
-LDFLAGS		=	-L $(BUILD_DIR) $(LINK_MODULES) -lSDL2 -lSDL2_image
+WARNINGS	=	-Wall -Wextra
+CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) `sdl2-config --cflags` -fdiagnostics-color=always -D _GNU_SOURCE
+CXXFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) `sdl2-config --cflags` -fdiagnostics-color=always -D _GNU_SOURCE
+LDFLAGS		=	-L $(BUILD_DIR) $(LINK_MODULES) `sdl2-config --libs` -lSDL2_image
+
+ifeq ($(PLATFORM), linux)
+include ./buildscripts/linux_rules
+endif
+
+ifeq ($(PLATFORM), switch)
+include ./buildscripts/switch_rules
+endif
+
 
 DEFAULT		=	\e[0m
 WHITE		=	\e[1;97m
-RED		=	\e[1;91m
+RED			=	\e[1;91m
 GREEN		=	\e[1;92m
 YELLOW		=	\e[1;93m
 BLUE		=	\e[1;94m
@@ -49,8 +62,6 @@ MAGENTA		=	\e[1;95m
 CYAN		=	\e[1;96m
 
 V		=	@
-
-all:	$(ROOT)/$(NAME)
 
 test:			CFLAGS += -g -D TEST
 test:			LDFLAGS += -lcriterion
@@ -67,9 +78,9 @@ clean:
 				make --no-print-directory -C $$dir clean; \
 			done
 
-fclean:			clean
+fclean:		clean
 			$(V)printf "$(WHITE)Cleaning $(GREEN)linked $(WHITE)files$(DEFAULT)\n"
-			$(V)rm -f $(ROOT)/$(NAME) $(BUILD_DIR)/$(NAME)
+			$(V)rm -f $(ROOT)/$(BASE_NAME)* $(BUILD_DIR)/$(BASE_NAME)*
 			$(V)rm -f $(ROOT)/test $(BUILD_DIR)/test
 			$(V)for dir in $(PREFIXED_MODULS); do \
 				make --no-print-directory -C $$dir fclean; \
@@ -89,7 +100,7 @@ echo_build_parts:
 $(ROOT)/$(NAME):	$(BUILD_DIR)/$(NAME)
 			$(V)printf "$(WHITE)Copying $(GREEN)$(NAME)$(WHITE) from $(BLUE)$(BUILD_DIR)$(WHITE) folder$(DEFAULT)\n"
 			$(V)cp $(BUILD_DIR)/$(NAME) $(ROOT)/$(NAME)
-			$(V)printf "$(WHITE)Final $(GREEN)$(NAME)$(WHITE) size: $(CYAN)%dKb$(DEFAULT)\n" `du -s $@ | awk -F ' ' '{print $$1}'`
+			$(V)printf "$(WHITE)Final $(GREEN)$(NAME)$(WHITE) size: $(CYAN)%dKb$(DEFAULT)\n" `du -s $(NAME) | awk -F ' ' '{print $$1}'`
 
 $(ROOT)/test:		$(BUILD_DIR)/test
 			$(V)printf "$(WHITE)Copying $(GREEN)test$(WHITE) from $(BLUE)$(BUILD_DIR)$(WHITE) folder$(DEFAULT)\n"
@@ -118,4 +129,5 @@ $(BUILD_DIR)/lib%.a:	$(SRC_DIR)/%
 			$(V)printf "$(WHITE)Compiling module $(MAGENTA)$<$(DEFAULT)\n"
 			$(V)make --no-print-directory -C $<
 
-.PHONY:			all clean re echo_build_parts fclean test
+
+.PHONY:			all clean re echo_build_parts fclean test linux switch
