@@ -29,7 +29,7 @@ WindowCreator::WindowCreator(std::string &name, int x, int y)
 #endif
         if (renderer == NULL)
             throw GraphicalException("Renderer error", "SDL_CreateRenderer");
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_SetRenderDrawColor(renderer, 135, 206, 250, 255);
         SDL_RenderClear(renderer);
         SDL_RenderPresent(renderer);
     }
@@ -46,6 +46,13 @@ bool WindowCreator::inits(Uint32 sdl, Uint32 img)
     }
     return true;
 }
+
+void WindowCreator::setProtocol(auto newProtocol)
+{
+    protocol = newProtocol;
+}
+
+void WindowCreator
 
 void WindowCreator::client_event()
 {
@@ -117,7 +124,10 @@ void WindowCreator::addX(int value)
 
 void WindowCreator::server_event()
 {
-//
+    if (tileList.empty())
+        protocol.askMapSize();
+    for (int x = 0, y = 0; (x + y) < (map.x + map.y); x++)
+        protocol.askTileContent(x, y);
 }
 
 void WindowCreator::drawTile()
@@ -126,9 +136,9 @@ void WindowCreator::drawTile()
         tileList[i]->draw(renderer, window);
 }
 
-void WindowCreator::life()
+void WindowCreator::life(auto dataHandler, auto protocol, int a)
 {
-    while (heart) {
+    while (dataHandler.handle(a)) {
         SDL_RenderClear(renderer);
         update();
         SDL_RenderPresent(renderer);
@@ -138,8 +148,48 @@ void WindowCreator::life()
 void WindowCreator::update()
 {
     server_event();
+    srvDataRecuperation();
     drawTile();
     client_event();
+}
+
+void WindowCreator::srvDataRecuperation(pkt_header_t header)
+{
+    std::vector<Tile *>::iterator it;
+
+    switch (header.id) {
+        case SRV_MAP_SIZE_LEN:
+            srv_map_size_t newMap;
+            read(sock, &newMap, SRV_MAP_SIZE_LEN);
+            addAllTile(newMap);
+            break;
+        case SRV_TILE_CONTENT:
+            srv_tile_content_t newTileContent;
+            read(sock, &newTileContent, SRV_TILE_CONTENT);
+            updateTile(newTileContent);
+            break;
+    }
+}
+
+void WindowCreator::addAllTile(srv_map_size_t newMap)
+{
+    for (int i = 0; i < (newMap.x * newMap.y); i++) {
+        tileList.push_back(new Tile(REALPATH("back.bmp", renderer)));
+        tileList[i].setMapSize(*newMap);
+    }
+}
+
+void WindowCreator::updateTile(srv_tile_content_t newTileContent)
+{
+    std::vector<Tile *>::iterator it;
+
+    for (; it < tileList.end(); it++) {
+        if (it.getMap() != NULL) {
+            if (newTileContent != it && it.getX() == newTileContent.x
+                    && it.getY() == newTileContent.y)
+                it.setTileContent(*newTileContent);
+        }
+    }
 }
 
 void WindowCreator::destroy()

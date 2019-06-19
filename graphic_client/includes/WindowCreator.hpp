@@ -38,12 +38,12 @@ class WindowCreator {
         void addY(int);
         void scale(int);
 
-        void updateTileList(std::vector<Tile *>value);
         void drawTile();
         void destroy();
 
         auto *getRender() { return renderer; }
         auto *getWindow() { return window; }
+        bool getHeart() { return heart; }
 
     private:
         bool heart;

@@ -29,10 +29,10 @@ class Tile {
         void setX(int);
         void setY(int);
         void setScale(int);
-        int getX() {return x;}
-        int getY() {return y;}
-        int getScale() {return scale;}
-
+        int getX() { return x; }
+        int getY() { return y; }
+        int getScale() { return scale; }
+        srv_map_size_t *getMap() { return map; }
 
     private:
         SDL_Surface *IMG;

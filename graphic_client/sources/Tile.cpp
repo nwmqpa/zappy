@@ -26,10 +26,14 @@ Tile::Tile(std::string &IMGpath, SDL_Renderer *render)
         throw GraphicalException("Texture creation error", "SDL_CreateTexture");
 }
 
-void Tile::updateTile()
+void Tile::setMapSize(srv_map_size_t *mapSize)
 {
-    //requête API
-    //tile = result;
+    map = mapSize;
+}
+
+void Tile::setTileContent(srv_tile_content_t *newtile)
+{
+    tile = newtile;
 }
 
 void Tile::draw(SDL_Renderer *render, SDL_Window *window)
