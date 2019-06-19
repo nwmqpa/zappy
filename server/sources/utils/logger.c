@@ -7,8 +7,8 @@
 
 #include "logger.h"
 
-// The log const is defining how the log is shown.
-//                        [Date - hour | level] message
+/// The log const is defining how the log is shown.
+///                        [Date - hour | level] message
 static const char *LOG = "%s[%s | %s] %s\e[0m";
 
 static const char *LEVEL_NAME[] = {"FATAL", "ERROR", "WARN", "INFO", "DEBUG"};
@@ -24,81 +24,11 @@ char *get_log(int log_level, const char *color, const char *str)
     return ret;
 }
 
-int get_log_level()
+int get_log_level(void)
 {
     char *env_level = getenv("LOG_LEVEL");
 
     if (env_level)
         return atoi(env_level);
     return LOG_LEVEL;
-}
-
-void fatall(const char *str, ...)
-{
-    int log_level = get_log_level();
-    char *log = get_log(FATAL_LOG, "\e[31m", str);
-
-    if (log_level >= FATAL_LOG) {
-        va_list ap;
-        va_start(ap, str);
-        vfprintf(stderr, log, ap);
-        va_end(ap);
-        free(log);
-    }
-}
-
-void errorl(const char *str, ...)
-{
-    int log_level = get_log_level();
-    char *log = get_log(ERROR_LOG, "\e[91m", str);
-
-    if (log_level >= ERROR_LOG) {
-        va_list ap;
-        va_start(ap, str);
-        vfprintf(stderr, log, ap);
-        va_end(ap);
-        free(log);
-    }
-}
-
-void warnl(const char *str, ...)
-{
-    int log_level = get_log_level();
-    char *log = get_log(WARN_LOG, "\e[33m", str);
-
-    if (log_level >= WARN_LOG) {
-        va_list ap;
-        va_start(ap, str);
-        vfprintf(stderr, log, ap);
-        va_end(ap);
-        free(log);
-    }
-}
-
-void infol(const char *str, ...)
-{
-    int log_level = get_log_level();
-    char *log = get_log(INFO_LOG, "\e[92m", str);
-
-    if (log_level >= INFO_LOG) {
-        va_list ap;
-        va_start(ap, str);
-        vfprintf(stderr, log, ap);
-        va_end(ap);
-        free(log);
-    }
-}
-
-void debugl(const char *str, ...)
-{
-    int log_level = get_log_level();
-    char *log = get_log(DEBUG_LOG, "\e[94m", str);
-
-    if (log_level >= DEBUG_LOG) {
-        va_list ap;
-        va_start(ap, str);
-        vfprintf(stderr, log, ap);
-        va_end(ap);
-        free(log);
-    }
 }

@@ -26,7 +26,7 @@ void insert_list(list_t *list, void *elem, size_t idx)
 
 void insert_head_list(list_t *list, void *elem)
 {
-   entry_t *new = malloc(sizeof(entry_t));
+    entry_t *new = malloc(sizeof(entry_t));
 
     list->size++;
     new->data = elem;

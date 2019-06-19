@@ -13,6 +13,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define BREAK(x) (x); break
+
 typedef struct options_s {
     short port;
     int width;

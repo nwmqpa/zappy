@@ -12,6 +12,7 @@
 #include "handlers.h"
 #include "client_commands.h"
 #include "egg.h"
+#include "events.h"
 
 static void handle_cooldown(client_t *client, server_t *server, int elapsed)
 {
@@ -79,6 +80,7 @@ static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
             return -1;
         }
         tick_system(server);
+        handle_events(server);
     }
     return 0;
 }
