@@ -31,6 +31,7 @@ typedef struct command_param_s {
 int prepare_command(client_t *client);
 char *process_command(client_t *client, server_t *server);
 void move_client(client_t *client, server_t *server, pos_t new, pos_t size);
+void kill_player(client_t *client, server_t *server);
 
 /*
 ** Moving command

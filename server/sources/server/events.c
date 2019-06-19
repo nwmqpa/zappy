@@ -44,6 +44,7 @@ static int get_packet_size(int id) {
 
 static int send_event(server_t *server, event_t *event)
 {
+    int *gsock = NULL;
     int packet_size = get_packet_size(event->id);
     struct {
         pkt_header_t header;
@@ -58,8 +59,11 @@ static int send_event(server_t *server, event_t *event)
         .payload = event->payload
     };
 
-    return write(*(int *) get_list(server->graphic_clients, 0), &send,
-            packet_size + PKT_HDR_LEN);
+    gsock = get_list(server->graphic_clients, 0);
+    if (gsock)
+        return write(*gsock , &send, packet_size + PKT_HDR_LEN);
+    else
+        return 0;
 }
 
 void handle_events(server_t *server)
