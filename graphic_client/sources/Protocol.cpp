@@ -7,8 +7,6 @@
 
 #include "Protocol.hpp"
 
-
-
 Protocol::Protocol(std::string ip, short int port) noexcept
     : _port(port)
     , _ip(ip)
