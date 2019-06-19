@@ -1,0 +1,5 @@
+
+CC		:=	g++
+LD		:=	g++
+
+all:		$(ROOT)/$(NAME)

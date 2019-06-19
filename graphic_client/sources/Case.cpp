@@ -5,6 +5,7 @@
 ** Graphical Client
 */
 
+#include <iostream>
 #include "Case.hpp"
 
 Tile::Tile(srv_tile_content_t *tileSet, srv_map_size_t *mapData,
@@ -16,8 +17,7 @@ Tile::Tile(srv_tile_content_t *tileSet, srv_map_size_t *mapData,
     scale = 1;
     x = tileSet->x;
     y = tileSet->y;
-
-    IMG = IMG_Load(IMGpath.c_str());
+    IMG = SDL_LoadBMP(IMGpath.c_str());
     if (IMG == NULL)
         printf("Error PathImage");
     posx = IMG->w + scale;
@@ -27,7 +27,6 @@ Tile::Tile(srv_tile_content_t *tileSet, srv_map_size_t *mapData,
         printf("TMP error\n");
     texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888,
             SDL_TEXTUREACCESS_TARGET, IMG->w, IMG->h);
-    /*récupération de données et affichage du background de la case*/
 }
 
 Tile::~Tile()

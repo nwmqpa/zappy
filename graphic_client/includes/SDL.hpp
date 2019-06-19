@@ -12,6 +12,14 @@
 #include <SDL2/SDL_image.h>
 #include "Case.hpp"
 
+#ifdef __SWITCH__
+#   define BASEPATH "romfs:/"
+#else
+#   define BASEPATH "assets/"
+#endif /* __SWITCH__ */
+
+#define REALPATH(path) BASEPATH path
+
 class WindowCreator {
     public:
         WindowCreator(const char *name = "Zappy", int x = 800, int y = 600);
@@ -35,7 +43,9 @@ class WindowCreator {
 
         void destroy();
 
-        SDL_Renderer *getRender() {return renderer;}
+        auto *getRender() {return renderer;}
+        auto *getWindow() {return window;}
+
     private:
         bool heart;
 
