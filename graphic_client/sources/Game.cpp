@@ -40,8 +40,15 @@ static const std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, std::string>> N
 	std::make_tuple(SRV_COMMAND_PARAMETER, std::string("SRV_COMMAND_PARAMETER")),
 };
 
+
+void gotMapSize(GameState &state, WindowCreator &window)
+{
+    srv_map_size_t *packet = (srv_map_size_t *) state.lastData;
+    std::cout << "Map size: (" << packet->x << ", " << packet->y << ")" << std::endl;
+}
+
 static const std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, data_processor_t>> DATA_PROCESSORS = {
-	std::make_tuple(SRV_MAP_SIZE, nullptr),
+	std::make_tuple(SRV_MAP_SIZE, &gotMapSize),
 	std::make_tuple(SRV_TILE_CONTENT, nullptr),
 	std::make_tuple(SRV_TEAMS_NAMES, nullptr),
 	std::make_tuple(SRV_NEW_PLAYER_CONNECT, nullptr),
@@ -68,11 +75,12 @@ static const std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, data_processor_
 	std::make_tuple(SRV_COMMAND_PARAMETER, nullptr),
 };
 
-
 Game::Game(std::string &ip, int port)
  : ip(ip)
  , port(port)
 {
+    memset(&this->state, 0, sizeof(this->state));
+    this->state.isActive = true;
 }
 
 void Game::life(WindowCreator &window)
@@ -80,6 +88,8 @@ void Game::life(WindowCreator &window)
     auto protocol = Protocol(ip, port);
 
     auto dataHandler = DataHandler<GameState>(protocol.getSocket(), [](int sock, GameState &state) {
+        free(state.lastData);
+        memset(&state, 0, sizeof(state.lastData) + sizeof(state.lastHeader));
         pkt_header_t header;
         int ret = read(sock, &header, PKT_HDR_LEN);
         if (ret == -1 && errno == EAGAIN)
@@ -98,17 +108,47 @@ void Game::life(WindowCreator &window)
         return true;
     });
 
-    while (dataHandler.handle(state)) {
-        processData(window);
-        window.getHeart();
+    while (this->state.isActive && dataHandler.handle(state)) {
+        SDL_RenderClear(window.getRender());
+        this->processData(window);
+        this->eventLoop(window);
+        SDL_RenderPresent(window.getRender());
     }
+
+    SDL_DestroyRenderer(window.getRender());
+    SDL_DestroyWindow(window.getWindow());
+    SDL_Quit();
 }
 
 void Game::processData(WindowCreator &window)
 {
-    auto id = (GRAPHIC_PACKETS_FROM_SERVER) state.lastHeader.id;
-    auto processor = getValueForIndex<GRAPHIC_PACKETS_FROM_SERVER, data_processor_t>(id, DATA_PROCESSORS);
+    if (state.lastData != nullptr) {
+        auto id = (GRAPHIC_PACKETS_FROM_SERVER) state.lastHeader.id;
+        auto processor = getValueForIndex<GRAPHIC_PACKETS_FROM_SERVER, data_processor_t>(id, DATA_PROCESSORS);
 
-    if (processor != nullptr)
-        processor(state, window);
+        if (processor != nullptr)
+            processor(state, window);
+    }
+}
+
+void Game::eventLoop(WindowCreator &window)
+{
+    SDL_Event event;
+
+    while (SDL_PollEvent(&event)) {
+        switch (event.type) {
+            case SDL_JOYBUTTONDOWN:
+                if (event.jbutton.which == 0) {
+                    if (event.jbutton.button == 10) {
+                        state.isActive = false;
+                    }
+                }
+                break;
+            case SDL_KEYDOWN:
+                if (event.key.keysym.sym == SDLK_ESCAPE)
+                    state.isActive = false;
+            default:
+                break;
+        }
+    }
 }

@@ -10,4 +10,5 @@
 struct GameState {
     pkt_header_t lastHeader;
     void *lastData;
+    bool isActive;
 };

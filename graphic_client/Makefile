@@ -95,6 +95,8 @@ clean:
 			done
 
 fclean:		clean
+			$(V)rm -rf $(SRC_DIR)/*.d
+			$(V)rm -rf $(SRC_DIR)/*.o
 			$(V)printf "$(WHITE)Cleaning $(GREEN)linked $(WHITE)files$(DEFAULT)\n"
 			$(V)rm -f $(ROOT)/$(BASE_NAME)* $(BUILD_DIR)/$(BASE_NAME)*
 			$(V)rm -f $(ROOT)/test $(BUILD_DIR)/test

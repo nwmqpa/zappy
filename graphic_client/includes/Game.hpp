@@ -20,6 +20,7 @@ class Game {
 
         void life(WindowCreator &);
         void processData(WindowCreator &);
+        void eventLoop(WindowCreator &);
 
     private:
         std::string ip;

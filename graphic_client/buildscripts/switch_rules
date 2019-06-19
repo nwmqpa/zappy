@@ -49,6 +49,6 @@ endif
 
 $(NAME).elf	: $(OFILES)
 
-fclean:
+clean_switch:
 		rm -rf $(SRC_DIR)/*.d
 		rm -rf $(SRC_DIR)/*.o
