@@ -17,14 +17,16 @@ static void add_fd(server_t *server)
 
     event.events = EPOLLIN;
     event.data.fd = server->socket_client;
-    if (epoll_ctl(server->epoll_fd_client, EPOLL_CTL_ADD, server->socket_client, &event)) {
+    if (epoll_ctl(server->epoll_fd_client, EPOLL_CTL_ADD,
+                server->socket_client, &event)) {
         errorl("Failed to add file descriptor to epoll_fd\n");
         close(server->socket_client);
     }
     memset(&event, 0, sizeof(event));
     event.events = EPOLLIN;
     event.data.fd = server->socket_graphic;
-    if (epoll_ctl(server->epoll_fd_graphic, EPOLL_CTL_ADD, server->socket_graphic, &event)) {
+    if (epoll_ctl(server->epoll_fd_graphic, EPOLL_CTL_ADD,
+                server->socket_graphic, &event)) {
         errorl("Failed to add file descriptor to epoll_fd\n");
         close(server->socket_graphic);
     }

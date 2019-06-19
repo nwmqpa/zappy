@@ -9,7 +9,6 @@
 #include "logger.h"
 #include "egg.h"
 
-// TODO: Adding fork.
 char *fork_client(client_t *client, server_t *server)
 {
     team_t *team = get_client_team(client, server);

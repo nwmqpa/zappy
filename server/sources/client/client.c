@@ -51,16 +51,6 @@ void client_delete(client_t *client)
 void print_client(client_t *client)
 {
     char *inv = inventory(client, NULL);
-    const char *direction = NULL;
-
-    if (client->direction == 0)
-        direction = "LEFT";
-    else if (client->direction == 1)
-        direction = "RIGHT";
-    else if (client->direction == 2)
-        direction = "UP";
-    else
-        direction = "DOWN";
 
     printf("Client {\n"
             "   id: %d\n"
@@ -69,11 +59,11 @@ void print_client(client_t *client)
             "   level: %d\n"
             "   cooldown: %f\n"
             "   to_exec: %s\n"
-            "   direction: %s\n"
+            "   direction: %d\n"
             "}\n"
             , client->id, inv, client->position.x,
             client->position.y, client->level, client->cooldown,
-            client->to_exec, direction);
+            client->to_exec, client->direction);
     free(inv);
 }
 

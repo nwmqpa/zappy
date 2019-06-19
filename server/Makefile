@@ -44,6 +44,8 @@ SOURCES		=	main.c \
 				client/eject.c \
 				client/object.c \
 				utils/dispatcher.c \
+				utils/debug.c \
+				utils/logger_func.c \
 				server/graphic_handler.c \
 				server/client_handler.c \
 				server/teams.c \

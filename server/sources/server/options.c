@@ -49,38 +49,35 @@ static int get_names(options_t *options, int argc, char *argv[])
     return 0;
 }
 
-// TODO: Fix coding style.
+static void opt_loop(char opt, options_t *options, int argc, char *argv[])
+{
+    switch (opt) {
+        case 'p':
+            BREAK(options->port = atoi(optarg));
+        case 'x':
+            BREAK(options->width = atoi(optarg));
+        case 'y':
+            BREAK(options->height = atoi(optarg));
+        case 'n':
+            BREAK(get_names(options, argc, argv));
+        case 'c':
+            BREAK(options->client_nb = atoi(optarg));
+        case 'f':
+            BREAK(options->freq = atoi(optarg));
+        default:
+            fprintf(stderr, "%s", USAGE);
+            exit(84);
+    }
+}
+
 options_t *create_opt(int argc, char *argv[])
 {
     int opt = 0;
     options_t *options = calloc(sizeof(options_t), 1);
     if (!options)
         return NULL;
-    while ((opt = getopt(argc, argv, "p:x:y:n:c:f:")) != -1) {
-        switch (opt) {
-            case 'p':
-                options->port = atoi(optarg);
-                break;
-            case 'x':
-                options->width = atoi(optarg);
-                break;
-            case 'y':
-                options->height = atoi(optarg);
-                break;
-            case 'n':
-                get_names(options, argc, argv);
-                break;
-            case 'c':
-                options->client_nb = atoi(optarg);
-                break;
-            case 'f':
-                options->freq = atoi(optarg);
-                break;
-            default:
-                fprintf(stderr, "%s", USAGE);
-                exit(84);
-        }
-    }
+    while ((opt = getopt(argc, argv, "p:x:y:n:c:f:")) != -1)
+        opt_loop(opt, options, argc, argv);
     if (options->freq == 0)
         options->freq = 100;
     return options;
@@ -105,18 +102,4 @@ int check_opt(options_t *options)
         return -1;
     }
     return 0;
-}
-
-void print_opt(options_t *options)
-{
-    printf("Option {\n"
-            "    port: %hd,\n"
-            "    width: %d,\n"
-            "    height: %d,\n"
-            "    name: [", options->port, options->width, options->height);
-    for (int i = 0; options->name[i]; i++)
-        printf("%s%s", options->name[i], options->name[i + 1] ? ", " : "]\n" );
-    printf("    client_nb: %d\n"
-            "    freq: %d\n"
-            "}\n", options->client_nb, options->freq);
 }

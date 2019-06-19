@@ -32,7 +32,7 @@ char *take(client_t *client, server_t *server, const char *object)
 {
     int idx = get_inventory_idx(object);
     tile_t *tile = get_tile_map(server->map, client->position.x,
-           client->position.y);
+            client->position.y);
 
     if (idx == -1) {
         return strdup("ko\n");

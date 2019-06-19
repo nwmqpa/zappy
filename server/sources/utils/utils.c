@@ -9,8 +9,6 @@
 #include "client.h"
 #include "egg.h"
 
-// Put the to_join joinned by join to insert.
-// Insert should be allocated.
 int join_str(char *insert, const char **to_join, char join, size_t size)
 {
     int offset = 0;
