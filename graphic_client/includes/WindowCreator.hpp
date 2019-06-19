@@ -9,8 +9,9 @@
     #define WINDOWCREATOR_HPP_
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include "Case.hpp"
+
+#include "Tile.hpp"
+#include "Exception.hpp"
 
 #ifdef __SWITCH__
 #   define BASEPATH "romfs:/"
@@ -22,8 +23,8 @@
 
 class WindowCreator {
     public:
-        WindowCreator(const char *name = "Zappy", int x = 800, int y = 600);
-        ~WindowCreator();
+        WindowCreator(std::string &name, int x = 800, int y = 600);
+        ~WindowCreator() = default;
 
         bool inits(Uint32 SDL = SDL_INIT_EVERYTHING, Uint32 IMG = IMG_INIT_PNG);
 
@@ -37,20 +38,18 @@ class WindowCreator {
         void addY(int);
         void scale(int);
 
-        void updateTileList(std::vector<Tile *>value) {tileList = value;}
-
         void drawTile();
-
         void destroy();
 
-        auto *getRender() {return renderer;}
-        auto *getWindow() {return window;}
+        auto *getRender() { return renderer; }
+        auto *getWindow() { return window; }
+        bool getHeart() { return heart; }
 
     private:
         bool heart;
 
         std::vector<Tile *>tileList;
-        const char *name;
+        std::string &name;
         SDL_Renderer *renderer;
         SDL_Window *window;
         SDL_Event event;

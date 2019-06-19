@@ -8,28 +8,31 @@
 #ifndef TILE_HPP_
     #define TILE_HPP_
 
+#include "Exception.hpp"
 #include "Animation.hpp"
 #include "SDL2/SDL.h"
-#include "SDL2/SDL_image.h"
 #include "protocols.h"
 #include <vector>
 
 class Tile {
     public:
-        Tile(srv_tile_content_t *, srv_map_size_t *, std::string, SDL_Renderer *);
-        ~Tile();
+        Tile(std::string &, SDL_Renderer *);
+        ~Tile() = default;
 
         void updateTile();
         srv_tile_content_t *getTile() {return tile;}
         void draw(SDL_Renderer *, SDL_Window *);
 
-        void setPosX(int value) {posx = value;}
-        void setPosY(int value) {posy = value;}
-        void setScale(int value) {scale = value;}
-        int getPosX() {return posx;}
-        int getPosY() {return posy;}
-        int getScale() {return scale;}
+        void setTileContent(srv_tile_content_t *);
+        void setMapSize(srv_map_size_t *);
 
+        void setX(int);
+        void setY(int);
+        void setScale(int);
+        int getX() { return x; }
+        int getY() { return y; }
+        int getScale() { return scale; }
+        srv_map_size_t *getMap() { return map; }
 
     private:
         SDL_Surface *IMG;
@@ -41,10 +44,7 @@ class Tile {
         srv_map_size_t *map;
 
         int scale;
-        int posx;
-        int posy;
         int x;
         int y;
 };
-
 #endif
