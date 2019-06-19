@@ -32,6 +32,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+char *get_log(int log_level, const char *color, const char *str);
+
 int get_log_level();
 
 void fatall(const char *str, ...);
