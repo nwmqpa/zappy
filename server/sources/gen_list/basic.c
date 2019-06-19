@@ -7,7 +7,7 @@
 
 #include "generic_list.h"
 
-list_t *create_list()
+list_t *create_list(void)
 {
     list_t *list = malloc(sizeof(list_t));
 

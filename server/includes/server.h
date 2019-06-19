@@ -72,4 +72,9 @@ struct server_part_s {
 
 char *server_status(server_t *server, const char *command);
 
+void get_info_player(void *player, const void *nothing);
+void get_players_status(server_t *server);
+void get_map_status(server_t *server);
+void get_teams_status(server_t *server);
+
 #endif /* SERVER_H_ */

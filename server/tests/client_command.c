@@ -22,7 +22,7 @@ client_t *create_client_add_command(int how_many) {
 
 Test(client_command, pushing_command) {
     client_t *client = create_client_add_command(1);
-    cr_expect(len_command(client) == 1, "Should be 1.");
+    cr_expect(len_list(client->commands) == 1, "Should be 1.");
 
     char *command = get_list(client->commands, 0);
 
@@ -37,7 +37,7 @@ Test(client_command, processing_command) {
     process_command(client, server);
     prepare_command(client);
     process_command(client, server);
-    cr_assert(len_command(client) == 3);
+    cr_assert(len_list(client->commands) == 3);
 }
 
 Test(client_command, too_much_command) {
@@ -45,11 +45,11 @@ Test(client_command, too_much_command) {
     char *command = get_list(client->commands, 0);
     server_t *server = NULL;
 
-    cr_assert(len_command(client) == 10);
+    cr_assert(len_list(client->commands) == 10);
     cr_assert(strcmp(command, "test 9") == 0, "Should be test 9 it's %s\n", command);
     prepare_command(client);
     process_command(client, server);
     command = get_list(client->commands, 0);
-    cr_assert(len_command(client) == 9);
+    cr_assert(len_list(client->commands) == 9);
     cr_assert(strcmp(command, "test 8") == 0, "Should be test 8 it's %s\n", command);
 }
