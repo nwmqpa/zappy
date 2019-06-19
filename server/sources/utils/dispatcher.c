@@ -14,7 +14,7 @@
 static void cleanup_socket(dispatcher_t *this, int socket)
 {
     struct epoll_event event = {0};
-    
+
     event.events = EPOLLIN;
     event.data.fd = socket;
     if (epoll_ctl(this->epoll_fd, EPOLL_CTL_DEL, socket, &event))
@@ -25,7 +25,7 @@ static void cleanup_socket(dispatcher_t *this, int socket)
 static int setup_fd(dispatcher_t *this, int socket, void *data)
 {
     struct epoll_event event = {0};
-    
+
     event.events = EPOLLIN;
     event.data.fd = socket;
     if (socket < 0) {
