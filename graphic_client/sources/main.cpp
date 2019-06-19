@@ -15,13 +15,22 @@ int main(int argc, char *argv[])
 
     protocol.askMapSize();
 
-    auto dataHandler = DataHandler<int>(protocol.getSocket(),
-            [](int &a){ std::cout << "Test: " << a << std::endl; });
+    auto dataHandler = DataHandler<int>(protocol.getSocket(), [](int sock, int &a) {
+        pkt_header_t header;
+        if (read(sock, &header, PKT_HDR_LEN) == 0)
+            return false;
+        std::cout << "Request: " << std::to_string(header.id) << ". [" << a << "]" << std::endl;
+        if (header.id == SRV_MAP_SIZE) {
+            srv_map_size_t mapSize;
+            read(sock, &mapSize, SRV_MAP_SIZE_LEN);
+            std::cout << "x: " << mapSize.x << " y: " << mapSize.y << std::endl;
+        }
+        return true;
+    });
 
-    int test = 12;
-
-    while (true) {
-        dataHandler.handle(test);
+    int test = 0;
+    while (dataHandler.handle(test)) {
+        test++;
     }
 
     srv_tile_content_t tmpTile0;
