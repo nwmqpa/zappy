@@ -20,7 +20,7 @@ map_t *create_map(unsigned int width, unsigned int height)
     new->tiles = calloc(sizeof(tile_t), total);
     new->time_respawn =  TIME_RESPAWN;
     for (unsigned int i = 0; i < total; ++i)
-         set_tile(&new->tiles[i]);
+        set_tile(&new->tiles[i]);
     return new;
 }
 
