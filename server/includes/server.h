@@ -39,6 +39,7 @@ typedef struct server_s {
     int client_per_team;
     map_t *map;
     phr_t reg;
+    list_t *eggs;
 } server_t;
 
 typedef struct time_server_s {

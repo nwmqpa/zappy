@@ -9,13 +9,19 @@
 #include "logger.h"
 #include "generic_list.h"
 #include "client_commands.h"
+#include "egg.h"
 
-int client_cmp(const void *entry, const void *id)
+int handle_egg_client(client_t *client, server_t *server)
 {
-    const client_t *client = entry;
-    int rhs = *((size_t *) id);
+    team_t *team = get_client_team(client, server);
+    int to_insert = 0;
 
-    return client->id == rhs;
+    to_insert = check_for_eggs(team, server);
+    if (to_insert != -1) {
+        team->clients[to_insert] = client->id;
+        return 1;
+    }
+    return 0;
 }
 
 void handle_protocol(client_t *client, server_t *server)
@@ -31,7 +37,7 @@ void handle_protocol(client_t *client, server_t *server)
         dprintf(client->id, "ko\n");
         read(client->id, &team_name, 100);
     }
-    if (free_space > 0) {
+    if (free_space > 0 || handle_egg_client(client, server)) {
         add_player(get_tile_map(server->map, x, y), client->id);
         client->position.x = x;
         client->position.y = y;

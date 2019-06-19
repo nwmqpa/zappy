@@ -8,6 +8,8 @@
 #include "map.h"
 #include "logger.h"
 
+static const unsigned int MAX_RAND_FILL = 3;
+
 map_t *create_map(unsigned int width, unsigned int height)
 {
     map_t *new = malloc(sizeof(map_t));
@@ -16,13 +18,36 @@ map_t *create_map(unsigned int width, unsigned int height)
     new->width = width;
     new->height = height;
     new->tiles = calloc(sizeof(tile_t), total);
+    new->time_respawn =  TIME_RESPAWN;
     for (unsigned int i = 0; i < total; ++i)
          set_tile(&new->tiles[i]);
     return new;
 }
 
+static void randomise_tile(tile_t *tile)
+{
+    tile->inventory.inv.linemate += rand() % MAX_RAND_FILL;
+    tile->inventory.inv.deraumere += rand() % MAX_RAND_FILL;
+    tile->inventory.inv.sibur += rand() % MAX_RAND_FILL;
+    tile->inventory.inv.mendiane += rand() % MAX_RAND_FILL;
+    tile->inventory.inv.phiras += rand() % MAX_RAND_FILL;
+    tile->inventory.inv.thystame += rand() % MAX_RAND_FILL;
+    tile->inventory.inv.food += rand() % MAX_RAND_FILL;
+}
 
-inline tile_t *get_tile_map(map_t *map, int x, int y)
+void respawn_ressources(map_t *map)
+{
+    tile_t *tmp = NULL;
+
+    for (unsigned int x = 0; x < map->width; ++x) {
+        for (unsigned int y = 0; y < map->height; ++y) {
+            tmp = get_tile_map(map, x, y);
+            randomise_tile(tmp);
+        }
+    }
+}
+
+tile_t *get_tile_map(map_t *map, int x, int y)
 {
     if (x < 0)
         x = map->width + x;

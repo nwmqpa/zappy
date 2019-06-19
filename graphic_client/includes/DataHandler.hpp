@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include <sys/epoll.h>
 #include <iostream>
+#include <fcntl.h>
 
 template <typename T>
 class DataHandler {
@@ -19,52 +19,28 @@ public:
     /// DataHandler constructor that need a function
     DataHandler(int sock, handler func) noexcept
         : _sock(sock)
-        , _fd(epoll_create1(0))
         , _handlerFunc(func)
-        , _eventCount(0)
-        , _events{}
     {
-        if (_fd == -1) {
-            std::cerr << "Error cannot create epoll socket." << std::endl;
-            exit(84);
-        }
-        struct epoll_event ev = {};
+        int flags = fcntl(sock, F_GETFL, 0);
 
-        ev.events = EPOLLIN;
-        ev.data.fd = _sock;
-        if (epoll_ctl(_fd, EPOLL_CTL_ADD, _sock, &ev)) {
-            std::cerr << "Error cannot add epoll sock." << std::endl;
-            exit(84);
-        }
+        fcntl(sock, F_SETFL, flags | O_NONBLOCK);
     }
 
-    /// Handler of the data.
-    bool handle(T &data) noexcept {
-        _eventCount = epoll_wait(_fd, _events, 5, 1);
-
-        for (int i = 0; i < _eventCount; ++i) {
-            if (_handlerFunc(_sock, data) == false) {
-                cleanupSocket();
-                return false;
-            }
+    bool handle(T &data) noexcept
+    {
+        if (_handlerFunc(_sock, data) == false) {
+            cleanupSocket();
+            return false;
         }
         return true;
     }
 
 private:
-    void cleanupSocket() noexcept {
-        struct epoll_event event = {};
-
-        event.events = EPOLLIN;
-        event.data.fd = _sock;
-        if (epoll_ctl(_fd, EPOLL_CTL_DEL, _sock, &event))
-            std::cerr << "Connection with the server closed.\n" << std::endl;
+    void cleanupSocket() noexcept
+    {
         close(_sock);
     }
 
     int _sock;
-    int _fd;
     handler _handlerFunc;
-    int _eventCount;
-    struct epoll_event _events[5];
 };

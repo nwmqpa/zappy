@@ -8,18 +8,25 @@
 #include "server.h"
 #include "logger.h"
 #include "client.h"
+#include "egg.h"
 
-void get_info_player(void *player, const void *nothing) {
+
+
+void get_info_player(void *player, const void *nothing)
+{
     client_t *client = player;
 
     print_client(client);
 }
 
-void get_players_status(server_t *server) {
+void get_players_status(server_t *server)
+{
     map(server->clients, get_info_player, NULL);
+    map(server->eggs, get_info_egg, NULL);
 }
 
-void get_map_status(server_t *server) {
+void get_map_status(server_t *server)
+{
     tile_t *tile = NULL;
 
     for (int y = server->height; y >= 0; --y) {
@@ -33,7 +40,8 @@ void get_map_status(server_t *server) {
     putchar('\n');
 }
 
-void get_teams_status(server_t *server) {
+void get_teams_status(server_t *server)
+{
     int nb_client = 0;
     int value_c = 0;
 
@@ -56,7 +64,8 @@ static const struct server_part_s SERVER_PARTS[] = {
     {NULL, NULL}
 };
 
-static debug_func get_func(char *part) {
+static debug_func get_func(char *part)
+{
     for (int i = 0; SERVER_PARTS[i].name; ++i) {
         if (strcmp(part, SERVER_PARTS[i].name) == 0)
             return SERVER_PARTS[i].func;
@@ -64,7 +73,8 @@ static debug_func get_func(char *part) {
     return NULL;
 }
 
-char *server_status(server_t *server, const char *command) {
+char *server_status(server_t *server, const char *command)
+{
     char *part = NULL;
     char *dupped = strdup(command);
     debug_func func;

@@ -25,3 +25,5 @@ server/compile_commands.json
 */documentation
 
 server/.cquery
+
+server/build/*.o.json

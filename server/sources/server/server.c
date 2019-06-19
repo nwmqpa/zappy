@@ -72,6 +72,7 @@ server_t *create_server(options_t *options)
     setup_network(server, options);
     server->clients = create_list();
     server->graphic_clients = create_list();
+    server->eggs = create_list();
     server->width = options->width;
     server->height = options->height;
     server->freq = options->freq;
