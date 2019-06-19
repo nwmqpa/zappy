@@ -28,7 +28,10 @@ V					=	@
 
 all:				$(SERVER) $(AI) $(GRAPHIC_LINUX)
 
-switch:				$(GRAPHIC_SWITCH)
+switch:				clean_switch $(GRAPHIC_SWITCH)
+clean_switch:
+					$(V)rm -f $(GRAPHIC_SWITCH)
+					$(V)rm -f $(GRAPHIC_DIR)/$(GRAPHIC_SWITCH)
 
 $(GRAPHIC_SWITCH):	$(GRAPHIC_DIR)/$(GRAPHIC_SWITCH)
 					$(V)printf "$(WHITE)Copying $(GREEN)$(GRAPHIC_SWITCH) from $(BLUE)$(GRAPHIC_DIR)$(WHITE) folder $(DEFAULT)\n"
