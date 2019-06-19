@@ -56,7 +56,8 @@ SOURCES		=	main.c \
 				protocol/team.c \
 				protocol/map.c \
 				protocol/custom.c \
-				protocol/time.c
+				protocol/time.c \
+				client/egg.c
 
 TEST_SOURCES	=	client_command.c \
 					generic_list.c \

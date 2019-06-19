@@ -11,6 +11,7 @@
 #include "dispatcher.h"
 #include "handlers.h"
 #include "client_commands.h"
+#include "egg.h"
 
 static void handle_cooldown(client_t *client, server_t *server, int elapsed)
 {
@@ -27,7 +28,6 @@ static void handle_cooldown(client_t *client, server_t *server, int elapsed)
     prepare_command(client);
 }
 
-// TODO: Handle client death.
 static void handle_player_tick(void *data, const void *params)
 {
     const time_server_t *parameters = (time_server_t *) params;
@@ -44,6 +44,7 @@ static void handle_player_tick(void *data, const void *params)
     }
     if (client->cooldown <= 0)
         handle_cooldown(client, parameters->server, elapsed_time);
+    map(parameters->server->eggs, eclosion_handler, (void *) parameters);
 }
 
 void tick_system(server_t *server)
@@ -60,6 +61,12 @@ void tick_system(server_t *server)
     name.elapsed *= server->freq;
     clock_gettime(CLOCK_MONOTONIC, &old);
     map(server->clients, handle_player_tick, &name);
+    server->map->time_respawn -= name.elapsed;
+    if (server->map->time_respawn <= 0) {
+        infol("Respwaning ressources.\n");
+        server->map->time_respawn = TIME_RESPAWN;
+        respawn_ressources(server->map);
+    }
 }
 
 static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,

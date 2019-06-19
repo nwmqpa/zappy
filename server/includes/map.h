@@ -10,6 +10,8 @@
 #include "client.h"
 #include "utils.h"
 
+#define TIME_RESPAWN 100
+
 /*
 ** Contain an inventory and player's id of those placed on them.
 **
@@ -32,6 +34,7 @@ typedef struct map_s {
     unsigned int width;
     unsigned int height;
     tile_t *tiles;
+    double time_respawn;
 } map_t;
 
 char *tile_to_string(const tile_t *tile);
@@ -40,3 +43,4 @@ tile_t *get_tile_map(map_t *map, int x, int y);
 int move_client_map(map_t *map, client_t *client);
 char *get_reponse_string(map_t *map);
 tile_t *get_random_tile(map_t *map, unsigned int max_x, unsigned max_y);
+void respawn_ressources(map_t *map);
