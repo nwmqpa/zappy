@@ -23,7 +23,8 @@ COMPILER_COMMAND = compile_commands.json
 
 MODULES		=
 
-SOURCES		=		Case.cpp	\
+SOURCES		=		Exception.cpp	\
+					Tile.cpp	\
 					WindowCreator.cpp	\
 					Protocol.cpp \
 					main.cpp

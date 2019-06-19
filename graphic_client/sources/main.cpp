@@ -1,4 +1,4 @@
-#include "SDL.hpp"
+#include "WindowCreator.hpp"
 #include "protocols.h"
 #include "Protocol.hpp"
 #include "DataHandler.hpp"
@@ -64,16 +64,12 @@ int main(int argc, char *argv[])
         return true;
     });
 
-    int test = 0;
-    while (dataHandler.handle(test)) {
-        test++;
-    }
-
-    WindowCreator tmp("Test", 800, 600);
+    std::string title = "Zappy";
+    WindowCreator tmp(title, 800, 600);
 
     auto rock_surface = SDL_LoadBMP(REALPATH("rock.bmp"));
     auto rock_texture = SDL_CreateTextureFromSurface(tmp.getRender(), rock_surface);
-    
+
     SDL_Rect rect;
     rect.h = 200;
     rect.w = 200;
