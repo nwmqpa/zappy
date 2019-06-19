@@ -6,6 +6,12 @@ zappy_graphic_linux
 *.a
 *.so
 *.pyc
+*.d
+*.lst
+*.map
+*.elf
+*.nro
+*.nacp
 __pycache__
 .vscode/*
 */.vscode
