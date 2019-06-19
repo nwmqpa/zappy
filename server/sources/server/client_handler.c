@@ -66,19 +66,15 @@ int on_delete_client(int socket, void *data)
 {
     server_t *server = (server_t *) data;
     client_t *client = NULL;
-    team_t *team = NULL;
 
     debugl("Client delete handler.\n");
-    client = pop_cmp_list( server->clients, client_cmp, (void *) &socket);
+    client = get_cmp_list( server->clients, client_cmp, (void *) &socket);
     if (!client) {
         errorl("Client %d not found.\n", socket);
         return 84;
     }
     infol("Deleting client %d.\n", client->id);
-    team = get_client_team(client, server);
-    remove_client_from_team(team, client, server);
-    client_delete(client);
-    event_player_death(client, server);
+    kill_player(client, server);
     return 0;
 }
 
