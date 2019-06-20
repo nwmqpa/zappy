@@ -6,6 +6,12 @@ zappy_graphic_linux
 *.a
 *.so
 *.pyc
+*.d
+*.lst
+*.map
+*.elf
+*.nro
+*.nacp
 __pycache__
 .vscode/*
 */.vscode
@@ -20,4 +26,6 @@ server/compile_commands.json
 
 server/.cquery
 
-server/build/*.o.json
+server/build/
+
+graphic_client/compile_commands.json

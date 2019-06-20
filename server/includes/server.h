@@ -40,6 +40,7 @@ typedef struct server_s {
     map_t *map;
     phr_t reg;
     list_t *eggs;
+    list_t *events;
 } server_t;
 
 typedef struct time_server_s {
@@ -54,10 +55,10 @@ server_t *create_server(options_t *options);
 int create_client_listener(options_t *options);
 int create_graphic_listener(options_t *options);
 
-team_t *get_client_team(client_t *client, server_t *server);
+team_t *get_ia_team(ia_t *client, server_t *server);
 
-int add_client_to_team(server_t *server, client_t *client, const char *team);
-void remove_client_from_team(team_t *team, client_t *client, server_t *server);
+int add_ia_to_team(server_t *server, ia_t *client, const char *team);
+void remove_client_from_team(team_t *team, ia_t *client, server_t *server);
 
 void print_server(server_t *server);
 

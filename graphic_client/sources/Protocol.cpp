@@ -7,20 +7,6 @@
 
 #include "Protocol.hpp"
 
-void Protocol::setupSocket() {
-    int ret = 0;
-    struct sockaddr_in data = {0};
-
-    data.sin_family = AF_INET;
-    data.sin_port = htons(_port);
-    data.sin_addr.s_addr = inet_addr(_ip.c_str());
-    ret = connect(_sock, (struct sockaddr *) &data, sizeof(struct sockaddr));
-    if (ret == -1) {
-        std::cerr << "Error cannot connect socket." << std::endl;
-        exit(84);
-    }
-}
-
 Protocol::Protocol(std::string ip, short int port) noexcept
     : _port(port)
     , _ip(ip)
@@ -33,7 +19,25 @@ Protocol::Protocol(std::string ip, short int port) noexcept
     }
     struct hostent *host = gethostbyname(ip.c_str());
     _ip = std::string(inet_ntoa(*(struct in_addr *)(host->h_addr_list[0])));
-    this->setupSocket();
+}
+
+int Protocol::getSocket() const noexcept {
+    return _sock;
+}
+
+int Protocol::setupSocket() {
+    int ret = 0;
+    struct sockaddr_in data = {};
+
+    data.sin_family = AF_INET;
+    data.sin_port = htons(_port);
+    data.sin_addr.s_addr = inet_addr(_ip.c_str());
+    ret = connect(_sock, (struct sockaddr *) &data, sizeof(struct sockaddr));
+    if (ret == -1) {
+        std::cerr << "Error cannot connect socket." << std::endl;
+        return (-1);
+    }
+    return (0);
 }
 
 bool Protocol::askMapSize() const noexcept {

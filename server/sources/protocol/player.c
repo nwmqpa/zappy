@@ -12,7 +12,7 @@
 static void fill_payload(clt_player_pos_t *id, srv_player_pos_t *payload,
         server_t *server)
 {
-    client_t *client = get_cmp_list(server->clients, client_cmp,
+    ia_t *client = get_cmp_list(server->clients, client_cmp,
             (void *) &id->player_num);
 
     payload->x = client->position.x;
@@ -47,7 +47,7 @@ int player_pos(const void *data)
 
 int player_level(const void *data)
 {
-    client_t *client = NULL;
+    ia_t *client = NULL;
     clt_player_level_t payload;
     const struct {
         int sock;

@@ -7,13 +7,15 @@
 
 #include "logger.h"
 #include "client_commands.h"
+#include "events.h"
 
-void move_client(client_t *client, server_t *server, pos_t new, pos_t size)
+void move_client(ia_t *client, server_t *server, pos_t new, pos_t size)
 {
     tile_t *new_tile = NULL;
     tile_t *old_tile = get_tile_map(server->map, client->position.x,
             client->position.y);
 
+    event_player_pos(client, server);
     remove_player(old_tile, client->id);
     client->position.x += new.x;
     client->position.y += new.y;
@@ -28,9 +30,9 @@ void move_client(client_t *client, server_t *server, pos_t new, pos_t size)
     add_player(new_tile, client->id);
 }
 
-client_t *client_create(int id)
+ia_t *client_create(int id)
 {
-    client_t *new = calloc(sizeof(client_t), 1);
+    ia_t *new = calloc(sizeof(ia_t), 1);
 
     new->commands = create_list();
     new->id = id;
@@ -41,14 +43,14 @@ client_t *client_create(int id)
     return new;
 }
 
-void client_delete(client_t *client)
+void client_delete(ia_t *client)
 {
     free(client->to_exec);
     empty_list(client->commands, free);
     dprintf(client->id, "dead\n");
 }
 
-void print_client(client_t *client)
+void print_client(ia_t *client)
 {
     char *inv = inventory(client, NULL);
 
@@ -69,5 +71,5 @@ void print_client(client_t *client)
 
 void print_client_list(const void *data)
 {
-    print_client((client_t *) data);
+    print_client((ia_t *) data);
 }

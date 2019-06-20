@@ -17,8 +17,8 @@ static void send_text(void *ptr, const void *data)
 {
     const server_t *server = (server_t *) data;
     const char *text = (char *) (data + sizeof(void *));
-    const client_t *sender = (client_t *) (data + (sizeof(void *) * 2));
-    client_t *client = (client_t *) ptr;
+    const ia_t *sender = (ia_t *) (data + (sizeof(void *) * 2));
+    ia_t *client = (ia_t *) ptr;
     int tile = 0;
 
     if (client->position.x == sender->position.x &&
@@ -32,7 +32,7 @@ static void send_text(void *ptr, const void *data)
 static void send_to_clients(server_t *server, const char *text, size_t local_id)
 {
     const void *data[3] = {0};
-    client_t *client = get_cmp_list(server->clients, client_cmp, &local_id);
+    ia_t *client = get_cmp_list(server->clients, client_cmp, &local_id);
 
     data[0] = server;
     data[1] = text;
@@ -40,7 +40,7 @@ static void send_to_clients(server_t *server, const char *text, size_t local_id)
     map(server->clients, send_text, data);
 }
 
-char *broadcast(client_t *client, server_t *server, const char *text)
+char *broadcast(ia_t *client, server_t *server, const char *text)
 {
     send_to_clients(server, text, client->id);
     return strdup("ok");

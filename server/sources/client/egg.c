@@ -22,7 +22,7 @@ int check_for_eggs(team_t *team, server_t *server)
     egg_t *egg = get_cmp_list(server->eggs, is_eclosable, NULL);
 
     if (egg == NULL) {
-        debugl("No egg able to eclose.");
+        infol("No egg able to eclose.\n");
         return -1;
     }
     for (int i = 0; team->clients[i]; ++i) {
@@ -30,7 +30,7 @@ int check_for_eggs(team_t *team, server_t *server)
             return i;
         }
     }
-    debugl("No slot available on team to connect.");
+    infol("No slot available on team %s to connect.\n", team->name);
     return -1;
 }
 
@@ -58,13 +58,13 @@ egg_t *egg_create(int x, int y)
     return new;
 }
 
-client_t *egg_eclose(egg_t *egg, int fd)
+ia_t *egg_eclose(egg_t *egg, int fd)
 {
     if (egg->can_eclose != 1) {
         errorl("Cannot eclose right now");
         return NULL;
     }
-    client_t *new = client_create(fd);
+    ia_t *new = client_create(fd);
     new->position.x = egg->position.x;
     new->position.y = egg->position.y;
     return new;

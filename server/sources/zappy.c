@@ -12,8 +12,9 @@
 #include "handlers.h"
 #include "client_commands.h"
 #include "egg.h"
+#include "events.h"
 
-static void handle_cooldown(client_t *client, server_t *server, int elapsed)
+static void handle_cooldown(ia_t *client, server_t *server, int elapsed)
 {
     char *to_send = NULL;
 
@@ -31,13 +32,13 @@ static void handle_cooldown(client_t *client, server_t *server, int elapsed)
 static void handle_player_tick(void *data, const void *params)
 {
     const time_server_t *parameters = (time_server_t *) params;
-    client_t *client = data;
+    ia_t *client = data;
     double elapsed_time = parameters->elapsed;
 
     client->cooldown -= elapsed_time;
     client->need_to_eat -= elapsed_time;
     if (client->need_to_eat <= 0 && client->inventory.inv.food == 0) {
-        client_delete(client);
+        kill_player(client, parameters->server);
     } else if (client->need_to_eat <= 0) {
         client->inventory.inv.food -= 1;
         client->need_to_eat = 126;
@@ -79,6 +80,7 @@ static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
             return -1;
         }
         tick_system(server);
+        handle_events(server);
     }
     return 0;
 }

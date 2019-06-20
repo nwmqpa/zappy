@@ -51,6 +51,7 @@ static void setup_teams(server_t *server, options_t *options)
 static void setup_network(server_t *server, options_t *options)
 {
     debugl("Setup of network.\n");
+    server->events = create_list();
     server->socket_client = create_client_listener(options);
     server->socket_graphic = create_graphic_listener(options);
     server->epoll_fd_client = epoll_create1(0);

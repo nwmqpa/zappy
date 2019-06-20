@@ -85,7 +85,7 @@ static char *get_vision_content(server_t *server, unsigned int level,
     return buffer;
 }
 
-char *look(client_t *client, server_t *server)
+char *look(ia_t *client, server_t *server)
 {
     return get_vision_content(server, client->level, client->direction,
             client->position);
