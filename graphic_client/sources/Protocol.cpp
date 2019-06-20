@@ -19,14 +19,13 @@ Protocol::Protocol(std::string ip, short int port) noexcept
     }
     struct hostent *host = gethostbyname(ip.c_str());
     _ip = std::string(inet_ntoa(*(struct in_addr *)(host->h_addr_list[0])));
-    this->setupSocket();
 }
 
 int Protocol::getSocket() const noexcept {
     return _sock;
 }
 
-void Protocol::setupSocket() {
+int Protocol::setupSocket() {
     int ret = 0;
     struct sockaddr_in data = {};
 
@@ -36,8 +35,9 @@ void Protocol::setupSocket() {
     ret = connect(_sock, (struct sockaddr *) &data, sizeof(struct sockaddr));
     if (ret == -1) {
         std::cerr << "Error cannot connect socket." << std::endl;
-        exit(84);
+        return (-1);
     }
+    return (0);
 }
 
 bool Protocol::askMapSize() const noexcept {

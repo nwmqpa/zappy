@@ -12,11 +12,19 @@
 #include "egg.h"
 #include "events.h"
 
-int handle_egg_client(client_t *client, server_t *server)
+int handle_egg_client(client_t *client, server_t *server, const char *team_name)
 {
-    team_t *team = get_client_team(client, server);
+    team_t *team = NULL;
     int to_insert = 0;
 
+    for (int i = 0; server->teams[i]; i++) {
+        if (strcmp(server->teams[i]->name, team_name) == 0) {
+            team = server->teams[i];
+            break;
+        }
+    }
+    if (team == NULL)
+        return 0;
     to_insert = check_for_eggs(team, server);
     if (to_insert != -1) {
         team->clients[to_insert] = client->id;
@@ -26,28 +34,29 @@ int handle_egg_client(client_t *client, server_t *server)
     return 0;
 }
 
-void handle_protocol(client_t *client, server_t *server)
+void handle_protocol(client_t *client, server_t *srv)
 {
     char team_name[100] = {0};
-    int free_space = -1;
-    unsigned int x = rand() % (server->width - 1);
-    unsigned int y = rand() % (server->height - 1);
+    int slots = -1;
+    pos_t pos = { rand() % (srv->width - 1), rand() % (srv->height - 1) };
 
     dprintf(client->id, "WELCOME\n");
     read(client->id, &team_name, 100);
-    while ((free_space = add_client_to_team(server, client, team_name)) == -1) {
+    while ((slots = add_client_to_team(srv, client, team_name)) == -1) {
         dprintf(client->id, "ko\n");
         read(client->id, &team_name, 100);
     }
-    if (free_space > 0)
-        event_new_player(client, server);
-    if (free_space > 0 || handle_egg_client(client, server)) {
-        add_player(get_tile_map(server->map, x, y), client->id);
-        client->position.x = x;
-        client->position.y = y;
+    if (slots > 0)
+        event_new_player(client, srv);
+    if (slots > 0 || (slots = handle_egg_client(client, srv, team_name))) {
+        add_player(get_tile_map(srv->map, pos.x, pos.y), client->id);
+        client->position = pos;
     }
-    dprintf(client->id, "%d\n%d %d\n", free_space - 1, server->width,
-            server->height);
+    if (slots == 0) {
+        dprintf(client->id, "ko\n");
+        close(client->id);
+    } else
+        dprintf(client->id, "%d\n%d %d\n", slots - 1, srv->width, srv->height);
 }
 
 int on_connect_client(int socket, void *data)

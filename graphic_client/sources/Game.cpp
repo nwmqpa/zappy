@@ -108,6 +108,12 @@ Game::Game(std::string &ip, int port)
 void Game::life(WindowCreator &window)
 {
     auto protocol = Protocol(ip, port);
+
+    if (protocol.setupSocket() == -1) {
+        close(protocol.getSocket());
+        return;
+    }
+
     auto dataHandler = DataHandler<GameState>(protocol.getSocket(), [](int sock, GameState &state) {
         free(state.lastData);
         memset(&state, 0, sizeof(state.lastData) + sizeof(state.lastHeader));
