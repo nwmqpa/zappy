@@ -45,8 +45,8 @@ void gotMapSize(GameState &state, WindowCreator &window)
 {
     if (window.getTileList().empty()) {
         srv_map_size_t *packet = (srv_map_size_t *) state.lastData;
-        //std::cout << "Map size: (" << packet->x << ", "
-        //    << packet->y << ")" << std::endl;
+        std::cout << "Map size: (" << packet->x << ", "
+            << packet->y << ")" << std::endl;
         window.setTileList(packet);
     }
 }

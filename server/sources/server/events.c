@@ -30,7 +30,11 @@ static const struct {
 
 int add_event(server_t *server, int id, void *payload)
 {
-    insert_head_list(server->events, payload);
+    event_t *event = malloc(sizeof(event_t));
+
+    event->id = id;
+    event->payload = payload;
+    insert_head_list(server->events, event);
     return 0;
 }
 
@@ -48,7 +52,7 @@ static int send_event(server_t *server, event_t *event)
     int packet_size = get_packet_size(event->id);
     struct {
         pkt_header_t header;
-        void *payload;
+        char payload[1024];
     } send = {
         {
             .id = event->id,
@@ -56,9 +60,11 @@ static int send_event(server_t *server, event_t *event)
             .subid = 0,
             .size = packet_size
         },
-        .payload = event->payload
+        { 0 }
     };
 
+    debugl("Sending %d with size %d.\n", send.header.id, packet_size);
+    memcpy(send.payload, event->payload, packet_size);
     gsock = get_list(server->graphic_clients, 0);
     if (gsock)
         return write(*gsock , &send, packet_size + PKT_HDR_LEN);

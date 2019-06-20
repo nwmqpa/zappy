@@ -48,7 +48,3 @@ $(NAME).nro	:	$(NAME).elf
 endif
 
 $(NAME).elf	: $(OFILES)
-
-clean_switch:
-		rm -rf $(SRC_DIR)/*.d
-		rm -rf $(SRC_DIR)/*.o

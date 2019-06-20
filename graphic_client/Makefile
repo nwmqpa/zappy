@@ -28,7 +28,8 @@ SOURCES		=		Exception.cpp	\
 					WindowCreator.cpp	\
 					Protocol.cpp \
 					main.cpp	\
-					Game.cpp
+					Game.cpp \
+					InputHandler.cpp
 
 TEST_SOURCES	=	dummy.c
 
