@@ -9,7 +9,7 @@
 #include "protocols.h"
 #include "events.h"
 
-void event_incantation(client_t *client, server_t *server, int *players, int nb)
+void event_incantation(ia_t *client, server_t *server, int *players, int nb)
 {
     srv_start_incantation_t *pld = malloc(sizeof(srv_start_incantation_t));
 
