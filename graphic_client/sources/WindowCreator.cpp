@@ -47,33 +47,6 @@ bool WindowCreator::inits(Uint32 sdl, Uint32 img)
     }
     return true;
 }
-
-void WindowCreator::setTileList(srv_map_size_t *size)
-{
-    std::string path = "back.bmp";
-
-    mapSize = size;
-    for (unsigned int i = 0; i < (size->x * size->y); i += 1) {
-        tileList.push_back(new Tile(path, renderer));
-        tileList[i]->setMapSize(size);
-    }
-}
-
-void WindowCreator::setTileInfo(srv_tile_content_t *info)
-{
-    std::vector<Tile *>::iterator it = tileList.begin();
-
-    if (!tileList.empty()) {
-        for (; it != tileList.end(); it++) {
-            if ((*it)->getMap() != NULL) {
-                if (info != (*it)->getTileInfo() && (*it)->getPosX() == info->x
-                        && (*it)->getPosY() == info->y)
-                    (*it)->setTileContent(info);
-            }
-        }
-    }
-}
-
 /*void WindowCreator::client_event()
 {
     while (SDL_PollEvent(&event) != 0) {
@@ -117,7 +90,7 @@ void WindowCreator::scale(int value)
     }
 }
 */
-void WindowCreator::addY(int value)
+void WindowCreator::addY(int value, std::vector<Tile *> tileList)
 {
     int old;
 
@@ -128,7 +101,7 @@ void WindowCreator::addY(int value)
     }
 }
 
-void WindowCreator::addX(int value)
+void WindowCreator::addX(int value, std::vector<Tile *> tileList)
 {
     int old = 0;
 
@@ -138,31 +111,45 @@ void WindowCreator::addX(int value)
         tileList[i]->setX(old += value);
     }
 }
-/*
-void WindowCreator::drawTile()
-{
-    for (unsigned int i = 0; i < tileList.size(); i++)
-        tileList[i]->draw(renderer, window);
-}
 
-void WindowCreator::display()
+void WindowCreator::drawTile(std::vector<Tile *> tileList, srv_map_size_t *mapSize)
 {
-    SDL_RenderClear(renderer);
-    update();
-    SDL_RenderPresent(renderer);
-}
+    int w, h;
+    SDL_Rect pos;
+    std::vector<Tile *>::iterator it = tileList.begin();
 
-void WindowCreator::addAllTile(srv_map_size_t newMap)
-{
-    for (int i = 0; i < (newMap.x * newMap.y); i++) {
-        tileList.push_back(new Tile(REALPATH("back.bmp"), renderer));
-        tileList[i].setMapSize(*newMap);
+    SDL_GetWindowSize(window, &w, &h);
+    if (mapSize == NULL)
+        throw GraphicalException("Map error", "srv_map_size");
+    for (; it != tileList.end(); it++) {
+        if ((*it)->getTileInfo() == NULL)
+            throw GraphicalException("Tile error", "srv_tile_content");
+        pos.x = (w / 2 - ((mapSize->x) / 2) + x) +
+            ((*it)->getTileInfo()->x - (*it)->getTileInfo()->y) *
+            ((*it)->getSurface()->w / 2);
+        pos.y = (h / 2 - ((mapSize->y) / 2) + y) +
+            ((*it)->getTileInfo()->x + (*it)->getTileInfo()->y) *
+            ((*it)->getSurface()->h / 2);
+        pos.w = (*it)->getSurface()->w;
+        pos.h = (*it)->getSurface()->h;
+        if (SDL_RenderCopy(renderer, (*it)->getTmp(), NULL, &pos) < 0)
+            throw GraphicalException("Render copy error", "SDL_RenderCopy");
     }
 }
 
-void WindowCreator::destroy()
+void WindowCreator::clearScreen()
 {
+    SDL_RenderClear(renderer);
+}
+
+void WindowCreator::PresentScreen()
+{
+    SDL_RenderPresent(renderer);
+}
+
+void WindowCreator::destroyer()
+{
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    IMG_Quit();
     SDL_Quit();
-}*/
+}
