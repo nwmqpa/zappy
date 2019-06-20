@@ -8,12 +8,13 @@
 #include "events.h"
 #include "logger.h"
 
-static const int NB_PACKET = 13;
+static const int NB_PACKET = 14;
 
 static const struct {
     int id;
     int size;
 } ID_SIZE[] = {
+    {SRV_PLAYER_POSITION, SRV_PLAYER_POS_LEN},
     {SRV_NEW_PLAYER_CONNECT, SRV_NEW_PLAYER_CONNECT_LEN},
     {SRV_EXPULSION, SRV_PLAYER_EXPULSION_LEN},
     {SRV_BROADCAST, SRV_BROADCAST_MSG_LEN},

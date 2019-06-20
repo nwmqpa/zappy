@@ -62,3 +62,15 @@ void event_end_game(const char *winning_team, server_t *server)
     add_event(server, SRV_END_GAME, pld);
     debugl("Adding SRV_END_GAME to event queue.\n");
 }
+
+void event_player_pos(client_t *client, server_t *server)
+{
+    srv_player_pos_t *pld = malloc(sizeof(srv_player_pos_t));
+
+    pld->orientation = client->direction;
+    pld->player_num = client->id;
+    pld->x = client->position.x;
+    pld->y = client->position.y;
+    add_event(server, SRV_PLAYER_POSITION, pld);
+    debugl("Adding SRV_END_GAME to event queue.\n");
+}
