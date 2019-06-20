@@ -25,3 +25,6 @@ void event_new_player(client_t *client, server_t *server);
 void event_player_death(client_t *client, server_t *server);
 void event_player_connected_egg(client_t *client, server_t *server);
 void event_end_game(const char *winning_team, server_t *server);
+void event_player_pos(client_t *client, server_t *server);
+void event_incantation(client_t *client, server_t *server, int *players,
+        int nb);
