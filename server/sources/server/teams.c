@@ -47,7 +47,7 @@ void remove_client_from_team(team_t *team, client_t *client, server_t *server)
 {
     for (int i = 0; server->client_per_team; ++i) {
         if (client->id == team->clients[i]) {
-            team->clients[i] = 0;
+            team->clients[i] = -1;
             return;
         }
     }

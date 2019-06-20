@@ -38,7 +38,7 @@ static void handle_player_tick(void *data, const void *params)
     client->cooldown -= elapsed_time;
     client->need_to_eat -= elapsed_time;
     if (client->need_to_eat <= 0 && client->inventory.inv.food == 0) {
-        client_delete(client);
+        kill_player(client, parameters->server);
     } else if (client->need_to_eat <= 0) {
         client->inventory.inv.food -= 1;
         client->need_to_eat = 126;

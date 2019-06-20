@@ -27,7 +27,8 @@ SOURCES		=		Exception.cpp	\
 					Tile.cpp	\
 					WindowCreator.cpp	\
 					Protocol.cpp \
-					main.cpp
+					main.cpp	\
+					Game.cpp
 
 TEST_SOURCES	=	dummy.c
 
@@ -43,7 +44,7 @@ PATSUBST_MODULS =	$(patsubst  $(SRC_DIR)/%, $(BUILD_DIR)/lib%.a, $(PREFIXED_MODU
 LINK_MODULES	=	$(addprefix -l, $(MODULES))
 
 
-WARNINGS	=	-Wall -Wextra
+WARNINGS	=	-Wall -Wextra -g
 CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) `sdl2-config --cflags` -fdiagnostics-color=always -D _GNU_SOURCE
 CXXFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) `sdl2-config --cflags` -fdiagnostics-color=always -D _GNU_SOURCE
 LDFLAGS		=	-L $(BUILD_DIR) $(LINK_MODULES) `sdl2-config --libs` -lSDL2_image
@@ -94,6 +95,8 @@ clean:
 			done
 
 fclean:		clean
+			$(V)rm -rf $(SRC_DIR)/*.d
+			$(V)rm -rf $(SRC_DIR)/*.o
 			$(V)printf "$(WHITE)Cleaning $(GREEN)linked $(WHITE)files$(DEFAULT)\n"
 			$(V)rm -f $(ROOT)/$(BASE_NAME)* $(BUILD_DIR)/$(BASE_NAME)*
 			$(V)rm -f $(ROOT)/test $(BUILD_DIR)/test

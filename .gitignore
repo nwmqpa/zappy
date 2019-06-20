@@ -26,6 +26,6 @@ server/compile_commands.json
 
 server/.cquery
 
-server/build/*.o.json
+server/build/
 
 graphic_client/compile_commands.json
