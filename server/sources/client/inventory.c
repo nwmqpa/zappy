@@ -7,7 +7,7 @@
 
 #include "client_commands.h"
 
-char *inventory(client_t *client, server_t *server)
+char *inventory(ia_t *client, server_t *server)
 {
     char *inv = NULL;
 

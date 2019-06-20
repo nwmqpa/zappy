@@ -10,7 +10,7 @@
 
 void get_info_player(void *player, const void *nothing)
 {
-    client_t *client = player;
+    ia_t *client = player;
 
     print_client(client);
 }
