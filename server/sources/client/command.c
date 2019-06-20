@@ -77,13 +77,14 @@ double get_cooldown(const char *cmd)
     return -1;
 }
 
-int prepare_command(ia_t *client)
+int prepare_command(ia_t *client, server_t *server)
 {
     if (is_empty_list(client->commands))
         return -1;
     client->to_exec = pop_list(client->commands, 0);
     debugl("Preparing command %s.\n", client->to_exec);
-    client->cooldown = get_cooldown(client->to_exec);
+    if (prepare_special_command(client, server) == 0)
+        client->cooldown = get_cooldown(client->to_exec);
     if (client->cooldown == -1) {
         errorl("Cannot find cooldown of %s.\n", client->to_exec);
         return -1;
