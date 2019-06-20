@@ -26,16 +26,11 @@ Tile::Tile(std::string &IMGpath, SDL_Renderer *render)
         throw GraphicalException("Texture creation error", "SDL_CreateTexture");
 }
 
-void Tile::setMapSize(srv_map_size_t *mapSize)
-{
-    map = mapSize;
-}
-
 void Tile::setTileContent(srv_tile_content_t *newtile)
 {
     tile = newtile;
 }
-
+/*
 void Tile::draw(SDL_Renderer *render, SDL_Window *window)
 {
     int w, h;
@@ -56,7 +51,7 @@ void Tile::draw(SDL_Renderer *render, SDL_Window *window)
     if (SDL_RenderCopy(render, tmp, NULL, &pos) < 0)
         throw GraphicalException("Render copy error", "SDL_RenderCopy");
 }
-
+*/
 void Tile::setX(int newX)
 {
     x = newX;

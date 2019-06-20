@@ -45,7 +45,7 @@ void get_info_egg(void *data, const void *nothing)
 
 int client_cmp(const void *entry, const void *id)
 {
-    const client_t *client = entry;
+    const ia_t *client = entry;
     int rhs = *((size_t *) id);
 
     return client->id == rhs;

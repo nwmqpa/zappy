@@ -58,13 +58,13 @@ egg_t *egg_create(int x, int y)
     return new;
 }
 
-client_t *egg_eclose(egg_t *egg, int fd)
+ia_t *egg_eclose(egg_t *egg, int fd)
 {
     if (egg->can_eclose != 1) {
         errorl("Cannot eclose right now");
         return NULL;
     }
-    client_t *new = client_create(fd);
+    ia_t *new = client_create(fd);
     new->position.x = egg->position.x;
     new->position.y = egg->position.y;
     return new;

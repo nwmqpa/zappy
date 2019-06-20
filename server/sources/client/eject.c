@@ -8,7 +8,7 @@
 #include "client_commands.h"
 #include "logger.h"
 
-static void eject_client(client_t *client, map_t *map, pos_t pos)
+static void eject_client(ia_t *client, map_t *map, pos_t pos)
 {
     switch (client->direction) {
     case LEFT:
@@ -31,12 +31,12 @@ static void eject_client(client_t *client, map_t *map, pos_t pos)
             client->id);
 }
 
-char *eject(client_t *client, server_t *server)
+char *eject(ia_t *client, server_t *server)
 {
     tile_t *tile = get_tile_map(server->map, client->position.x,
             client->position.y);
     int client_id;
-    client_t *client_ptr = NULL;
+    ia_t *client_ptr = NULL;
     unsigned int nb_player = tile->nb_player;
 
     for (unsigned int i = 0; i < nb_player; i++) {

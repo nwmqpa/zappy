@@ -20,10 +20,10 @@ void handle_events(server_t *server);
 
 // Functions
 
-void event_egg_layed(client_t *client, server_t *server);
-void event_new_player(client_t *client, server_t *server);
-void event_player_death(client_t *client, server_t *server);
-void event_player_connected_egg(client_t *client, server_t *server);
+void event_egg_layed(ia_t *client, server_t *server);
+void event_new_player(ia_t *client, server_t *server);
+void event_player_death(ia_t *client, server_t *server);
+void event_player_connected_egg(ia_t *client, server_t *server);
 void event_end_game(const char *winning_team, server_t *server);
 void event_player_pos(client_t *client, server_t *server);
 void event_incantation(client_t *client, server_t *server, int *players,

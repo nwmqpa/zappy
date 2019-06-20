@@ -22,7 +22,7 @@ server_t *setup_server(int x, int y)
 
 Test(commands, look_level3_with_only_food) {
     server_t *server = setup_server(4, 4);
-    client_t *client = client_create(3);
+    ia_t *client = client_create(3);
 
     for (int y = 0; y < 4; ++y) {
         for (int x = 0; x < 4; ++x) {
@@ -44,7 +44,7 @@ Test(commands, look_level3_with_only_food) {
 
 Test(commands, look_level2_with_some_things) {
     server_t *server = setup_server(4, 4);
-    client_t *client = client_create(3);
+    ia_t *client = client_create(3);
 
     for (int y = 0; y < 4; ++y) {
         for (int x = 0; x < 4; ++x) {
@@ -62,7 +62,7 @@ Test(commands, look_level2_with_some_things) {
 
 Test(commands, look_level2_direction) {
     server_t *server = setup_server(4, 4);
-    client_t *client = client_create(3);
+    ia_t *client = client_create(3);
 
     for (int y = 0; y < 4; ++y) {
         for (int x = 0; x < 4; ++x) {
@@ -86,19 +86,19 @@ Test(commands, look_level2_direction) {
 Test(commands, eject_basic) {
     server_t *server = setup_server(10, 10);
 
-    client_t *client0 = client_create(3);
+    ia_t *client0 = client_create(3);
     client0->direction = DOWN;
     client0->position = (pos_t){1, 1};
 
-    client_t *client1 = client_create(4);
+    ia_t *client1 = client_create(4);
     client1->position = (pos_t){1, 1};
     client1->direction = RIGHT;
 
-    client_t *client2 = client_create(5);
+    ia_t *client2 = client_create(5);
     client2->position = (pos_t){1, 1};
     client2->direction = UP;
 
-    client_t *client3 = client_create(6);
+    ia_t *client3 = client_create(6);
     client3->position = (pos_t){1, 1};
     client3->direction = LEFT;
 

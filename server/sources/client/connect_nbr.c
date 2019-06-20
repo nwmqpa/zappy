@@ -18,11 +18,11 @@ static int count_unused_slots(team_t *team, int nb_client)
     return nbr;
 }
 
-char *connect_nbr(client_t *client, server_t *server)
+char *connect_nbr(ia_t *client, server_t *server)
 {
     debugl("Connect nbr command.\n");
     char *ret = NULL;
-    team_t *player_team = get_client_team(client, server);
+    team_t *player_team = get_ia_team(client, server);
 
     asprintf(&ret, "%d",
             count_unused_slots(player_team, server->client_per_team));

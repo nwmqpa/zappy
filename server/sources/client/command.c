@@ -28,7 +28,7 @@ static const command_param_t COMMANDS_PARAM[] = {
     {NULL, NULL, 0, 0}
 };
 
-int add_command(client_t *client, char *command)
+int add_command(ia_t *client, char *command)
 {
     size_t len = len_list(client->commands);
 
@@ -43,7 +43,7 @@ int add_command(client_t *client, char *command)
     }
 }
 
-static char *iter_command(client_t *client, server_t *server,
+static char *iter_command(ia_t *client, server_t *server,
         const char *command)
 {
     for (int i = 0; COMMANDS_PARAM[i].name; ++i) {
@@ -77,7 +77,7 @@ double get_cooldown(const char *cmd)
     return -1;
 }
 
-int prepare_command(client_t *client)
+int prepare_command(ia_t *client)
 {
     if (is_empty_list(client->commands))
         return -1;
@@ -91,7 +91,7 @@ int prepare_command(client_t *client)
     return 0;
 }
 
-char *process_command(client_t *client, server_t *server)
+char *process_command(ia_t *client, server_t *server)
 {
     if (!client->to_exec || client->cooldown > 0) {
         errorl("No command to exec");

@@ -8,7 +8,7 @@
 #include "events.h"
 #include "logger.h"
 
-void event_egg_layed(client_t *client, server_t *server)
+void event_egg_layed(ia_t *client, server_t *server)
 {
     srv_player_egg_layed_t *payload = malloc(sizeof(srv_player_egg_layed_t));
 
@@ -20,10 +20,10 @@ void event_egg_layed(client_t *client, server_t *server)
     debugl("Adding SRV_EGG_LAYING to event queue.\n");
 }
 
-void event_new_player(client_t *client, server_t *server)
+void event_new_player(ia_t *client, server_t *server)
 {
     srv_new_player_connect_t *pld = malloc(sizeof(srv_new_player_connect_t));
-    team_t *team = get_client_team(client, server);
+    team_t *team = get_ia_team(client, server);
 
     pld->x = client->position.x;
     pld->y = client->position.y;
@@ -35,7 +35,7 @@ void event_new_player(client_t *client, server_t *server)
     debugl("Adding SRV_NEW_PLAYER_CONNECT_LEN to event queue.\n");
 }
 
-void event_player_death(client_t *client, server_t *server)
+void event_player_death(ia_t *client, server_t *server)
 {
     srv_player_death_t *pld = malloc(sizeof(srv_player_death_t));
 
@@ -44,7 +44,7 @@ void event_player_death(client_t *client, server_t *server)
     debugl("Adding SRV_PLAYER_DEATH to event queue.\n");
 }
 
-void event_player_connected_egg(client_t *client, server_t *server)
+void event_player_connected_egg(ia_t *client, server_t *server)
 {
     srv_player_egg_connection_t *pld =
         malloc(sizeof(srv_player_egg_connection_t));
@@ -63,7 +63,7 @@ void event_end_game(const char *winning_team, server_t *server)
     debugl("Adding SRV_END_GAME to event queue.\n");
 }
 
-void event_player_pos(client_t *client, server_t *server)
+void event_player_pos(ia_t *client, server_t *server)
 {
     srv_player_pos_t *pld = malloc(sizeof(srv_player_pos_t));
 

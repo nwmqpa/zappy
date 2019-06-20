@@ -10,13 +10,13 @@
 #include "egg.h"
 #include "events.h"
 
-char *fork_client(client_t *client, server_t *server)
+char *fork_client(ia_t *client, server_t *server)
 {
-    team_t *team = get_client_team(client, server);
-    client_t *tmp = client_create(-2);
+    team_t *team = get_ia_team(client, server);
+    ia_t *tmp = client_create(-2);
     egg_t *new;
 
-    if (add_client_to_team(server, tmp, team->name) == 0) {
+    if (add_ia_to_team(server, tmp, team->name) == 0) {
         errorl("Cannot fork no more space in team %s.\n", team->name);
         return strdup("ko");
     }
