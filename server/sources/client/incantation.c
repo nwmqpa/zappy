@@ -6,6 +6,7 @@
 */
 
 #include "incante.h"
+#include "events.h"
 
 int prepare_incante(ia_t *client, server_t *server)
 {
@@ -31,6 +32,7 @@ char *incante(ia_t *client, server_t *server)
 
     infol("Beginning incantation of level %d.\n", client->level + 1);
     do_incante(tile, server, client->level + 1, client);
+    event_incantation_end(client, server, 1);
     asprintf(&output, "Current level: %d", client->level);
     return output;
 }
