@@ -28,31 +28,37 @@ class WindowCreator {
 
         bool inits(Uint32 SDL = SDL_INIT_EVERYTHING, Uint32 IMG = IMG_INIT_PNG);
 
-        void life();
+//        void display();
 
-        void update();
-        void server_event();
-        void client_event();
+//        void update();
+//        void client_event();
 
         void addX(int);
         void addY(int);
-        void scale(int);
+//        void scale(int);
 
-        void drawTile();
-        void destroy();
+//        void drawTile();
+//        void destroy();
+        void setTileList(srv_map_size_t *);
+        void setTileInfo(srv_tile_content_t *);
 
         auto *getRender() { return renderer; }
         auto *getWindow() { return window; }
-        bool getHeart() { return heart; }
+        std::vector<Tile *> getTileList() { return tileList; }
+        int getX() { return x; }
+        int getY() { return y; }
+        srv_map_size_t *getMapSize() { return mapSize; }
 
     private:
-        bool heart;
-
+        srv_map_size_t *mapSize;
         std::vector<Tile *>tileList;
         std::string &name;
         SDL_Renderer *renderer;
         SDL_Window *window;
         SDL_Event event;
+
+        int x;
+        int y;
 };
 
 #endif

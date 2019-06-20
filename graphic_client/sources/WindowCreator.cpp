@@ -9,14 +9,15 @@
 #include "WindowCreator.hpp"
 
 WindowCreator::WindowCreator(std::string &name, int x, int y)
-    :name(name)
+    :name(name),
+    x(0),
+    y(0)
 {
 #ifdef __SWITCH__
     if (inits(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK, IMG_INIT_PNG)) {
 #else
     if (inits()) {
 #endif
-        heart = true;
 #ifdef __SWITCH__
         SDL_CreateWindowAndRenderer(1280, 720, 0, &window, &renderer);
 #else
@@ -47,7 +48,33 @@ bool WindowCreator::inits(Uint32 sdl, Uint32 img)
     return true;
 }
 
-void WindowCreator::client_event()
+void WindowCreator::setTileList(srv_map_size_t *size)
+{
+    std::string path = "back.bmp";
+
+    mapSize = size;
+    for (unsigned int i = 0; i < (size->x * size->y); i += 1) {
+        tileList.push_back(new Tile(path, renderer));
+        tileList[i]->setMapSize(size);
+    }
+}
+
+void WindowCreator::setTileInfo(srv_tile_content_t *info)
+{
+    std::vector<Tile *>::iterator it = tileList.begin();
+
+    if (!tileList.empty()) {
+        for (; it != tileList.end(); it++) {
+            if ((*it)->getMap() != NULL) {
+                if (info != (*it)->getTileInfo() && (*it)->getPosX() == info->x
+                        && (*it)->getPosY() == info->y)
+                    (*it)->setTileContent(info);
+            }
+        }
+    }
+}
+
+/*void WindowCreator::client_event()
 {
     while (SDL_PollEvent(&event) != 0) {
         switch (event.type) {
@@ -89,11 +116,12 @@ void WindowCreator::scale(int value)
         tileList[i]->setScale(old += value);
     }
 }
-
+*/
 void WindowCreator::addY(int value)
 {
     int old;
 
+    y += value;
     for (unsigned int i = 0; i < tileList.size(); i++) {
         old = tileList[i]->getY();
         tileList[i]->setY(old += value);
@@ -104,16 +132,32 @@ void WindowCreator::addX(int value)
 {
     int old = 0;
 
+    x += value;
     for (unsigned int i = 0; i < tileList.size(); i++) {
         old = tileList[i]->getX();
         tileList[i]->setX(old += value);
     }
 }
-
+/*
 void WindowCreator::drawTile()
 {
     for (unsigned int i = 0; i < tileList.size(); i++)
         tileList[i]->draw(renderer, window);
+}
+
+void WindowCreator::display()
+{
+    SDL_RenderClear(renderer);
+    update();
+    SDL_RenderPresent(renderer);
+}
+
+void WindowCreator::addAllTile(srv_map_size_t newMap)
+{
+    for (int i = 0; i < (newMap.x * newMap.y); i++) {
+        tileList.push_back(new Tile(REALPATH("back.bmp"), renderer));
+        tileList[i].setMapSize(*newMap);
+    }
 }
 
 void WindowCreator::destroy()
@@ -121,5 +165,4 @@ void WindowCreator::destroy()
     SDL_DestroyWindow(window);
     IMG_Quit();
     SDL_Quit();
-    heart = false;
-}
+}*/

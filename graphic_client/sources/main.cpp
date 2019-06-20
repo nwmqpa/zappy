@@ -1,12 +1,8 @@
-#include <vector>
-#include <unistd.h>
-#include <iostream>
-#include <errno.h>
 #include "WindowCreator.hpp"
+#include "Game.hpp"
 #include "protocols.h"
 #include "Protocol.hpp"
 #include "DataHandler.hpp"
-#include "Game.hpp"
 
 #ifdef __SWITCH__
 #   include <switch.h>
@@ -70,6 +66,47 @@ int main(int argc, char *argv[])
         std::cout << "Usage: " << argv[0] << " <ip> <port>" << std::endl;
         exit(84);
     }
+    /*auto protocol = Protocol(argv[1], atoi(argv[2]));
+
+    auto dataHandler = DataHandler<int>(protocol.getSocket(), [](int sock, int &a) {
+        pkt_header_t header;
+        int ret = read(sock, &header, PKT_HDR_LEN);
+        if (ret == -1 && errno == EAGAIN)
+            return true;
+        if (ret == 0 || (ret == -1 && errno != EAGAIN))
+            return false;
+        std::cout << "Request: " << std::to_string(header.id) << ". [" << a << "]" << std::endl;
+        tmp.setupData(header);
+        if (header.id == SRV_TILE_CONTENT_LEN) {
+            srv_map_size_t mapSize;
+            read(sock, &mapSize, SRV_TILE_CONTENT_LEN);
+            std::cout << "x: " << mapSize.x << " y: " << mapSize.y << std::endl;
+            tmp.setMapSize(mapSize);
+        }
+        return true;
+    });
+
+    std::string title = "Zappy";
+    WindowCreator tmp(title, 800, 600);
+    int a = 0;
+
+    tmp.life(dataHandler, protocol, a);
+    auto rock_surface = SDL_LoadBMP(REALPATH("rock.bmp"));
+    auto rock_texture = SDL_CreateTextureFromSurface(tmp.getRender(), rock_surface);
+
+    SDL_Rect rect;
+    rect.h = 200;
+    rect.w = 200;
+    rect.x = 200;
+    rect.y = 200;
+    SDL_RenderCopy(tmp.getRender(), rock_texture, NULL, &rect);
+
+    SDL_RenderPresent(tmp.getRender());
+
+    sleep(10);
+    SDL_DestroyRenderer(tmp.getRender());
+    SDL_DestroyWindow(tmp.getWindow());
+    SDL_Quit();*/
     std::string host(argv[1]);
     int port = atoi(argv[2]);
 #endif /* __SWITCH__ */
