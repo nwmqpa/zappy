@@ -100,13 +100,16 @@ void Game::life(WindowCreator &window)
         std::cout << "Got " << getValueForIndex<GRAPHIC_PACKETS_FROM_SERVER, std::string>(id, NAMES);
         std::cout << " of len " << std::to_string(header.size) << std::endl;
         state.lastData = calloc(1, header.size);
-        ret = read(sock, &state.lastData, header.size);
+        ret = read(sock, state.lastData, header.size);
+        std::cout << state.lastData << std::endl;
         if (ret == -1 && errno == EAGAIN)
             return true;
         if (ret == 0 || (ret == -1 && errno != EAGAIN))
             return false;
         return true;
     });
+
+    protocol.askMapSize();
 
     while (this->state.isActive && dataHandler.handle(state)) {
         SDL_RenderClear(window.getRender());
