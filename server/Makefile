@@ -27,6 +27,7 @@ SOURCES		=	main.c \
 				server/server.c \
 				server/server_init.c \
 				server/server_debug.c \
+				server/events.c \
 				gen_list/basic.c \
 				gen_list/compare.c \
 				gen_list/filter.c \
@@ -43,9 +44,11 @@ SOURCES		=	main.c \
 				client/fork.c \
 				client/eject.c \
 				client/object.c \
+				client/remove.c \
 				utils/dispatcher.c \
 				utils/debug.c \
 				utils/logger_func.c \
+				utils/srv_events_player.c \
 				server/graphic_handler.c \
 				server/client_handler.c \
 				server/teams.c \

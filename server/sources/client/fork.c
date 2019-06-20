@@ -8,6 +8,7 @@
 #include "client_commands.h"
 #include "logger.h"
 #include "egg.h"
+#include "events.h"
 
 char *fork_client(client_t *client, server_t *server)
 {
@@ -20,8 +21,7 @@ char *fork_client(client_t *client, server_t *server)
         return strdup("ko");
     }
     new = egg_create(client->position.x, client->position.y);
+    event_egg_layed(client, server);
     append_list(server->eggs, new);
     return strdup("ok");
 }
-
-

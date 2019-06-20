@@ -7,6 +7,7 @@
 
 #include "logger.h"
 #include "client_commands.h"
+#include "events.h"
 
 void move_client(client_t *client, server_t *server, pos_t new, pos_t size)
 {
@@ -14,6 +15,7 @@ void move_client(client_t *client, server_t *server, pos_t new, pos_t size)
     tile_t *old_tile = get_tile_map(server->map, client->position.x,
             client->position.y);
 
+    event_player_pos(client, server);
     remove_player(old_tile, client->id);
     client->position.x += new.x;
     client->position.y += new.y;

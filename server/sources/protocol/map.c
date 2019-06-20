@@ -68,10 +68,10 @@ int tile_content(const void *data)
         pkt_header_t header;
         srv_tile_content_t payload;
     } response = {
-        {   .id = SRV_MAP_SIZE,
+        {   .id = SRV_TILE_CONTENT,
             .subid = 0,
             .version = PROTOCOL_VERSION,
-            .size = SRV_MAP_SIZE_LEN},
+            .size = SRV_TILE_CONTENT_LEN },
         {0}
     };
 

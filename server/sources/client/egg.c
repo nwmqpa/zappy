@@ -22,7 +22,7 @@ int check_for_eggs(team_t *team, server_t *server)
     egg_t *egg = get_cmp_list(server->eggs, is_eclosable, NULL);
 
     if (egg == NULL) {
-        debugl("No egg able to eclose.");
+        infol("No egg able to eclose.\n");
         return -1;
     }
     for (int i = 0; team->clients[i]; ++i) {
@@ -30,7 +30,7 @@ int check_for_eggs(team_t *team, server_t *server)
             return i;
         }
     }
-    debugl("No slot available on team to connect.");
+    infol("No slot available on team %s to connect.\n", team->name);
     return -1;
 }
 
