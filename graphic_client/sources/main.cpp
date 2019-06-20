@@ -50,9 +50,9 @@ static void initJoycons(void) {
 }
 #endif
 
-#ifndef TEST
-int main(int argc, char *argv[])
-{
+//#ifndef TEST
+int main(void/*int argc, char *argv[]*/)
+{/*
 #ifdef __SWITCH__
     int sockNxlinkSock = -1;
     initNxLink(sockNxlinkSock);
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
         std::cout << "Usage: " << argv[0] << " <ip> <port>" << std::endl;
         exit(84);
     }
-    /*auto protocol = Protocol(argv[1], atoi(argv[2]));
+    auto protocol = Protocol(argv[1], atoi(argv[2]));
 
     auto dataHandler = DataHandler<int>(protocol.getSocket(), [](int sock, int &a) {
         pkt_header_t header;
@@ -105,10 +105,10 @@ int main(int argc, char *argv[])
     sleep(10);
     SDL_DestroyRenderer(tmp.getRender());
     SDL_DestroyWindow(tmp.getWindow());
-    SDL_Quit();*/
+    SDL_Quit();
     std::string host(argv[1]);
     int port = atoi(argv[2]);
-#endif /* __SWITCH__ */
+#endif *//* __SWITCH__ *//*
     auto name = std::string("window");
     auto window = WindowCreator(name, 1280, 720);
     auto game = Game(host, port);
@@ -117,7 +117,11 @@ int main(int argc, char *argv[])
 #ifdef __SWITCH__
     SDL_Quit();
     exitNxLink(sockNxlinkSock);
-#endif
+#endif*/
+    auto name = std::string("window");
+    auto window = WindowCreator(name, 1280, 720);
+    auto game = Game(name, 666);
+    game.life(window);
     return (0);
 }
-#endif /* TEST */
+//#endif /* TEST */
