@@ -59,7 +59,6 @@ int main(int argc, char *argv[])
 {
 #ifdef __SWITCH__
     int sockNxlinkSock = -1;
-    atexit(SDL_Quit);
     initNxLink(sockNxlinkSock);
     initRomFS();
     initJoycons();
@@ -77,7 +76,9 @@ int main(int argc, char *argv[])
     auto window = WindowCreator(name, 1280, 720);
     auto game = Game(host, port);
     game.life(window);
+    std::cout << "Finished program." << std::endl;
 #ifdef __SWITCH__
+    SDL_Quit();
     exitNxLink(sockNxlinkSock);
 #endif
     return (0);
