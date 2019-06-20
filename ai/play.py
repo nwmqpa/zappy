@@ -5,7 +5,7 @@ from ai.parse_inventory import Inventory
 from ai.parse_vision import parse_vision
 from ai.parse_vision import Vision
 from ai.parse_vision import verif_look_response
-from ai.queue import Queue
+# from ai.queue import Queue
 from threading import Thread
 import socket
 import sys
@@ -13,6 +13,7 @@ from typing import List
 from typing import Dict
 from typing import Optional
 import time
+import queue
 
 
 class Player:
@@ -21,8 +22,11 @@ class Player:
     def __init__(self, server_socket: socket.socket) -> None:
         """Set basic infos."""
         self.server_socket = server_socket
-        self.units_of_time = 0
         self.actual_level = 1
+        self.FARM_MODE = True
+        self.JOIN_MODE = False
+        self.listening = True
+        self.event_queue: queue.Queue[str] = queue.Queue()
         self.stones_combinations = [{
                                         "linemate": 1,
                                         "deraumere": 0,
@@ -110,13 +114,14 @@ class Player:
 
     def read_oldest_response(self) -> str:
         """Return oldest response to command from server."""
-        while (self.my_queue.size() == 0):
+        while (self.event_queue.qsize() == 0):
+            if (self.FARM_MODE is False and self.JOIN_MODE is False):
+                return ("")
             i = 0
             # print("Waiting...")
-        # print(self.my_queue.printQueue())
-        response = self.my_queue.first_in()
+        response = self.event_queue.get()
+        # print("IIIIIIII -> ", response)
         if (self.is_a_response_to_comand(response) is True):
-            self.my_queue.dequeue()
             return (response)
         else:
             splitted_line = response.split(" ")
@@ -130,7 +135,7 @@ class Player:
         self.send_msg("Look")
         response = self.recv_msg()
         if (verif_look_response(response) is False):
-            print("Bad response from server.\n", response)
+            print("Bad response from server to look command.\n", response)
             print("Pass.")
             return (-1)
         response = response.replace("[ ", "")
@@ -144,20 +149,18 @@ class Player:
                 player_nb = player_nb + 1
         return (player_nb)
 
-    def check_inventory(self) -> Inventory:
+    def check_inventory(self) -> None:
         """Check what's is in my Inventory."""
         print("Check Inventory.")
         self.send_msg("Inventory")
         # response = self.recv_msg()
         response = self.read_oldest_response()
         if (response == ""):
+            print("LOLILOL")
             return
-        inventory = parse_inventory(response)
-        # if (inventory is None):
-        #     print("Bad response from server.\n", response)
-        #     print("Pass.")
-        #     return None
-        return (inventory)
+        print("1")
+        self.inventory = parse_inventory(response)
+        print("2")
 
     def look_around(self) -> List[Vision]:
         """Look command to see what's in front of me."""
@@ -294,7 +297,7 @@ class Player:
         # response = self.recv_msg()
         response = self.read_oldest_response()
         if (self.check_ok_ko_response(response) is False):
-            print("Bad response from server.\n", response)
+            print("Bad response from server to move forward.\n", response)
             print("Pass.")
             return (-1)
         print("Response for player move ->", response)
@@ -307,7 +310,7 @@ class Player:
         # response = self.recv_msg()
         response = self.read_oldest_response()
         if (self.check_ok_ko_response(response) is False):
-            print("Bad response from server.\n", response)
+            print("Bad response from server in turn right.\n", response)
             print("Pass.")
             return (-1)
         print("Response for player move ->", response)
@@ -320,7 +323,7 @@ class Player:
         # response = self.recv_msg()
         response = self.read_oldest_response()
         if (self.check_ok_ko_response(response) is False):
-            print("Bad response from server.\n", response)
+            print("Bad response from server in turn left.\n", response)
             print("Pass.")
             return (-1)
         print("Response for player move ->", response)
@@ -447,28 +450,34 @@ class Player:
             self.server_socket.settimeout(0.5)
             try:
                 received = self.server_socket.recv(1024).decode()
-            except:
+            except (socket.error):
+                print("111")
+                self.FARM_MODE = False
+                self.JOIN_MODE = False
                 break
-            if (received == "dead\n"):
-                print("Player is dead.")
-                exit(0)
+            if (received == "dead\n" or received == ""):
+                print("Player is dead in listener.")
+                self.FARM_MODE = False
+                self.JOIN_MODE = False
+                break
             while (received[len(received) - 1] != '\n'):
-                received = received + self.server_socket.recv(1024).decode()
-
+                try:
+                    received += self.server_socket.recv(1024).decode()
+                except (socket.error):
+                    print("222")
+                    self.FARM_MODE = False
+                    self.JOIN_MODE = False
+                    break
             print("FINAL of thread = ", received)
-            self.response_from_thread = received
-            self.my_queue.enqueue(received)
+            self.event_queue.put(received)
             received = ""
 
     def farm_mode(self) -> None:
         """Mode where player live normaly."""
-
         print("\n+++\nFarm mode loop !\n")
-        self.inventory = self.check_inventory()
+        self.check_inventory()
         print(self.inventory)
         print("")
-        # print("MY STUFF -> ", self.inventory)
-
         self.choose_stone_to_take(self.actual_level)
         # self.elevate()
         self.where_to_move()
@@ -479,42 +488,23 @@ class Player:
 
     def start_response_listener(self) -> None:
         """Start thread to listen to server responses."""
-        self.my_queue = Queue()
         listening_thread = Thread(target=self.listener, args=())
         listening_thread.start()
 
     def life_loop(self) -> None:
-        """Main loop of player attitude."""
+        """Principal loop of player attitude."""
         print("Begin of loop.\n")
-        i = 0
-        while (i < 50):
+        while (1):
             if (self.FARM_MODE is True):
                 self.farm_mode()
-            elif (self.join_mode is True):
+            elif (self.JOIN_MODE is True):
                 self.join_mode()
-            i = i + 1
+            else:
+                break
         self.listening = False
         print("--------------")
 
     def begin_player_life(self) -> None:
-        """Initiate player modes and start life."""
-        self.FARM_MODE = True
-        self.JOIN_MODE = False
-        self.listening = True
+        """Initialize player modes and start life."""
         self.start_response_listener()
         self.life_loop()
-
-        # self.my_queue.enqueue("1")
-        # self.my_queue.enqueue("2")
-        # self.my_queue.enqueue("3")
-        # print(self.my_queue.first_in())
-        # self.my_queue.enqueue("4")
-        # self.my_queue.dequeue()
-        # print(self.my_queue.printQueue())
-        # print(self.my_queue.queue[self.my_queue.size() - 1])
-        # self.my_queue.dequeue()
-        # print(self.my_queue.printQueue())
-        # print(self.my_queue.queue[self.my_queue.size() - 1])
-
-        # print("1--> ".join(self.result))
-        # print("2--> ", self.result)
