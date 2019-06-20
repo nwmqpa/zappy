@@ -45,7 +45,7 @@ PATSUBST_MODULS =	$(patsubst  $(SRC_DIR)/%, $(BUILD_DIR)/lib%.a, $(PREFIXED_MODU
 LINK_MODULES	=	$(addprefix -l, $(MODULES))
 
 
-WARNINGS	=	-Wall -Wextra
+WARNINGS	=	-Wall -Wextra -g
 CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) `sdl2-config --cflags` -fdiagnostics-color=always -D _GNU_SOURCE
 CXXFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) `sdl2-config --cflags` -fdiagnostics-color=always -D _GNU_SOURCE
 LDFLAGS		=	-L $(BUILD_DIR) $(LINK_MODULES) `sdl2-config --libs` -lSDL2_image

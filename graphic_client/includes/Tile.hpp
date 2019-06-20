@@ -33,6 +33,10 @@ class Tile {
         int getY() { return y; }
         int getScale() { return scale; }
         srv_map_size_t *getMap() { return map; }
+        srv_tile_content_t *getTileInfo() { return tile; }
+
+        unsigned int getPosX() { return tile->x; }
+        unsigned int getPosY() { return tile->y; }
 
     private:
         SDL_Surface *IMG;
