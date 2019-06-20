@@ -19,21 +19,19 @@ class Tile {
         Tile(std::string &, SDL_Renderer *);
         ~Tile() = default;
 
-        void updateTile();
-        srv_tile_content_t *getTile() {return tile;}
-        void draw(SDL_Renderer *, SDL_Window *);
-
         void setTileContent(srv_tile_content_t *);
-        void setMapSize(srv_map_size_t *);
+        srv_tile_content_t *getTileInfo() { return tile; }
 
         void setX(int);
         void setY(int);
         void setScale(int);
+
         int getX() { return x; }
         int getY() { return y; }
-        int getScale() { return scale; }
-        srv_map_size_t *getMap() { return map; }
-        srv_tile_content_t *getTileInfo() { return tile; }
+        int getScale();
+
+        SDL_Surface *getSurface() { return IMG; }
+        SDL_Texture *getTmp() { return tmp; }
 
         unsigned int getPosX() { return tile->x; }
         unsigned int getPosY() { return tile->y; }
@@ -43,9 +41,7 @@ class Tile {
         SDL_Texture *texture;
         SDL_Texture *tmp;
 
-        SDL_Rect pos;
         srv_tile_content_t *tile;
-        srv_map_size_t *map;
 
         int scale;
         int x;
