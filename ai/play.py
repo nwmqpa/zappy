@@ -5,7 +5,7 @@ from ai.parse_inventory import Inventory
 from ai.parse_vision import parse_vision
 from ai.parse_vision import Vision
 from ai.parse_vision import verif_look_response
-# from ai.listen_broadcasts import Broadcast_listener
+from ai.queue import Queue
 from threading import Thread
 import socket
 import sys
@@ -91,10 +91,39 @@ class Player:
             print("Player is dead.")
             exit(0)
         while (received[len(received) - 1] != '\n'):
-            # print("HAVEN'T RECEIVED ALL")
             received = received + self.server_socket.recv(1024).decode()
-            # print("FINAL = ", received)
         return (received)
+
+    def is_a_response_to_comand(self, line: str) -> bool:
+        """Return True if line is a response to a command."""
+        """Return False if line is a broadcast or eject."""
+        splitted_line = line.split(" ")
+        if (splitted_line[0] == "message" or splitted_line == "eject:"):
+            return (False)
+        return (True)
+
+    def check_ok_ko_response(self, response: str) -> bool:
+        """Verify if response is `ok` or `ko` else command don't count."""
+        if (response == "ok\n" or response == "ko\n"):
+            return (True)
+        return (False)
+
+    def read_oldest_response(self) -> str:
+        """Return oldest response to command from server."""
+        while (self.my_queue.size() == 0):
+            i = 0
+            # print("Waiting...")
+        # print(self.my_queue.printQueue())
+        response = self.my_queue.first_in()
+        if (self.is_a_response_to_comand(response) is True):
+            self.my_queue.dequeue()
+            return (response)
+        else:
+            splitted_line = response.split(" ")
+            if (splitted_line[0] == "message"):
+                print("It's a broadcast message.")
+                return ("")
+        return ("")
 
     def other_player_nb_on_tile(self) -> int:
         """Return nb of other player on same tile."""
@@ -115,32 +144,27 @@ class Player:
                 player_nb = player_nb + 1
         return (player_nb)
 
-    def check_ok_ko_response(self, response: str) -> bool:
-        """Verify if response is `ok` or `ko` else command don't count."""
-        if (response == "ok\n" or response == "ko\n"):
-            return (True)
-        return (False)
-
     def check_inventory(self) -> Inventory:
         """Check what's is in my Inventory."""
         print("Check Inventory.")
         self.send_msg("Inventory")
-        # print("+++++++++++++++++++++++++++++++")
-        response = self.recv_msg()
-        # print("Wesh -> ", response)
-        inventory = parse_inventory(response)
-        if (inventory is None):
-            print("Bad response from server.\n", response)
-            print("Pass.")
-            # time.sleep(5)
+        # response = self.recv_msg()
+        response = self.read_oldest_response()
+        if (response == ""):
             return
+        inventory = parse_inventory(response)
+        # if (inventory is None):
+        #     print("Bad response from server.\n", response)
+        #     print("Pass.")
+        #     return None
         return (inventory)
 
     def look_around(self) -> List[Vision]:
         """Look command to see what's in front of me."""
         self.send_msg("Look")
-        new_data = self.recv_msg()
-        environment = parse_vision(new_data)
+        # response = self.recv_msg()
+        response = self.read_oldest_response()
+        environment = parse_vision(response)
         return (environment)
 
     def take_object(self, object: str) -> int:
@@ -148,7 +172,8 @@ class Player:
         self.send_msg("Take " + object)
         print("Take " + object)
         # self.units_of_time = int(self.units_of_time) - 7
-        response = self.recv_msg()
+        # response = self.recv_msg()
+        response = self.read_oldest_response()
         if (self.check_ok_ko_response(response) is False):
             return (-1)
         if (response != "ok\n"):
@@ -180,7 +205,8 @@ class Player:
         self.send_msg("Set " + object)
         print("Set " + object)
         # self.units_of_time = int(self.units_of_time) - 7
-        response = self.recv_msg()
+        # response = self.recv_msg()
+        response = self.read_oldest_response()
         if (self.check_ok_ko_response(response) is False):
             return (-1)
         if (response != "ok\n"):
@@ -206,11 +232,6 @@ class Player:
                 self.inventory.thystame = str(int(self.inventory.thystame) - 1)
             return (1)
         return (2)
-
-    # def get_stone_nb(self, stone: str) -> int:
-    #     """Return number of this stone in inventory."""
-    #     # print(self.inventory.get_item(stone))
-    #     return(self.inventory.get_item(stone))
 
     def should_take(self, stone: str) -> bool:
         """Return True if we have to pickup this stone, else return False."""
@@ -270,7 +291,8 @@ class Player:
         """Move player `Forward`."""
         print("\nPlayer move `Forward`.")
         self.send_msg("Forward")
-        response = self.recv_msg()
+        # response = self.recv_msg()
+        response = self.read_oldest_response()
         if (self.check_ok_ko_response(response) is False):
             print("Bad response from server.\n", response)
             print("Pass.")
@@ -282,7 +304,8 @@ class Player:
         """Make player turn `Right`."""
         print("\nPlayer move `Right`.")
         self.send_msg("Right")
-        response = self.recv_msg()
+        # response = self.recv_msg()
+        response = self.read_oldest_response()
         if (self.check_ok_ko_response(response) is False):
             print("Bad response from server.\n", response)
             print("Pass.")
@@ -294,7 +317,8 @@ class Player:
         """Make player turn `Left`."""
         print("\nPlayer move `Left`.")
         self.send_msg("Left")
-        response = self.recv_msg()
+        # response = self.recv_msg()
+        response = self.read_oldest_response()
         if (self.check_ok_ko_response(response) is False):
             print("Bad response from server.\n", response)
             print("Pass.")
@@ -343,7 +367,8 @@ class Player:
         """Start incantation to elevate level."""
         print("\nPlayer ask for Incantation.")
         self.send_msg("Incantationt")
-        response = self.recv_msg()
+        # response = self.recv_msg()
+        response = self.read_oldest_response()
         print("Response for `Incantation`:", response)
         if (response == "ko\n"):
             print("Level still -> ", self.actual_level)
@@ -416,38 +441,80 @@ class Player:
                 self.actual_level = 8
 
     def listener(self) -> None:
-        """Threaded function to alwqys listen to server."""
+        """Threaded function to always listen to server."""
         print("----------- In broadcast listener -----------")
-        self.result = "foo"
-        received = self.server_socket.recv(1024).decode()
-        if (received == "dead\n"):
-            print("Player is dead.")
-            exit(0)
-        while (received[len(received) - 1] != '\n'):
-            received = received + self.server_socket.recv(1024).decode()
-        print("FINAL of thread = ", received)
-        self.response_from_thread = received
+        while (self.listening is True):
+            self.server_socket.settimeout(0.5)
+            try:
+                received = self.server_socket.recv(1024).decode()
+            except:
+                break
+            if (received == "dead\n"):
+                print("Player is dead.")
+                exit(0)
+            while (received[len(received) - 1] != '\n'):
+                received = received + self.server_socket.recv(1024).decode()
 
-    def life_loop(self) -> None:
-        """Player life."""
-        print("Begin of loop.\n")
-        i = 0
-        self.response_from_thread = ""
+            print("FINAL of thread = ", received)
+            self.response_from_thread = received
+            self.my_queue.enqueue(received)
+            received = ""
+
+    def farm_mode(self) -> None:
+        """Mode where player live normaly."""
+
+        print("\n+++\nFarm mode loop !\n")
+        self.inventory = self.check_inventory()
+        print(self.inventory)
+        print("")
+        # print("MY STUFF -> ", self.inventory)
+
+        self.choose_stone_to_take(self.actual_level)
+        # self.elevate()
+        self.where_to_move()
+
+    def join_mode(self) -> None:
+        """Mode where player join other to elevate."""
+        print("\n+++\nJoin player loop !\n")
+
+    def start_response_listener(self) -> None:
+        """Start thread to listen to server responses."""
+        self.my_queue = Queue()
         listening_thread = Thread(target=self.listener, args=())
         listening_thread.start()
+
+    def life_loop(self) -> None:
+        """Main loop of player attitude."""
+        print("Begin of loop.\n")
+        i = 0
+        while (i < 50):
+            if (self.FARM_MODE is True):
+                self.farm_mode()
+            elif (self.join_mode is True):
+                self.join_mode()
+            i = i + 1
+        self.listening = False
+        print("--------------")
+
+    def begin_player_life(self) -> None:
+        """Initiate player modes and start life."""
+        self.FARM_MODE = True
+        self.JOIN_MODE = False
+        self.listening = True
+        self.start_response_listener()
+        self.life_loop()
+
+        # self.my_queue.enqueue("1")
+        # self.my_queue.enqueue("2")
+        # self.my_queue.enqueue("3")
+        # print(self.my_queue.first_in())
+        # self.my_queue.enqueue("4")
+        # self.my_queue.dequeue()
+        # print(self.my_queue.printQueue())
+        # print(self.my_queue.queue[self.my_queue.size() - 1])
+        # self.my_queue.dequeue()
+        # print(self.my_queue.printQueue())
+        # print(self.my_queue.queue[self.my_queue.size() - 1])
+
         # print("1--> ".join(self.result))
         # print("2--> ", self.result)
-        while (i < 1000):
-            print("\n+++\nLOOP\n")
-            self.inventory = self.check_inventory()
-            print(self.inventory)
-            print("")
-            # self.units_of_time = int(self.inventory.food) * 126
-            # print("MY STUFF -> ", self.inventory)
-            # self.choose_stone_to_take(self.actual_level)
-
-            # self.elevate()
-
-            # self.where_to_move()
-
-            i = i + 1

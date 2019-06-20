@@ -45,6 +45,4 @@ def main() -> None:
     client_info = get_client_nb_and_world_size(server_socket, opt)
     # commands(server_socket)
     curr_player = Player(server_socket)
-    print("--------------")
-    curr_player.life_loop()
-    print("--------------")
+    curr_player.begin_player_life()
