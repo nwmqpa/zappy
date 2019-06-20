@@ -26,7 +26,7 @@ static void handle_cooldown(ia_t *client, server_t *server, int elapsed)
         free(client->to_exec);
         client->to_exec = NULL;
     }
-    prepare_command(client);
+    prepare_command(client, server);
 }
 
 static void handle_player_tick(void *data, const void *params)

@@ -33,9 +33,9 @@ Test(client_command, processing_command) {
     ia_t *client = create_client_add_command(5);
     server_t *server = NULL;
 
-    prepare_command(client);
+    prepare_command(client, server);
     process_command(client, server);
-    prepare_command(client);
+    prepare_command(client, server);
     process_command(client, server);
     cr_assert(len_list(client->commands) == 3);
 }
@@ -47,7 +47,7 @@ Test(client_command, too_much_command) {
 
     cr_assert(len_list(client->commands) == 10);
     cr_assert(strcmp(command, "test 9") == 0, "Should be test 9 it's %s\n", command);
-    prepare_command(client);
+    prepare_command(client, server);
     process_command(client, server);
     command = get_list(client->commands, 0);
     cr_assert(len_list(client->commands) == 9);

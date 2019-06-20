@@ -37,7 +37,6 @@ SOURCES		=	main.c \
 				client/client.c \
 				client/command.c \
 				client/move.c \
-				client/incantation.c \
 				client/inventory.c \
 				client/look.c \
 				client/broadcast.c \
@@ -57,6 +56,9 @@ SOURCES		=	main.c \
 				map/tile.c \
 				utils/utils.c \
 				client/connect_nbr.c \
+				client/incantation.c \
+				client/incantation_2.c \
+				client/special_function.c \
 				protocol/protocol.c \
 				protocol/player.c \
 				protocol/team.c \
