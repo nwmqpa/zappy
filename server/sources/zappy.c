@@ -29,6 +29,12 @@ static void handle_cooldown(client_t *client, server_t *server, int elapsed)
     prepare_command(client);
 }
 
+static void handle_team_tick(void *data, const void *params)
+{
+    team_t *team = data;
+    map(team->eggs, eclosion_handler, (void *) params);
+}
+
 static void handle_player_tick(void *data, const void *params)
 {
     const time_server_t *parameters = (time_server_t *) params;
@@ -45,7 +51,6 @@ static void handle_player_tick(void *data, const void *params)
     }
     if (client->cooldown <= 0)
         handle_cooldown(client, parameters->server, elapsed_time);
-    map(parameters->server->eggs, eclosion_handler, (void *) parameters);
 }
 
 void tick_system(server_t *server)
@@ -62,6 +67,8 @@ void tick_system(server_t *server)
     name.elapsed *= server->freq;
     clock_gettime(CLOCK_MONOTONIC, &old);
     map(server->clients, handle_player_tick, &name);
+    for (int i = 0; server->teams[i]; i++)
+        handle_team_tick(server->teams[i], &name);
     server->map->time_respawn -= name.elapsed;
     if (server->map->time_respawn <= 0) {
         infol("Respwaning ressources.\n");

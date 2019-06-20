@@ -20,10 +20,11 @@
 
 typedef struct team_s {
     char *name;
-    int *clients;
+    list_t *clients;
+    list_t *eggs;
 } team_t;
 
-int check_free_space(team_t *team, int max_client, int new_client);
+int check_free_space(team_t *team);
 
 typedef struct server_s {
     unsigned int width;
@@ -39,7 +40,6 @@ typedef struct server_s {
     int client_per_team;
     map_t *map;
     phr_t reg;
-    list_t *eggs;
     list_t *events;
 } server_t;
 
@@ -77,5 +77,7 @@ void get_info_player(void *player, const void *nothing);
 void get_players_status(server_t *server);
 void get_map_status(server_t *server);
 void get_teams_status(server_t *server);
+
+int count_unused_slots(team_t *team, int nb_client);
 
 #endif /* SERVER_H_ */

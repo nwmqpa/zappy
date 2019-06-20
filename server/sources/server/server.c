@@ -42,7 +42,8 @@ static void setup_teams(server_t *server, options_t *options)
     for (; options->name[i]; ++i) {
         server->teams[i] = malloc(sizeof(team_t));
         server->teams[i]->name = options->name[i];
-        server->teams[i]->clients = calloc(sizeof(int), options->client_nb);
+        server->teams[i]->clients = create_list();
+        server->teams[i]->eggs = create_list();
     }
     free(options->name);
     server->teams[i] = NULL;
@@ -75,7 +76,6 @@ server_t *create_server(options_t *options)
     setup_network(server, options);
     server->clients = create_list();
     server->graphic_clients = create_list();
-    server->eggs = create_list();
     server->width = options->width;
     server->height = options->height;
     server->freq = options->freq;
