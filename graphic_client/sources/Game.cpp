@@ -49,6 +49,7 @@ void gotMapSize(GameState &state, WindowCreator &window)
 }
 
 static const std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, data_processor_t>> DATA_PROCESSORS = {
+    std::make_tuple((GRAPHIC_PACKETS_FROM_SERVER) 0, nullptr),
     std::make_tuple(SRV_MAP_SIZE, &gotMapSize),
     std::make_tuple(SRV_TILE_CONTENT, nullptr),
     std::make_tuple(SRV_TEAMS_NAMES, nullptr),
