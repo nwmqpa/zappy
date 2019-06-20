@@ -31,7 +31,7 @@ int get_inventory_idx(const char *elem)
     return -1;
 }
 
-char *take(client_t *client, server_t *server, const char *object)
+char *take(ia_t *client, server_t *server, const char *object)
 {
     int idx = get_inventory_idx(object + 1);
     tile_t *tile = get_tile_map(server->map, client->position.x,
@@ -46,7 +46,7 @@ char *take(client_t *client, server_t *server, const char *object)
     return strdup("ok\n");
 }
 
-char *set(client_t *client, server_t *server, const char *object)
+char *set(ia_t *client, server_t *server, const char *object)
 {
     int idx = get_inventory_idx(object);
     tile_t *tile = get_tile_map(server->map, client->position.x,

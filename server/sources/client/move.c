@@ -7,7 +7,7 @@
 
 #include "client_commands.h"
 
-char *forward(client_t *client, server_t *server)
+char *forward(ia_t *client, server_t *server)
 {
     pos_t size = {server->width, server->height};
 
@@ -27,7 +27,7 @@ char *forward(client_t *client, server_t *server)
     return strdup("ok");
 }
 
-char *left(client_t *client, server_t *server)
+char *left(ia_t *client, server_t *server)
 {
     switch (client->direction) {
     case LEFT:
@@ -45,7 +45,7 @@ char *left(client_t *client, server_t *server)
     return strdup("ok");
 }
 
-char *right(client_t *client, server_t *server)
+char *right(ia_t *client, server_t *server)
 {
     switch (client->direction) {
     case LEFT:

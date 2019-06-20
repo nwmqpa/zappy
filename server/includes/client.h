@@ -74,16 +74,16 @@ typedef struct client_s {
     double cooldown;
     double need_to_eat;
     char *to_exec;
-} client_t;
+} ia_t;
 
 // Utility function.
 int client_cmp(const void *entry, const void *id);
 
-client_t *client_create(int id);
-void client_delete(client_t *client);
+ia_t *client_create(int id);
+void client_delete(ia_t *client);
 
-int add_command(client_t *client, char *command);
-size_t len_command(client_t *client);
+int add_command(ia_t *client, char *command);
+size_t len_command(ia_t *client);
 
-void print_client(client_t *client);
+void print_client(ia_t *client);
 void print_client_list(const void *data);
