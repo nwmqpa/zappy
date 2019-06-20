@@ -46,6 +46,8 @@ public:
 
     bool askTimeUnitChange() const noexcept;
 
+    int setupSocket();
+
 private:
     /// The port in little endian.
     short int _port;
@@ -53,6 +55,4 @@ private:
     std::string _ip;
     /// The socket to the server.
     int _sock;
-
-    void setupSocket();
 };

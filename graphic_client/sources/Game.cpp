@@ -99,6 +99,15 @@ void Game::life(WindowCreator &window)
     std::vector<Tile *> tileList = window.getTileList();
     std::vector<Tile *>::iterator it = tileList.begin();
     auto protocol = Protocol(ip, port);
+<<<<<<< HEAD
+
+    if (protocol.setupSocket() == -1) {
+        close(protocol.getSocket());
+        return;
+    }
+
+=======
+>>>>>>> eca8a934a1db7bf253a55c7115d97cf105630d4a
     auto dataHandler = DataHandler<GameState>(protocol.getSocket(), [](int sock, GameState &state) {
         free(state.lastData);
         memset(&state, 0, sizeof(state.lastData) + sizeof(state.lastHeader));
