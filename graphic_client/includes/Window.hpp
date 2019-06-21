@@ -11,6 +11,7 @@
 #include <SDL2/SDL.h>
 #include "Tile.hpp"
 #include "Exception.hpp"
+#include "GameState.hpp"
 
 #ifdef __SWITCH__
 #   define BASEPATH "romfs:/"
@@ -27,16 +28,16 @@ class Window {
                 Isometry() = default;
                 ~Isometry() = default;
 
-                static float setPositionX(float, float, float, float, float, float);
-                static float setPositionY(float, float, float, float, float, float);
-                static float setWidth(float);
-                static float setHeight(float);
+                static float setPositionX(float, float, float, float, float, Camera);
+                static float setPositionY(float, float, float, float, float, Camera);
+                static float setWidth(float, Camera);
+                static float setHeight(float, Camera);
         };
 
         Window(std::string &name, int x = 800, int y = 600);
         ~Window();
 
-        void drawTile(std::vector<Tile *>, int, int);
+        void render(GameState &state, int, int);
         //void addY(int, std::vector<Tile *>);
         //void addX(int, std::vector<Tile *>);
 
