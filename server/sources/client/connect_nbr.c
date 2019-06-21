@@ -5,17 +5,28 @@
 ** Command that give available slots in the team of the player.
 */
 
+#include <sys/queue.h>
+#include "egg.h"
 #include "client_commands.h"
 #include "logger.h"
 
-static int count_unused_slots(team_t *team, int nb_client)
+int count_eggs(team_t *team)
 {
+    entry_t *entry;
     int nbr = 0;
 
-    for (int i = 0; i < nb_client; ++i)
-        if (team->clients[i] == 0 || team->clients[i] == -1)
+    LIST_FOREACH(entry, &team->eggs->head, next) {
+        if (((egg_t *) entry)->can_eclose)
             nbr++;
+    }
     return nbr;
+}
+
+int count_unused_slots(team_t *team, int nb_client)
+{
+    int nbr = nb_client - len_list(team->clients);
+
+    return nbr + count_eggs(team);
 }
 
 char *connect_nbr(ia_t *client, server_t *server)
