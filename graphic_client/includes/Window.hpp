@@ -33,7 +33,7 @@ class Window {
         int getY() { return y; }
         int getX() { return x; }
 
-        void drawTile(std::vector<Tile *>, srv_map_size_t *);
+        void drawTile(std::vector<Tile *>, srv_map_size_t &);
         auto *getRender() { return renderer; }
         void clearScreen();
         void PresentScreen();
