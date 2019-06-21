@@ -11,8 +11,16 @@
 
 int join_str(char *insert, const char **to_join, char *join, size_t size)
 {
-    for (size_t i = 0; i < size; ++i)
-        sprintf(insert, "%s%s%s", insert, (i == 0) ? "" : join, to_join[i]);
+    size_t y = 0;
+    size_t i = 0;
+
+    while (i < size) {
+        if (to_join[y] != NULL) {
+            sprintf(insert, "%s%s%s", insert, (y == 0) ? "" : join, to_join[y]);
+            i++;
+        }
+        y++;
+    }
     return 0;
 }
 
