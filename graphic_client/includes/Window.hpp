@@ -5,11 +5,10 @@
 ** GraphicalClient
 */
 
-#ifndef WINDOWCREATOR_HPP_
-    #define WINDOWCREATOR_HPP_
+#ifndef WINDOW_HPP_
+    #define WINDOW_HPP_
 
 #include <SDL2/SDL.h>
-
 #include "Tile.hpp"
 #include "Exception.hpp"
 
@@ -21,10 +20,10 @@
 
 #define REALPATH(path) BASEPATH path
 
-class WindowCreator {
+class Window {
     public:
-        WindowCreator(std::string &name, int x = 800, int y = 600);
-        ~WindowCreator() = default;
+        Window(std::string &name, int x = 800, int y = 600);
+        ~Window() = default;
 
         bool inits(Uint32 SDL = SDL_INIT_EVERYTHING, Uint32 IMG = IMG_INIT_PNG);
 
@@ -36,7 +35,6 @@ class WindowCreator {
 
         void drawTile(std::vector<Tile *>, srv_map_size_t *);
         auto *getRender() { return renderer; }
-        //auto *getWindow() { return window; }
         void clearScreen();
         void PresentScreen();
         void destroyer();
@@ -46,8 +44,8 @@ class WindowCreator {
         SDL_Renderer *renderer;
         SDL_Window *window;
 
-        int x;
-        int y;
+        float x;
+        float y;
 };
 
 #endif

@@ -1,13 +1,13 @@
 /*
 ** EPITECH PROJECT, 2019
 ** InputHandler.cpp
-** File description:
+** File description
 ** Header file of Input Handler class.
 */
 
 #include "InputHandler.hpp"
 
-void InputHandler::handle(const WindowCreator &window, InputHandler::InputDatas &inputs) const noexcept {
+void InputHandler::handle(const Window &window, InputHandler::InputDatas &inputs) const noexcept {
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {

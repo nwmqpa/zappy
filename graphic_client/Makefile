@@ -25,7 +25,7 @@ MODULES		=
 
 SOURCES		=		Exception.cpp	\
 					Tile.cpp	\
-					WindowCreator.cpp	\
+					Window.cpp	\
 					Protocol.cpp \
 					main.cpp	\
 					Game.cpp \

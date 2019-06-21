@@ -40,7 +40,7 @@ static const std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, std::string>> N
 	std::make_tuple(SRV_COMMAND_PARAMETER, std::string("SRV_COMMAND_PARAMETER")),
 };
 
-void gotMapSize(GameState &state, WindowCreator &window)
+void gotMapSize(GameState &state, Window &window)
 {
     if (state.tileList.empty()) {
         std::string path = "back.bmp";
@@ -53,7 +53,7 @@ void gotMapSize(GameState &state, WindowCreator &window)
     }
 }
 
-void gotTileContent(GameState &state, WindowCreator &window)
+void gotTileContent(GameState &state, Window &window)
 {
     srv_tile_content_t *packet = (srv_tile_content_t *) state.lastData;
     std::cout << "Tile: (" << packet->x << ", " << packet->y << ") data" << std::endl;
@@ -105,7 +105,7 @@ Game::Game(std::string &ip, int port)
     this->state.isActive = true;
 }
 
-void Game::life(WindowCreator &window)
+void Game::life(Window &window)
 {
 /*    auto protocol = Protocol(ip, port);
 
@@ -159,10 +159,13 @@ void Game::life(WindowCreator &window)
     SDL_DestroyWindow(window.getWindow());
     SDL_Quit();*/
 
+    //InputHandler input;
+    //InputHandler::InputDatas inputData;
+
     srv_map_size_t map {3, 3};
     state.mapSize = &map;
     std::vector<Tile *> tileList;
-    std::string name = "grass.bmp";
+    std::string name = "assets/grass.bmp";
 
     srv_tile_content_t tile0 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     srv_tile_content_t tile1 {0, 1, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -193,12 +196,13 @@ void Game::life(WindowCreator &window)
         window.clearScreen();
         window.drawTile(state.tileList, state.mapSize);
         this->eventLoop(window, tileList);
+        //input.handle(window, inputData);
         window.PresentScreen();
     }
     window.destroyer();
 }
 
-void Game::processData(WindowCreator &window)
+void Game::processData(Window &window)
 {
     if (state.lastData != nullptr) {
         auto id = (GRAPHIC_PACKETS_FROM_SERVER) state.lastHeader.id;
@@ -209,7 +213,7 @@ void Game::processData(WindowCreator &window)
     }
 }
 
-void Game::eventLoop(WindowCreator &window, std::vector<Tile *> tileList)
+void Game::eventLoop(Window &window, std::vector<Tile *> tileList)
 {
     SDL_Event event;
 

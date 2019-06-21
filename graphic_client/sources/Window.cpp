@@ -6,9 +6,9 @@
 */
 
 #include <iostream>
-#include "WindowCreator.hpp"
+#include "Window.hpp"
 
-WindowCreator::WindowCreator(std::string &name, int x, int y)
+Window::Window(std::string &name, int x, int y)
     :name(name),
     x(0),
     y(0)
@@ -36,7 +36,7 @@ WindowCreator::WindowCreator(std::string &name, int x, int y)
     }
 }
 
-bool WindowCreator::inits(Uint32 sdl, Uint32 img)
+bool Window::inits(Uint32 sdl, Uint32 img)
 {
     if (SDL_Init(sdl) < 0) {
         std::cout << "SDL Error: " << SDL_GetError() << std::endl;
@@ -47,7 +47,7 @@ bool WindowCreator::inits(Uint32 sdl, Uint32 img)
     }
     return true;
 }
-/*void WindowCreator::client_event()
+/*void Window::client_event()
 {
     while (SDL_PollEvent(&event) != 0) {
         switch (event.type) {
@@ -80,7 +80,7 @@ bool WindowCreator::inits(Uint32 sdl, Uint32 img)
     }
 }
 
-void WindowCreator::scale(int value)
+void Window::scale(int value)
 {
     int old;
 
@@ -90,7 +90,7 @@ void WindowCreator::scale(int value)
     }
 }
 */
-void WindowCreator::addY(int value, std::vector<Tile *> tileList)
+void Window::addY(int value, std::vector<Tile *> tileList)
 {
     int old;
 
@@ -101,7 +101,7 @@ void WindowCreator::addY(int value, std::vector<Tile *> tileList)
     }
 }
 
-void WindowCreator::addX(int value, std::vector<Tile *> tileList)
+void Window::addX(int value, std::vector<Tile *> tileList)
 {
     int old = 0;
 
@@ -112,7 +112,7 @@ void WindowCreator::addX(int value, std::vector<Tile *> tileList)
     }
 }
 
-void WindowCreator::drawTile(std::vector<Tile *> tileList, srv_map_size_t *mapSize)
+void Window::drawTile(std::vector<Tile *> tileList, srv_map_size_t *mapSize)
 {
     int w, h;
     SDL_Rect pos;
@@ -124,12 +124,14 @@ void WindowCreator::drawTile(std::vector<Tile *> tileList, srv_map_size_t *mapSi
     for (; it != tileList.end(); it++) {
         if ((*it)->getTileInfo() == NULL)
             throw GraphicalException("Tile error", "srv_tile_content");
-        pos.x = (w / 2 - ((mapSize->x) / 2) + x) +
-            ((*it)->getTileInfo()->x - (*it)->getTileInfo()->y) *
-            ((*it)->getSurface()->w / 2);
+        pos.x = (w / 2 - (mapSize->x / 2) + x) +
+            ((*it)->getPosX() - (*it)->getPosY()) *
+            ((*it)->getSurface()->w / 2) - ((*it)->getSurface()->w / 2);
         pos.y = (h / 2 - ((mapSize->y) / 2) + y) +
             ((*it)->getTileInfo()->x + (*it)->getTileInfo()->y) *
-            ((*it)->getSurface()->h / 2);
+            ((*it)->getSurface()->h / 2) - (((*it)->getTileInfo()->x +
+            (*it)->getTileInfo()->y) * 64) - (mapSize->y / 2 *
+            (*it)->getSurface()->h) ;
         pos.w = (*it)->getSurface()->w;
         pos.h = (*it)->getSurface()->h;
         if (SDL_RenderCopy(renderer, (*it)->getTmp(), NULL, &pos) < 0)
@@ -137,17 +139,17 @@ void WindowCreator::drawTile(std::vector<Tile *> tileList, srv_map_size_t *mapSi
     }
 }
 
-void WindowCreator::clearScreen()
+void Window::clearScreen()
 {
     SDL_RenderClear(renderer);
 }
 
-void WindowCreator::PresentScreen()
+void Window::PresentScreen()
 {
     SDL_RenderPresent(renderer);
 }
 
-void WindowCreator::destroyer()
+void Window::destroyer()
 {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

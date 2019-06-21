@@ -33,8 +33,8 @@ class Tile {
         SDL_Surface *getSurface() { return IMG; }
         SDL_Texture *getTmp() { return tmp; }
 
-        unsigned int getPosX() { return tile->x; }
-        unsigned int getPosY() { return tile->y; }
+        int getPosX() { return tile->x; }
+        int getPosY() { return tile->y; }
 
     private:
         SDL_Surface *IMG;

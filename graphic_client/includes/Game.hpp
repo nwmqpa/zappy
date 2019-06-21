@@ -9,18 +9,18 @@
     #define GAME_HPP_
 
 #include "GameState.hpp"
-#include "WindowCreator.hpp"
+#include "Window.hpp"
 
-typedef void (*data_processor_t)(GameState &, WindowCreator &);
+typedef void (*data_processor_t)(GameState &, Window &);
 
 class Game {
     public:
         Game(std::string &ip, int port);
         ~Game() = default;
 
-        void life(WindowCreator &);
-        void processData(WindowCreator &);
-        void eventLoop(WindowCreator &, std::vector<Tile *>);
+        void life(Window &);
+        void processData(Window &);
+        void eventLoop(Window &, std::vector<Tile *>);
 
     private:
         std::string ip;

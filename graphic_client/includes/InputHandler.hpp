@@ -7,7 +7,7 @@
 
 #include <SDL2/SDL.h>
 #include <iostream>
-#include "WindowCreator.hpp"
+#include "Window.hpp"
 
 class InputHandler {
 public:
@@ -22,7 +22,7 @@ public:
     InputHandler() = default;
     ~InputHandler() = default;
 
-    void handle(const WindowCreator &window, InputDatas &inputs) const noexcept;
+    void handle(const Window &window, InputDatas &inputs) const noexcept;
 private:
     void setKeys(SDL_Event &events, InputHandler::InputDatas &inputs) const noexcept;
 };

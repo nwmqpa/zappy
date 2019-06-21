@@ -1,4 +1,4 @@
-#include "WindowCreator.hpp"
+#include "Window.hpp"
 #include "Game.hpp"
 #include "protocols.h"
 #include "Protocol.hpp"
@@ -119,7 +119,7 @@ int main(void/*int argc, char *argv[]*/)
     exitNxLink(sockNxlinkSock);
 #endif*/
     auto name = std::string("window");
-    auto window = WindowCreator(name, 1280, 720);
+    auto window = Window(name, 1280, 720);
     auto game = Game(name, 666);
     game.life(window);
     return (0);
