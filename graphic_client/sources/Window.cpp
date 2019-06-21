@@ -12,7 +12,7 @@ Window::Window(std::string &name, int x, int y)
     :name(name)
 {
 #ifdef __SWITCH__
-    if (initSDL(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK, IMG_INIT_PNG)) {
+    if (initSDL(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK)) {
 #else
     if (initSDL()) {
 #endif
