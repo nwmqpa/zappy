@@ -12,6 +12,9 @@ void InputHandler::handle(const Window &window, InputHandler::InputDatas &inputs
 
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
+        case SDL_QUIT:
+            inputs.should_quit = true;
+            break;
         case SDL_JOYBUTTONDOWN:
             if (event.jbutton.which == 0)
                 if (event.jbutton.button == 10)

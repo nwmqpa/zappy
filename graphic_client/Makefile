@@ -23,7 +23,8 @@ COMPILER_COMMAND = compile_commands.json
 
 MODULES		=
 
-SOURCES		=		Exception.cpp	\
+SOURCES		=		Isometry.cpp	\
+					Exception.cpp	\
 					Tile.cpp	\
 					Window.cpp	\
 					Protocol.cpp \

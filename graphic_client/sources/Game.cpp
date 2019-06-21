@@ -10,6 +10,7 @@
 #include "DataHandler.hpp"
 #include "Protocol.hpp"
 #include "Game.hpp"
+#include "InputHandler.hpp"
 #include "Utils.hpp"
 
 static const std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, std::string>> NAMES = {
@@ -77,7 +78,7 @@ void gotTileContent(GameState &state, Window &window)
                 (*it)->setTileContent(packet->x, packet->y, temp, packet->players);
             }
         }
-        window.drawTile(state.tileList, state.mapSize);
+        window.drawTile(state.tileList, state.mapSize.x, state.mapSize.y);
     }
 }
 
@@ -145,13 +146,60 @@ void Game::life(Window &window)
     });
 
     state.protocol.askMapSize();
+    InputHandler input;
+    InputHandler::InputDatas inputData;
 
     while (this->state.isActive && dataHandler.handle(state)) {
         this->processData(window);
         window.clearScreen();
-        window.drawTile(state.tileList, state.mapSize);
+        input.handle(window, inputData);
+        state.isActive = !inputData.should_quit;
+        window.move(inputData.x, inputData.y);
+        window.drawTile(state.tileList, state.mapSize.x, state.mapSize.y);
+        inputData.x = 0;
+        inputData.y = 0;
         window.presentScreen();
     }
+
+    /*InputHandler input;
+    InputHandler::InputDatas inputData;
+
+    srv_map_size_t map {3, 3};
+    state.mapSize = &map;
+    std::vector<Tile *> tileList;
+    std::string name = "assets/grass.bmp";
+
+    srv_tile_content_t TEST[] = {
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 2, 0, 0, 0, 0, 0, 0, 0, 0},
+        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+        {1, 2, 0, 0, 0, 0, 0, 0, 0, 0},
+        {2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {2, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+        {2, 2, 0, 0, 0, 0, 0, 0, 0, 0}
+    };
+
+    for (int i = 0; i < 9; i += 1) {
+        auto tile = new Tile(name, window.getRender());
+        tile->setTileContent(tile[0]);
+        tileList.push_back(tile);
+    }
+
+    state.tileList = tileList;
+    state.isActive = true;
+
+    while (state.isActive == true) {
+        window.clearScreen();
+        window.drawTile(state.tileList, state.mapSize);
+        input.handle(window, inputData);
+        state.isActive = !inputData.should_quit;
+        window.move(inputData.x, inputData.y);
+        window.PresentScreen();
+        inputData.x = 0;
+        inputData.y = 0;
+    }*/
 }
 
 void Game::processData(Window &window)
@@ -164,7 +212,7 @@ void Game::processData(Window &window)
             processor(state, window);
     }
 }
-
+/*
 void Game::eventLoop(Window &window, std::vector<Tile *> tileList)
 {
     SDL_Event event;
@@ -181,19 +229,14 @@ void Game::eventLoop(Window &window, std::vector<Tile *> tileList)
             case SDL_KEYDOWN:
                 if (event.key.keysym.sym == SDLK_ESCAPE)
                     state.isActive = false;
-                else if (event.key.keysym.sym == SDLK_DOWN) {
+                else if (event.key.keysym.sym == SDLK_DOWN)
                     window.addY(10, tileList);
-                    std::cout << "X: " << window.getX() << "Y: " << window.getY() << std::endl;
-                } else if (event.key.keysym.sym == SDLK_UP) {
+                else if (event.key.keysym.sym == SDLK_UP)
                     window.addY(-10, tileList);
-                    std::cout << "X: " << window.getX() << "Y: " << window.getY() << std::endl;
-                } else if (event.key.keysym.sym == SDLK_LEFT) {
+                else if (event.key.keysym.sym == SDLK_LEFT)
                     window.addX(-10, tileList);
-                    std::cout << "X: " << window.getX() << "Y: " << window.getY() << std::endl;
-                } else if (event.key.keysym.sym == SDLK_RIGHT) {
+                else if (event.key.keysym.sym == SDLK_RIGHT)
                     window.addX(10, tileList);
-                    std::cout << "X: " << window.getX() << "Y: " << window.getY() << std::endl;
-                }
                 break;
             case SDL_QUIT:
                 state.isActive = false;
@@ -202,4 +245,4 @@ void Game::eventLoop(Window &window, std::vector<Tile *> tileList)
                 break;
         }
     }
-}
+}*/

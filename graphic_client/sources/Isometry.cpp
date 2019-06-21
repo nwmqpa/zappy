@@ -7,25 +7,25 @@
 
 #include "Window.hpp"
 
-static float setPositionX(float width, float map, float tileX, float tileY, float surface, float camera)
+float Window::Isometry::setPositionX(float width, float map, float tileX, float tileY, float surface, float camera)
 {
     return ((width / 2 - (map / 2)) +
             (tileX - tileY) * (surface / 2) - (surface / 2) + camera);
 }
 
-static float setPositionY(float height, float map, float tileX, float tileY, float surface, float camera)
+float Window::Isometry::setPositionY(float height, float map, float tileX, float tileY, float surface, float camera)
 {
     return ((height / 2 - (map / 2)) +
         (tileX + tileY) * (surface / 2) -
-        ((surface + tileY) * 64) - (map / 2 * surface) + camera.y);
+        ((surface + tileY) * 64) - (map / 2 * surface) + camera);
 }
 
-static float setWidth(float value)
+float Window::Isometry::setWidth(float value)
 {
     return (value);
 }
 
-static float setHeight(float value)
+float Window::Isometry::setHeight(float value)
 {
     return (value);
 }

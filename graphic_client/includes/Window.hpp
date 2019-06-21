@@ -22,19 +22,43 @@
 
 class Window {
     public:
-        Window(std::string &name, int x = 800, int y = 600);
-        ~Window() = default;
+        class Isometry {
+            public:
+                Isometry() = default;
+                ~Isometry() = default;
 
-        void drawTile(std::vector<Tile *>, srv_map_size_t &);
-        auto *getRender() { return renderer; }
+                static float setPositionX(float, float, float, float, float, float);
+                static float setPositionY(float, float, float, float, float, float);
+                static float setWidth(float);
+                static float setHeight(float);
+        };
+
+        Window(std::string &name, int x = 800, int y = 600);
+        ~Window();
+
+        void drawTile(std::vector<Tile *>, int, int);
+        //void addY(int, std::vector<Tile *>);
+        //void addX(int, std::vector<Tile *>);
+
+        //int getY() { return y; }
+        //int getX() { return x; }
+
+        void move(float, float);
+        void setCameraSize(int, int);
+
         void clearScreen();
         void presentScreen();
 
+        auto *getRender() { return renderer; }
     private:
         std::string &name;
         SDL_Renderer *renderer;
         SDL_Window *window;
-        bool inits(Uint32 SDL = SDL_INIT_EVERYTHING, Uint32 IMG = IMG_INIT_PNG);
+        SDL_Rect camera;
+
+        //int x;
+        //int y;
+        bool initSDL(Uint32 SDL = SDL_INIT_EVERYTHING);
 };
 
 #endif

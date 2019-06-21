@@ -15,7 +15,7 @@ public:
         float x;
         float y;
         float zoom;
-        bool should_quit;
+        bool should_quit = false;
         float pos[2];
     };
 
