@@ -47,3 +47,8 @@ void Player::setTeamName(std::string teamName)
 {
     this->teamName = teamName;
 }
+
+void Player::setLevel(unsigned int level)
+{
+    this->level = level;
+}

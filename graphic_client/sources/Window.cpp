@@ -66,16 +66,6 @@ void Window::drawTile(std::vector<Tile *> tileList, int x, int y)
     setCameraSize(h, w);
 
     for (; it != tileList.end(); it++) {
-        /*pos.x = (w / 2 - (mapSize->x / 2)) +
-            ((*it)->getPosX() - (*it)->getPosY()) *
-            ((*it)->getSurface()->w / 2) - ((*it)->getSurface()->w / 2) + camera.x;
-        pos.y = (h / 2 - (mapSize->y / 2)) +
-            ((*it)->getTileInfo()->x + (*it)->getTileInfo()->y) *
-            ((*it)->getSurface()->h / 2) - (((*it)->getTileInfo()->x +
-            (*it)->getTileInfo()->y) * 64) - (mapSize->y / 2 *
-            (*it)->getSurface()->h) + camera.y;
-        pos.w = (*it)->getSurface()->w;
-        pos.h = (*it)->getSurface()->h;*/
         pos.x = Isometry::setPositionX(w, x, (*it)->getPosX(),
                 (*it)->getPosY(), (*it)->getSurface()->w, camera.x);
         pos.y = Isometry::setPositionY(h, y, (*it)->getPosX(),
@@ -85,6 +75,20 @@ void Window::drawTile(std::vector<Tile *> tileList, int x, int y)
         (*it)->setArea(pos);
         if (SDL_RenderCopy(renderer, (*it)->getTmp(), nullptr, &pos) < 0)
             throw GraphicalException("Render copy error", "SDL_RenderCopy");
+    }
+}
+
+void Window::drawPlayer(std::vector<Player *> playerList, std::vector<Tile *> tileList)
+{
+    auto itPlayer = playerList.begin();
+    auto itTile = tileList.begin();
+
+    for (; itPlayer != playerList.end(); itPlayer++) {
+        for (; itTile != tileList.end(); itTile++) {
+            if ((*itTile)->getPosX() == (*itPlayer)->getX() &&
+                (*itTile)->getPosY() == (*itPlayer)->getY())
+
+        }
     }
 }
 

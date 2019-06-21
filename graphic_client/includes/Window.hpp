@@ -11,6 +11,7 @@
 #include <SDL2/SDL.h>
 #include "Tile.hpp"
 #include "Exception.hpp"
+#include "Player.hpp"
 
 #ifdef __SWITCH__
 #   define BASEPATH "romfs:/"
@@ -36,12 +37,9 @@ class Window {
         Window(std::string &name, int x = 800, int y = 600);
         ~Window();
 
-        void drawTile(std::vector<Tile *>, int, int);
-        //void addY(int, std::vector<Tile *>);
-        //void addX(int, std::vector<Tile *>);
-
-        //int getY() { return y; }
-        //int getX() { return x; }
+        void drawTile(std::vector<Tile *> tileList, int x, int y);
+        void drawPlayer(std::vector<Player *> playerList,
+                std::vector<Tile *> tileList);
 
         void move(float, float);
         void setCameraSize(int, int);
@@ -56,8 +54,6 @@ class Window {
         SDL_Window *window;
         SDL_Rect camera;
 
-        //int x;
-        //int y;
         bool initSDL(Uint32 SDL = SDL_INIT_EVERYTHING);
 };
 
