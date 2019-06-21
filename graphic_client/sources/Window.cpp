@@ -56,38 +56,49 @@ void Window::setCameraSize(int h, int w)
     camera.w = w;
 }
 
-void Window::drawTile(std::vector<Tile *> tileList, int x, int y)
+void Window::render(GameState &state, int x, int y)
 {
     int w, h;
     SDL_Rect pos;
-    auto it = tileList.begin();
-
     SDL_GetWindowSize(window, &w, &h);
     setCameraSize(h, w);
 
-    for (; it != tileList.end(); it++) {
-        pos.x = Isometry::setPositionX(w, x, (*it)->getPosX(),
-                (*it)->getPosY(), (*it)->getSurface()->w, camera.x);
-        pos.y = Isometry::setPositionY(h, y, (*it)->getPosX(),
-                (*it)->getPosY(), (*it)->getSurface()->h, camera.y);
-        pos.h = Isometry::setHeight((*it)->getSurface()->h);
-        pos.w = Isometry::setWidth((*it)->getSurface()->w);
+    for (auto it = state.tileList.begin(); it != state.tileList.end(); it++) {
+        if ((*it)->getTileInfo() == nullptr)
+            continue;
+        std::cout << (*it)->getPosX() << ", " << (*it)->getPosY() << std::endl;
+        pos.x = (((*it)->getPosX() * (*it)->getSurface()->w) - ((*it)->getPosY() * (*it)->getSurface()->w)) / 2;
+        pos.y = (((*it)->getPosX() * (*it)->getSurface()->h) + ((*it)->getPosY() * (*it)->getSurface()->h)) / 3.25;
+        pos.x /= state.camera.scale.x;
+        pos.y /= state.camera.scale.x;
+        pos.x += (w / 2) - (*it)->getSurface()->w / 2 / state.camera.scale.x;
+        pos.y += (h / 2) - ((*it)->getSurface()->h / 2) * (y / 2 / state.camera.scale.y);
+        pos.h = Isometry::setHeight((*it)->getSurface()->h, state.camera);
+        pos.w = Isometry::setWidth((*it)->getSurface()->w, state.camera);
         (*it)->setArea(pos);
+        std::cout << pos.x << ", " << pos.y << ", " << pos.h << ", " << pos.w << std::endl;
         if (SDL_RenderCopy(renderer, (*it)->getTmp(), nullptr, &pos) < 0)
             throw GraphicalException("Render copy error", "SDL_RenderCopy");
     }
 }
 
-void Window::drawPlayer(std::vector<Player *> playerList, std::vector<Tile *> tileList)
+void Window::drawPlayer(GameState &state)
 {
+    std::vector<Player *> playerList = state.playerList;
+    std::vector<Tile *> tileList = state.tileList;
     auto itPlayer = playerList.begin();
     auto itTile = tileList.begin();
 
     for (; itPlayer != playerList.end(); itPlayer++) {
         for (; itTile != tileList.end(); itTile++) {
             if ((*itTile)->getPosX() == (*itPlayer)->getX() &&
-                (*itTile)->getPosY() == (*itPlayer)->getY())
-
+                (*itTile)->getPosY() == (*itPlayer)->getY()) {
+                    pos.x = (((*itPlayer)->getSurface()->w) -
+                            ((*itPlayer)->getSurface()->w) / 2);
+                    pos.y = (((*itPlayer)->getSurface()->h) +
+                            ((*itPlayer)->getSurface()->h) / 2);
+                    pos.
+            }
         }
     }
 }

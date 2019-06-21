@@ -9,6 +9,7 @@
 #include "Tile.hpp"
 
 Tile::Tile(std::string &imgpath, SDL_Renderer *render)
+ : tile(nullptr)
 {
     img = SDL_LoadBMP(imgpath.c_str());
     if (img == nullptr)
@@ -25,6 +26,8 @@ Tile::Tile(std::string &imgpath, SDL_Renderer *render)
 
 void Tile::setTileContent(int x, int y, std::vector<int> inventory, int nbplayer)
 {
+    tile = new srv_tile_content_t;
+    std::cout << x << ", " << y << std::endl;
     tile->x = x;
     tile->y = y;
     tile->q0 = inventory.at(0);

@@ -51,8 +51,9 @@ void gotMapSize(GameState &state, Window &window)
         for (auto it = state.tileList.begin(); it != state.tileList.end(); it++)
             delete *it;
         state.tileList = std::vector<Tile *>(0);
-        for (unsigned int i = 0; i < (packet->x * packet->y); i += 1)
+        for (unsigned int i = 0; i < (packet->x * packet->y); i += 1) {
             state.tileList.push_back(new Tile(path, window.getRender()));
+        }
         state.protocol.askMapContent();
     }
 }
@@ -60,26 +61,18 @@ void gotMapSize(GameState &state, Window &window)
 void gotTileContent(GameState &state, Window &window)
 {
     srv_tile_content_t *packet = (srv_tile_content_t *) state.lastData;
+    size_t pos = (packet->y * state.mapSize.x) + packet->x;
     std::vector<int> temp(0);
     std::cout << "Tile: (" << packet->x << ", " << packet->y << ") data" << std::endl;
-    std::vector<Tile *>::iterator it = state.tileList.begin();
 
-    if (!state.tileList.empty()) {
-        for (; it != state.tileList.end(); it++) {
-            if (packet != (*it)->getTileInfo() && (*it)->getPosX() == packet->x
-                    && (*it)->getPosY() == packet->y) {
-                temp.push_back(packet->q0);
-                temp.push_back(packet->q1);
-                temp.push_back(packet->q2);
-                temp.push_back(packet->q3);
-                temp.push_back(packet->q4);
-                temp.push_back(packet->q5);
-                temp.push_back(packet->q6);
-                (*it)->setTileContent(packet->x, packet->y, temp, packet->players);
-            }
-        }
-        window.drawTile(state.tileList, state.mapSize.x, state.mapSize.y);
-    }
+    temp.push_back(packet->q0);
+    temp.push_back(packet->q1);
+    temp.push_back(packet->q2);
+    temp.push_back(packet->q3);
+    temp.push_back(packet->q4);
+    temp.push_back(packet->q5);
+    temp.push_back(packet->q6);
+    state.tileList.at(pos)->setTileContent(packet->x, packet->y, temp, packet->players);
 }
 
 void gotNewPlayerConnect(GameState &state, Window &window)
@@ -149,6 +142,7 @@ void Game::life(Window &window)
         std::cout << "Got " << getValueForIndex<GRAPHIC_PACKETS_FROM_SERVER, std::string>(id, NAMES);
         std::cout << " of len " << std::to_string(header.size) << std::endl;
         state.lastData = calloc(1, header.size);
+        state.lastHeader = header;
         ret = read(sock, state.lastData, header.size);
         if (ret == -1 && errno == EAGAIN)
             return true;
@@ -167,51 +161,11 @@ void Game::life(Window &window)
         input.handle(window, inputData);
         state.isActive = !inputData.should_quit;
         window.move(inputData.x, inputData.y);
-        window.drawTile(state.tileList, state.mapSize.x, state.mapSize.y);
+        window.render(state, state.mapSize.x, state.mapSize.y);
         window.presentScreen();
         inputData.x = 0;
         inputData.y = 0;
     }
-/*
-    InputHandler input;
-    InputHandler::InputDatas inputData;
-
-    srv_map_size_t map = {3, 3};
-    state.mapSize = &map;
-    std::vector<Tile *> tileList;
-    std::string name = "assets/grass.bmp";
-
-    srv_tile_content_t TEST[] = {
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 2, 0, 0, 0, 0, 0, 0, 0, 0},
-        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-        {1, 2, 0, 0, 0, 0, 0, 0, 0, 0},
-        {2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {2, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-        {2, 2, 0, 0, 0, 0, 0, 0, 0, 0}
-    };
-
-    for (int i = 0; i < 9; i += 1) {
-        auto tile = new Tile(name, window.getRender());
-        tile->setTileContent(TEST[i][0], TEST[i][1], );
-        tileList.push_back(tile);
-    }
-
-    state.tileList = tileList;
-    state.isActive = true;
-
-    while (state.isActive == true) {
-        window.clearScreen();
-        window.drawTile(state.tileList, state.mapSize);
-        input.handle(window, inputData);
-        state.isActive = !inputData.should_quit;
-        window.move(inputData.x, inputData.y);
-        window.presentScreen();
-        inputData.x = 0;
-        inputData.y = 0;
-    }*/
 }
 
 void Game::processData(Window &window)
@@ -222,39 +176,7 @@ void Game::processData(Window &window)
 
         if (processor != nullptr)
             processor(state, window);
+        else
+            std::cerr << "Handler not found." << std::endl;
     }
 }
-/*
-void Game::eventLoop(Window &window, std::vector<Tile *> tileList)
-{
-    SDL_Event event;
-
-    while (SDL_PollEvent(&event)) {
-        switch (event.type) {
-            case SDL_JOYBUTTONDOWN:
-                if (event.jbutton.which == 0) {
-                    if (event.jbutton.button == 10) {
-                        state.isActive = false;
-                    }
-                }
-                break;
-            case SDL_KEYDOWN:
-                if (event.key.keysym.sym == SDLK_ESCAPE)
-                    state.isActive = false;
-                else if (event.key.keysym.sym == SDLK_DOWN)
-                    window.addY(10, tileList);
-                else if (event.key.keysym.sym == SDLK_UP)
-                    window.addY(-10, tileList);
-                else if (event.key.keysym.sym == SDLK_LEFT)
-                    window.addX(-10, tileList);
-                else if (event.key.keysym.sym == SDLK_RIGHT)
-                    window.addX(10, tileList);
-                break;
-            case SDL_QUIT:
-                state.isActive = false;
-                break;
-            default:
-                break;
-        }
-    }
-}*/
