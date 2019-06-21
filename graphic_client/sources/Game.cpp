@@ -160,11 +160,11 @@ void Game::life(Window &window)
         inputData.x = 0;
         inputData.y = 0;
     }
-
-    /*InputHandler input;
+/*
+    InputHandler input;
     InputHandler::InputDatas inputData;
 
-    srv_map_size_t map {3, 3};
+    srv_map_size_t map = {3, 3};
     state.mapSize = &map;
     std::vector<Tile *> tileList;
     std::string name = "assets/grass.bmp";
@@ -183,7 +183,7 @@ void Game::life(Window &window)
 
     for (int i = 0; i < 9; i += 1) {
         auto tile = new Tile(name, window.getRender());
-        tile->setTileContent(tile[0]);
+        tile->setTileContent(TEST[i][0], TEST[i][1], );
         tileList.push_back(tile);
     }
 
@@ -196,7 +196,7 @@ void Game::life(Window &window)
         input.handle(window, inputData);
         state.isActive = !inputData.should_quit;
         window.move(inputData.x, inputData.y);
-        window.PresentScreen();
+        window.presentScreen();
         inputData.x = 0;
         inputData.y = 0;
     }*/

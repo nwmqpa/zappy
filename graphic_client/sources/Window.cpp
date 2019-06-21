@@ -66,8 +66,6 @@ void Window::drawTile(std::vector<Tile *> tileList, int x, int y)
     setCameraSize(h, w);
 
     for (; it != tileList.end(); it++) {
-        if ((*it)->getTileInfo() == nullptr)
-            throw GraphicalException("Tile error", "srv_tile_content");
         /*pos.x = (w / 2 - (mapSize->x / 2)) +
             ((*it)->getPosX() - (*it)->getPosY()) *
             ((*it)->getSurface()->w / 2) - ((*it)->getSurface()->w / 2) + camera.x;
@@ -84,6 +82,7 @@ void Window::drawTile(std::vector<Tile *> tileList, int x, int y)
                 (*it)->getPosY(), (*it)->getSurface()->h, camera.y);
         pos.h = Isometry::setHeight((*it)->getSurface()->h);
         pos.w = Isometry::setWidth((*it)->getSurface()->w);
+        (*it)->setArea(pos);
         if (SDL_RenderCopy(renderer, (*it)->getTmp(), nullptr, &pos) < 0)
             throw GraphicalException("Render copy error", "SDL_RenderCopy");
     }
