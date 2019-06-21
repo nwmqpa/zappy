@@ -150,11 +150,10 @@ void Game::life(Window &window)
         state.isActive = !inputData.should_quit;
         window.move(inputData.x, inputData.y);
         window.render(state, state.mapSize.x, state.mapSize.y);
+        window.presentScreen();
         inputData.x = 0;
         inputData.y = 0;
-        window.presentScreen();
     }
-
 }
 
 void Game::processData(Window &window)

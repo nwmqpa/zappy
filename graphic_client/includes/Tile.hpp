@@ -28,10 +28,15 @@ class Tile {
         int getPosX() { return tile->x; }
         int getPosY() { return tile->y; }
 
+        SDL_Rect getArea() { return area; }
+        void setArea(SDL_Rect area);
+
     private:
         SDL_Surface *img;
         SDL_Texture *texture;
         SDL_Texture *tmp;
+
+        SDL_Rect area;
 
         srv_tile_content_t *tile;
 };

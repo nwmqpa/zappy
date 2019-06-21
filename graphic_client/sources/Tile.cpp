@@ -39,3 +39,8 @@ void Tile::setTileContent(int x, int y, std::vector<int> inventory, int nbplayer
     tile->q6 = inventory.at(6);
     tile->players = nbplayer;
 }
+
+void Tile::setArea(SDL_Rect area)
+{
+    this->area = area;
+}

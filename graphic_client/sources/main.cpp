@@ -64,7 +64,8 @@ int main(int argc, char *argv[])
     if (argc == 3) {
         host = std::string(argv[1]);
         port = atoi(argv[2]);
-    }
+    } else
+        return (0);
     auto name = std::string("window");
     auto window = Window(name, 1280, 720);
     auto game = Game(host, port);
