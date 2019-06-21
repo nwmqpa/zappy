@@ -107,7 +107,7 @@ Game::Game(std::string &ip, int port)
 
 void Game::life(WindowCreator &window)
 {
-    auto protocol = Protocol(ip, port);
+/*    auto protocol = Protocol(ip, port);
 
     if (protocol.setupSocket() == -1) {
         close(protocol.getSocket());
@@ -142,7 +142,7 @@ void Game::life(WindowCreator &window)
             protocol.askMapSize();
         else if (this->state.mapRequest && this->state.mapSize == NULL) {
             for (unsigned int x, y; it != state.tileList.end(); it++) {
-                if (x > state.mapSize->x) {
+                if (x >= state.mapSize->x) {
                     x = 0;
                     y += 1;
                 }
@@ -155,9 +155,47 @@ void Game::life(WindowCreator &window)
         it = state.tileList.begin();
     }
     window.destroyer();
-   /* SDL_DestroyRenderer(window.getRender());
+    SDL_DestroyRenderer(window.getRender());
     SDL_DestroyWindow(window.getWindow());
     SDL_Quit();*/
+
+    srv_map_size_t map {3, 3};
+    state.mapSize = &map;
+    std::vector<Tile *> tileList;
+    std::string name = "grass.bmp";
+
+    srv_tile_content_t tile0 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    srv_tile_content_t tile1 {0, 1, 0, 0, 0, 0, 0, 0, 0, 0};
+    srv_tile_content_t tile2 {0, 2, 0, 0, 0, 0, 0, 0, 0, 0};
+    srv_tile_content_t tile3 {1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    srv_tile_content_t tile4 {1, 1, 0, 0, 0, 0, 0, 0, 0, 0};
+    srv_tile_content_t tile5 {1, 2, 0, 0, 0, 0, 0, 0, 0, 0};
+    srv_tile_content_t tile6 {2, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    srv_tile_content_t tile7 {2, 1, 0, 0, 0, 0, 0, 0, 0, 0};
+    srv_tile_content_t tile8 {2, 2, 0, 0, 0, 0, 0, 0, 0, 0};
+
+    for (int i = 0; i < 9; i += 1)
+        tileList.push_back(new Tile(name, window.getRender()));
+    tileList[0]->setTileContent(&tile0);
+    tileList[1]->setTileContent(&tile1);
+    tileList[2]->setTileContent(&tile2);
+    tileList[3]->setTileContent(&tile3);
+    tileList[4]->setTileContent(&tile4);
+    tileList[5]->setTileContent(&tile5);
+    tileList[6]->setTileContent(&tile6);
+    tileList[7]->setTileContent(&tile7);
+    tileList[8]->setTileContent(&tile8);
+
+    state.tileList = tileList;
+    state.isActive = true;
+
+    while (state.isActive == true) {
+        window.clearScreen();
+        window.drawTile(state.tileList, state.mapSize);
+        this->eventLoop(window, tileList);
+        window.PresentScreen();
+    }
+    window.destroyer();
 }
 
 void Game::processData(WindowCreator &window)
