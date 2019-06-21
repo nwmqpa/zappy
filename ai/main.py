@@ -1,66 +1,48 @@
-
 """Main function to execute AI."""
 
 from ai.verif import basic_verif
-from ai.verif import verif_args_values
 from ai.get_args import get_arguments
+from ai.verif import verif_args_values
 from ai.first_connection import connect_socket
 from ai.first_connection import get_client_nb_and_world_size
-from ai.clear_received_message import clean_received_message
-from ai.parse_inventory import parse_inventory
+from ai.play import Player
 import socket
 import sys
 
 
-def test(server_socket: socket.socket) -> None:
-    """Test socket."""
-    print("In test\n")
-
-    print('Send     ->', "Look")    # send message
-    server_socket.send(("Look" + "\n").encode())
-    new_data = server_socket.recv(1024)     # Recv message
-    # print('Received ->', repr(new_data))    # print message
-    new_data_str = clean_received_message(repr(new_data))
-    print("Recv =====>", new_data, "\n")
-
-    print('Send     ->', "Inventory")    # send message
-    server_socket.send(("Inventory" + "\n").encode())
-    new_data = server_socket.recv(1024)     # Recv message
-    # print('Received ->', repr(new_data))    # print message
-    new_data_str = clean_received_message(repr(new_data))
-    inventory = parse_inventory(new_data_str)
-    print("Inventory -> ", inventory)
+def send_message(server_socket: socket.socket, message: str) -> None:
+    """Broadcast message to all players."""
+    # print('Send     ->', "Broadcast text")
+    server_socket.send(("Broadcast " + message + "\n").encode())
+    new_data = server_socket.recv(1024).decode()
     # print("Recv =====>", new_data, "\n")
 
-    print('Send     ->', "Broadcast text")    # send message
-    server_socket.send(("Broadcast Text Message Wesh" + "\n").encode())
-    new_data = server_socket.recv(1024)     # Recv message
-    # print('Received ->', repr(new_data))    # print message
-    new_data_str = clean_received_message(repr(new_data))
-    print("Recv =====>", new_data, "\n")
 
-    print('Send     ->', "Connect_nbr")    # sned message
+def get_connection_nb(server_socket: socket.socket) -> int:
+    """Return nb of connected players."""
+    # print('Send     ->', "Allowed Connect_nbr")
     server_socket.send(("Connect_nbr" + "\n").encode())
-    new_data = server_socket.recv(1024)     # Recv message
-    # print('Received ->', repr(new_data))    # print message
-    new_data_str = clean_received_message(repr(new_data))
-    print("Recv =====>", new_data, "\n")
-
-    # new_data = server_socket.recv(1024)     # Recv message
-    # # print('Received ->', repr(new_data))    # print message
-    # new_data = clean_received_message(repr(new_data))
+    new_data = server_socket.recv(1024).decode()
     # print("Recv =====>", new_data, "\n")
+    return (int(new_data))
+
+
+def commands(server_socket: socket.socket) -> None:
+    """All_command to send to server."""
+    send_message(server_socket, "LOLILOL")
+    get_connection_nb(server_socket)
+    # move_forward(server_socket)
+    # turn_right(server_socket)
+    # turn_left(server_socket)
 
 
 def main() -> None:
-    """Main."""
+    """Entry point of the bot."""
     basic_verif()
     opt = get_arguments()
     verif_args_values(opt)
-
-    print(repr(opt))
     server_socket = connect_socket(opt)
     client_info = get_client_nb_and_world_size(server_socket, opt)
-    print("Client info -> ", repr(client_info) + "\n")
-
-    test(server_socket)
+    # commands(server_socket)
+    curr_player = Player(server_socket)
+    curr_player.begin_player_life()
