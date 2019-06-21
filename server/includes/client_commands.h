@@ -28,77 +28,92 @@ typedef struct command_param_s {
     double cooldown;
 } command_param_t;
 
+/// Prepare commands like `Fork` and `Incantation`.
 int prepare_special_command(ia_t *client, server_t *server);
+
+/// Set the ai cooldown.
 int prepare_command(ia_t *client, server_t *server);
+
+/// Process the command.
 char *process_command(ia_t *client, server_t *server);
+
+/// Move client with the server.
 void move_client(ia_t *client, server_t *server, pos_t new, pos_t size);
+
+/// Remove player from the server.
 void kill_player(ia_t *client, server_t *server);
 
-/*
-** Moving command
-**  response:   ok
-**  time limit: 7/f
-*/
+///
+/// Moving command
+///  response:   ok
+///  time limit: 7/f
+///
 char *forward(ia_t *client, server_t *server);
 char *left(ia_t *client, server_t *server);
 char *right(ia_t *client, server_t *server);
 
-/*
-** Look command
-**  response:   [player, tile1-content, tile2-content, ...]
-**  time limit: 7/f
-*/
+///
+/// Look command
+///  response:   [player, tile1-content, tile2-content, ...]
+///  time limit: 7/f
+///
 char *look(ia_t *client, server_t *server);
 
-/*
-** Inventory command
-**  response:   [linemate X, demeraute Y, ..., phiras Z]
-**      -> where `X` `Y` `Z` number possesed by the player.
-**  time limit: 1/f
-*/
+///
+/// Inventory command
+///  response:   [linemate X, demeraute Y, ..., phiras Z]
+///      -> where `X` `Y` `Z` number possesed by the player.
+///  time limit: 1/f
+///
 char *inventory(ia_t *client, server_t *server);
 
-/*
-** Broadcast [text] command
-**  response:   ok
-**  time limit: 7/f
-*/
+///
+/// Broadcast [text] command
+///  response:   ok
+///  time limit: 7/f
+///
 char *broadcast(ia_t *client, server_t *server, const char *text);
 
-/*
-** Fork command
-**  response:   ok
-**  time limit: 42/f
-*/
+///
+/// Fork command
+///  response:   ok
+///  time limit: 42/f
+///
 char *fork_client(ia_t *client, server_t *server);
 
-/*
-** Eject command
-**  response:   ok/ko
-**  time limit: 7/f
-*/
+///
+/// Eject command
+///  response:   ok/ko
+///  time limit: 7/f
+///
 char *eject(ia_t *client, server_t *server);
 
-/*
-** Map interaction command
-**  response:   ok/ko
-**  time limit: 7/f
-*/
+///
+/// Get command
+///  response:   ok/ko
+///  time limit: 7/f
+///
 char *take(ia_t *client, server_t *server, const char *object);
+
+///
+/// Set command
+///  response:   ok/ko
+///  time limit: 7/f
+///
 char *set(ia_t *client, server_t *server, const char *object);
 
-/*
-** Incantation command
-**  response:   Elevation underway\nCurrent level: X/ko
-**      -> where X is the client->level
-**  time limit: 300/f
-*/
+///
+/// Incantation command
+///  response:   Elevation underway\nCurrent level: X/ko
+///      -> where X is the client->level
+///  time limit: 300/f
+///
 char *incante(ia_t *client, server_t *server);
 
-/*
-** Connect nbr command.
-**  response:   `Value`
-**      -> The nbr of available slots in client's team.
-**  time limit: 0
-*/
+///
+/// Connect nbr command.
+///  response:   `Value`
+///      -> The nbr of available slots in client's team.
+///  time limit: 0
+///
 char *connect_nbr(ia_t *client, server_t *server);

@@ -17,10 +17,10 @@
 
 typedef int (*disp_func)(int fd, void *data);
 
-/*
-* Dispatcher structure that handle function for sockets.
-*
-*/
+///
+/// Dispatcher structure that handle function for sockets.
+///
+///
 typedef struct dispatcher_s {
     int epoll_fd;
     int main_socket;
@@ -29,10 +29,10 @@ typedef struct dispatcher_s {
     disp_func on_delete;
 } dispatcher_t;
 
-/*
-* Take a dispatcher a listener and a function and dispatch the function to
-* all active sockets. (Work with `select` under the hood.)
-*/
+///
+/// Take a dispatcher a listener and a function and dispatch the function to
+/// all active sockets. (Work with `select` under the hood.)
+///
 int dispatch(dispatcher_t *this, void *data);
 
 #endif /* TCP_LIB_H_ */
