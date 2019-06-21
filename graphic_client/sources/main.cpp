@@ -52,7 +52,7 @@ static void initJoycons(void) {
 
 //#ifndef TEST
 int main(void/*int argc, char *argv[]*/)
-{/*
+{
 #ifdef __SWITCH__
     int sockNxlinkSock = -1;
     initNxLink(sockNxlinkSock);
@@ -60,7 +60,8 @@ int main(void/*int argc, char *argv[]*/)
     initJoycons();
     std::string host("192.168.43.129");
     int port = 13334;
-#else
+#endif
+/*
     if (argc != 3) {
         std::cout << "Usage: " << argv[0] << " <ip> <port>" << std::endl;
         exit(84);
@@ -114,14 +115,15 @@ int main(void/*int argc, char *argv[]*/)
     auto game = Game(host, port);
     game.life(window);
     std::cout << "Finished program." << std::endl;
-#ifdef __SWITCH__
-    SDL_Quit();
-    exitNxLink(sockNxlinkSock);
-#endif*/
+*/
     auto name = std::string("window");
     auto window = Window(name, 1280, 720);
     auto game = Game(name, 666);
     game.life(window);
+#ifdef __SWITCH__
+    SDL_Quit();
+    exitNxLink(sockNxlinkSock);
+#endif
     return (0);
 }
 //#endif /* TEST */
