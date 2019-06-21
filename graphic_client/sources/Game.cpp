@@ -148,12 +148,10 @@ void Game::life(Window &window)
 
     while (this->state.isActive && dataHandler.handle(state)) {
         this->processData(window);
-        this->eventLoop(window, state.tileList);
         window.clearScreen();
         window.drawTile(state.tileList, state.mapSize);
-        window.PresentScreen();
+        window.presentScreen();
     }
-    window.destroyer();
 }
 
 void Game::processData(Window &window)

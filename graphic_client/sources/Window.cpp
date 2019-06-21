@@ -90,27 +90,6 @@ void Window::scale(int value)
     }
 }
 */
-void Window::addY(int value, std::vector<Tile *> tileList)
-{
-    int old;
-
-    y += value;
-    for (unsigned int i = 0; i < tileList.size(); i++) {
-        old = tileList[i]->getY();
-        tileList[i]->setY(old += value);
-    }
-}
-
-void Window::addX(int value, std::vector<Tile *> tileList)
-{
-    int old = 0;
-
-    x += value;
-    for (unsigned int i = 0; i < tileList.size(); i++) {
-        old = tileList[i]->getX();
-        tileList[i]->setX(old += value);
-    }
-}
 
 void Window::drawTile(std::vector<Tile *> tileList, srv_map_size_t &mapSize)
 {
