@@ -28,7 +28,8 @@ typedef struct command_param_s {
     double cooldown;
 } command_param_t;
 
-int prepare_command(ia_t *client);
+int prepare_special_command(ia_t *client, server_t *server);
+int prepare_command(ia_t *client, server_t *server);
 char *process_command(ia_t *client, server_t *server);
 void move_client(ia_t *client, server_t *server, pos_t new, pos_t size);
 void kill_player(ia_t *client, server_t *server);

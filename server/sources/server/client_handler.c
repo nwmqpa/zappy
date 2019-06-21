@@ -27,8 +27,7 @@ int handle_egg_client(ia_t *client, server_t *server, const char *team_name)
         return 0;
     to_insert = check_for_eggs(team, server);
     if (to_insert != -1) {
-        team->clients[to_insert] = client->id;
-        event_player_connected_egg(client, server);
+        insert_head_list(team->clients, client);
         return 1;
     }
     return 0;
@@ -38,7 +37,6 @@ void handle_protocol(ia_t *client, server_t *srv)
 {
     char team_name[100] = {0};
     int slots = -1;
-    pos_t pos = { rand() % (srv->width - 1), rand() % (srv->height - 1) };
 
     dprintf(client->id, "WELCOME\n");
     read(client->id, &team_name, 100);
@@ -46,17 +44,13 @@ void handle_protocol(ia_t *client, server_t *srv)
         dprintf(client->id, "ko\n");
         read(client->id, &team_name, 100);
     }
-    if (slots > 0)
-        event_new_player(client, srv);
-    if (slots > 0 || (slots = handle_egg_client(client, srv, team_name))) {
-        add_player(get_tile_map(srv->map, pos.x, pos.y), client->id);
-        client->position = pos;
-    }
     if (slots == 0) {
         dprintf(client->id, "ko\n");
         close(client->id);
-    } else
+    } else {
+        add_player(get_tile_map(srv->map, client->position.x, client->position.y), client->id);
         dprintf(client->id, "%d\n%d %d\n", slots - 1, srv->width, srv->height);
+    }
 }
 
 int on_connect_client(int socket, void *data)

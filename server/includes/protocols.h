@@ -550,7 +550,7 @@ struct PACKED srv_end_incantation {
     enum RESULT result;
 };
 
-typedef struct srv_end_incantation_msg srv_end_incantation_msg_t;
+typedef struct srv_end_incantation srv_end_incantation_t;
 
 #define SRV_END_INCANTATION_LEN sizeof(struct srv_end_incantation)
 

@@ -15,7 +15,7 @@ static const command_t COMMANDS[] = {
     {"Left", left, 4, 7.0},
     {"Right", right, 5, 7.0},
     {"Look", look, 4, 7.0},
-    {"Incante", incante, 7, 300.0},
+    {"Incantation", incante, 7, 300.0},
     {"Connect_nbr", connect_nbr, 11, 0.0},
     {"Inventory", inventory, 9, 1.0},
     {NULL, NULL, 0, 0}
@@ -77,13 +77,14 @@ double get_cooldown(const char *cmd)
     return -1;
 }
 
-int prepare_command(ia_t *client)
+int prepare_command(ia_t *client, server_t *server)
 {
     if (is_empty_list(client->commands))
         return -1;
     client->to_exec = pop_list(client->commands, 0);
     debugl("Preparing command %s.\n", client->to_exec);
-    client->cooldown = get_cooldown(client->to_exec);
+    if (prepare_special_command(client, server) == 0)
+        client->cooldown = get_cooldown(client->to_exec);
     if (client->cooldown == -1) {
         errorl("Cannot find cooldown of %s.\n", client->to_exec);
         return -1;

@@ -1,5 +1,6 @@
 """Verification file."""
 
+
 import os
 import sys
 import ai.get_args
@@ -7,10 +8,11 @@ import ai.get_args
 
 def display_help() -> None:
     """Print usage."""
-    print("USAGE: ./zappy_ai -p port -n name -h machine\n"
-          "   port    is the port number\n"
-          "   name    is the name of the team\n"
-          "   machine is the name of the machine; localhost by default")
+    sys.stderr.write("USAGE: ./zappy_ai -p port -n name -h machine\n"
+                     "   port    is the port number\n"
+                     "   name    is the name of the team\n"
+                     "   machine is the name of the machine; "
+                     "localhost by default\n")
 
 
 def basic_verif() -> None:
@@ -21,8 +23,7 @@ def basic_verif() -> None:
         sys.exit(0)
     elif (len(sys.argv) != 7):
         display_help()
-        sys.stderr.write("zappy_ai: Too few arguments.\n")
-        sys.exit(84)
+        raise Exception("zappy_ai: Too few arguments.\n")
 
 
 def verif_args_values(opt: ai.get_args.Options) -> None:

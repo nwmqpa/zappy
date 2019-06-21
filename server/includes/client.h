@@ -87,3 +87,4 @@ size_t len_command(ia_t *client);
 
 void print_client(ia_t *client);
 void print_client_list(const void *data);
+

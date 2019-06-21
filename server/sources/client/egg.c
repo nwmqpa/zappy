@@ -8,9 +8,9 @@
 #include "egg.h"
 #include "logger.h"
 
-static const int ECLOSION_TIME = 600;
+static const int ECLOSION_TIME = 100;
 
-static int is_eclosable(const void *elem, const void *data)
+int is_eclosable(const void *elem, const void *data)
 {
     const egg_t *egg = elem;
 
@@ -19,19 +19,13 @@ static int is_eclosable(const void *elem, const void *data)
 
 int check_for_eggs(team_t *team, server_t *server)
 {
-    egg_t *egg = get_cmp_list(server->eggs, is_eclosable, NULL);
+    egg_t *egg = get_cmp_list(team->eggs, is_eclosable, NULL);
 
     if (egg == NULL) {
         infol("No egg able to eclose.\n");
         return -1;
     }
-    for (int i = 0; team->clients[i]; ++i) {
-        if (team->clients[i] == -2) {
-            return i;
-        }
-    }
-    infol("No slot available on team %s to connect.\n", team->name);
-    return -1;
+    return 0;
 }
 
 void eclosion_handler(void *elem, const void *data)

@@ -35,3 +35,8 @@ void get_info_egg(void *player, const void *nothing);
 /// Return -1 if their is not egg eclosable or
 /// if their is no team slot for eggs.
 int check_for_eggs(team_t *team, server_t *server);
+
+int is_eclosable(const void *elem, const void *data);
+
+
+int count_eggs(team_t *team);
