@@ -112,25 +112,23 @@ void Window::addX(int value, std::vector<Tile *> tileList)
     }
 }
 
-void Window::drawTile(std::vector<Tile *> tileList, srv_map_size_t *mapSize)
+void Window::drawTile(std::vector<Tile *> tileList, srv_map_size_t &mapSize)
 {
     int w, h;
     SDL_Rect pos;
     std::vector<Tile *>::iterator it = tileList.begin();
 
     SDL_GetWindowSize(window, &w, &h);
-    if (mapSize == NULL)
-        throw GraphicalException("Map error", "srv_map_size");
     for (; it != tileList.end(); it++) {
         if ((*it)->getTileInfo() == NULL)
             throw GraphicalException("Tile error", "srv_tile_content");
-        pos.x = (w / 2 - (mapSize->x / 2) + x) +
+        pos.x = (w / 2 - (mapSize.x / 2) + x) +
             ((*it)->getPosX() - (*it)->getPosY()) *
             ((*it)->getSurface()->w / 2) - ((*it)->getSurface()->w / 2);
-        pos.y = (h / 2 - ((mapSize->y) / 2) + y) +
+        pos.y = (h / 2 - ((mapSize.y) / 2) + y) +
             ((*it)->getTileInfo()->x + (*it)->getTileInfo()->y) *
             ((*it)->getSurface()->h / 2) - (((*it)->getTileInfo()->x +
-            (*it)->getTileInfo()->y) * 64) - (mapSize->y / 2 *
+            (*it)->getTileInfo()->y) * 64) - (mapSize.y / 2 *
             (*it)->getSurface()->h) ;
         pos.w = (*it)->getSurface()->w;
         pos.h = (*it)->getSurface()->h;

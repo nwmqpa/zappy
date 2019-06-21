@@ -15,7 +15,7 @@ typedef void (*data_processor_t)(GameState &, Window &);
 
 class Game {
     public:
-        Game(std::string &ip, int port);
+        Game(std::string ip, int port);
         ~Game() = default;
 
         void life(Window &);
