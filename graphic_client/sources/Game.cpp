@@ -78,13 +78,31 @@ void gotTileContent(GameState &state, Window &window)
 void gotNewPlayerConnect(GameState &state, Window &window)
 {
     srv_new_player_connect_t *packet = (srv_new_player_connect_t *) state.lastData;
-    std::string path = REALPATH("blocky.bmp");
-    Player temp(path, window.getRender());
-    temp.setPosition(packet->x, packet->y);
-    temp.setPlayerNum(packet->player_num);
-    temp.setOrientation(packet->orientation);
-    temp.setTeamName(std::string(packet->team_name));
-    state.playerList.push_back(&temp);
+    std::string path = REALPATH("player.bmp");
+    Player *temp = new Player(path, window.getRender());
+    temp->setPosition(packet->x, packet->y);
+    temp->setPlayerNum(packet->player_num);
+    temp->setOrientation(packet->orientation);
+    temp->setTeamName(std::string(packet->team_name));
+    state.playerList.push_back(temp);
+}
+
+void gotPlayerPosition(GameState &state, Window &window)
+{
+    srv_player_pos_t *packet = (srv_player_pos_t *) state.lastData;
+    for (auto it = state.playerList.begin(); it != state.playerList.end(); it++) {
+        if ((*it)->getPlayerNum() == packet->player_num)
+            (*it)->setPosition(packet->x, packet->y);
+    }
+}
+
+void gotPlayerLevel(GameState &state, Window &window)
+{
+    srv_player_level_t *packet = (srv_player_level_t *) state.lastData;
+    for (auto it = state.playerList.begin(); it != state.playerList.end(); it++) {
+        if ((*it)->getPlayerNum() == packet->player_num)
+            (*it)->setLevel(packet->level);
+    }
 }
 
 static const std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, data_processor_t>> DATA_PROCESSORS = {
@@ -92,8 +110,8 @@ static const std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, data_processor_
 	std::make_tuple(SRV_TILE_CONTENT, &gotTileContent),
 	std::make_tuple(SRV_TEAMS_NAMES, nullptr),
 	std::make_tuple(SRV_NEW_PLAYER_CONNECT, &gotNewPlayerConnect),
-	std::make_tuple(SRV_PLAYER_POSITION, nullptr),
-	std::make_tuple(SRV_PLAYER_LEVEL, nullptr),
+	std::make_tuple(SRV_PLAYER_POSITION, &gotPlayerPosition),
+	std::make_tuple(SRV_PLAYER_LEVEL, &gotPlayerLevel),
 	std::make_tuple(SRV_PLAYER_INVENTORY, nullptr),
 	std::make_tuple(SRV_EXPULSION, nullptr),
 	std::make_tuple(SRV_BROADCAST, nullptr),
@@ -177,6 +195,7 @@ void Game::life(Window &window)
         state.camera.center.y /= state.camera.scale.y;
         state.isActive = !inputData.should_quit;
         window.render(state, state.mapSize.x, state.mapSize.y);
+        window.renderPlayer(state);
         window.presentScreen();
         inputData.x = 0;
         inputData.y = 0;

@@ -11,7 +11,7 @@ Player::Player(std::string &path, SDL_Renderer *render)
 {
     sprite = SDL_LoadBMP(path.c_str());
     if (sprite == nullptr)
-        throw GraphicalException("BMP loading error", "SDL_LoadBMP");
+        throw GraphicalException("BMP loading error on Player", "SDL_LoadBMP Player");
     tmp = SDL_CreateTextureFromSurface(render, sprite);
     if (tmp == nullptr)
         throw GraphicalException("Buffering texture creation error",

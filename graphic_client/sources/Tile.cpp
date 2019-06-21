@@ -13,7 +13,7 @@ Tile::Tile(std::string &imgpath, SDL_Renderer *render)
 {
     img = SDL_LoadBMP(imgpath.c_str());
     if (img == nullptr)
-        throw GraphicalException("BMP loading error", "SDL_LoadBMP");
+        throw GraphicalException("BMP loading error on Tile", "SDL_LoadBMP Tile");
     tmp = SDL_CreateTextureFromSurface(render, img);
     if (tmp == nullptr)
         throw GraphicalException("Buffering texture creation error",

@@ -37,6 +37,9 @@ public:
     void setTeamName(std::string teamName);
     std::string getTeamName() { return teamName; }
 
+    SDL_Texture *getTmp() { return tmp; }
+    SDL_Surface *getSurface() { return sprite; }
+
 private:
     SDL_Surface *sprite;
     SDL_Texture *texture;
