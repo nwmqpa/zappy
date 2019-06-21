@@ -48,7 +48,7 @@ char *take(ia_t *client, server_t *server, const char *object)
 
 char *set(ia_t *client, server_t *server, const char *object)
 {
-    int idx = get_inventory_idx(object);
+    int idx = get_inventory_idx(object + 1);
     tile_t *tile = get_tile_map(server->map, client->position.x,
             client->position.y);
 
