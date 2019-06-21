@@ -34,8 +34,9 @@ static int are_players_ok(server_t *server, tile_t *tile, unsigned int level)
         if (client->level != level)
             nb_player_level--;
     }
-    if (DATA_INCANT[level].nb_player < nb_player_level) {
-        infol("Not enough player on tile to incante.\n");
+    if (nb_player_level < DATA_INCANT[level].nb_player) {
+        infol("Not enough player on tile to incante.\nNeed %d have %d.\n",
+                DATA_INCANT[level].nb_player, nb_player_level);
         return 0;
     }
     return 1;
@@ -56,7 +57,7 @@ int is_incant_possible(ia_t *client, server_t *server, tile_t *tile)
 {
     if (!are_players_ok(server, tile, client->level))
         return 0;
-    if (!are_stuff_ok(tile, client->level + 1))
+    if (!are_stuff_ok(tile, client->level))
         return 0;
     return 1;
 }

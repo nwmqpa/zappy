@@ -15,7 +15,7 @@ static const command_t COMMANDS[] = {
     {"Left", left, 4, 7.0},
     {"Right", right, 5, 7.0},
     {"Look", look, 4, 7.0},
-    {"Incante", incante, 7, 300.0},
+    {"Incantation", incante, 7, 300.0},
     {"Connect_nbr", connect_nbr, 11, 0.0},
     {"Inventory", inventory, 9, 1.0},
     {NULL, NULL, 0, 0}
