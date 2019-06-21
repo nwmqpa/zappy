@@ -34,7 +34,7 @@ Test(commands, look_level3_with_only_food) {
     }
     tile_t *tile =  get_tile_map(server->map, 0, 0);
     tile->inventory.inv.linemate = 2;
-    client->level = 3;
+    client->level = 2;
     client->position.x = 0;
     client->position.y = 0;
     client->direction = LEFT;
@@ -53,7 +53,7 @@ Test(commands, look_level2_with_some_things) {
                 tile->inventory.inv_arr[i] = 0;
         }
     }
-    client->level = 2;
+    client->level = 1;
     client->direction = 3;
     get_tile_map(server->map, 0, 0)->inventory.inv.linemate = 42;
     char *ret = look(client, server);
@@ -71,7 +71,7 @@ Test(commands, look_level2_direction) {
                 tile->inventory.inv_arr[i] = 0;
         }
     }
-    client->level = 2;
+    client->level = 1;
     client->direction = 3;
     client->position.x = 1;
     client->position.y = 1;
