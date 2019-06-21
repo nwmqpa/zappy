@@ -35,11 +35,6 @@ int map_size(const void *data)
     return 0;
 }
 
-int map_content(const void *data)
-{
-    return 0;
-}
-
 static void fill_payload(tile_t *tile, srv_tile_content_t *payload,
         unsigned int x, unsigned int y)
 {
@@ -53,6 +48,27 @@ static void fill_payload(tile_t *tile, srv_tile_content_t *payload,
     payload->q5 = tile->inventory.inv.phiras;
     payload->q6 = tile->inventory.inv.thystame;
     payload->players = tile->nb_player;
+}
+
+int map_content(const void *data)
+{
+    const struct { int sock; server_t *server; } *datas = data;
+    struct { pkt_header_t header; srv_tile_content_t payload; } response = {
+        {   .id = SRV_TILE_CONTENT,
+            .subid = 0,
+            .version = PROTOCOL_VERSION,
+            .size = SRV_TILE_CONTENT_LEN },
+        {0}
+    };
+
+    for (unsigned int y = 0; y < datas->server->height; ++y) {
+        for (unsigned int x = 0; x < datas->server->width; ++x) {
+            tile_t *tile = get_tile_map(datas->server->map, x, y);
+            fill_payload(tile, &response.payload, x, y);
+            write(datas->sock, &response, PKT_HDR_LEN + SRV_TILE_CONTENT_LEN);
+        }
+    }
+    return 0;
 }
 
 int tile_content(const void *data)
@@ -81,4 +97,3 @@ int tile_content(const void *data)
     write(datas->sock, &response, PKT_HDR_LEN + SRV_TILE_CONTENT_LEN);
     return 0;
 }
-
