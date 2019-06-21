@@ -10,6 +10,11 @@
 #include "server.h"
 #include "generic_list.h"
 
+///
+/// events are for graphic client.
+/// It's for things like `new_player` or `player_death`
+/// that the graphic client cannot ask for.
+///
 typedef struct event_s {
     int id;
     void *payload;
@@ -17,8 +22,6 @@ typedef struct event_s {
 
 int add_event(server_t *server, int id, void *payload);
 void handle_events(server_t *server);
-
-// Functions
 
 void event_egg_layed(ia_t *client, server_t *server);
 void event_new_player(ia_t *client, server_t *server);
