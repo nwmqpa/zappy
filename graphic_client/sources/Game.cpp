@@ -159,12 +159,28 @@ void Game::life(Window &window)
         this->processData(window);
         window.clearScreen();
         input.handle(window, inputData);
+        state.camera.center.x *= state.camera.scale.x;
+        state.camera.center.y *= state.camera.scale.y;
+        state.camera.center.x += inputData.x;
+        state.camera.center.y += inputData.y;
+        state.camera.scale.x += inputData.zoom;
+        state.camera.scale.y += inputData.zoom;
+        if (state.camera.scale.y < 0.5) {
+            state.camera.scale.x = 0.5;
+            state.camera.scale.y = 0.5;
+        }
+        if (state.camera.scale.y > 5) {
+            state.camera.scale.x = 5;
+            state.camera.scale.y = 5;
+        }
+        state.camera.center.x /= state.camera.scale.x;
+        state.camera.center.y /= state.camera.scale.y;
         state.isActive = !inputData.should_quit;
-        window.move(inputData.x, inputData.y);
         window.render(state, state.mapSize.x, state.mapSize.y);
         window.presentScreen();
         inputData.x = 0;
         inputData.y = 0;
+        inputData.zoom = 0;
     }
 }
 

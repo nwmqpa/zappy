@@ -66,22 +66,23 @@ void Window::render(GameState &state, int x, int y)
     for (auto it = state.tileList.begin(); it != state.tileList.end(); it++) {
         if ((*it)->getTileInfo() == nullptr)
             continue;
-        std::cout << (*it)->getPosX() << ", " << (*it)->getPosY() << std::endl;
         pos.x = (((*it)->getPosX() * (*it)->getSurface()->w) - ((*it)->getPosY() * (*it)->getSurface()->w)) / 2;
         pos.y = (((*it)->getPosX() * (*it)->getSurface()->h) + ((*it)->getPosY() * (*it)->getSurface()->h)) / 3.25;
         pos.x /= state.camera.scale.x;
-        pos.y /= state.camera.scale.x;
+        pos.y /= state.camera.scale.y;
         pos.x += (w / 2) - (*it)->getSurface()->w / 2 / state.camera.scale.x;
         pos.y += (h / 2) - ((*it)->getSurface()->h / 2) * (y / 2 / state.camera.scale.y);
+        pos.x += state.camera.center.x;
+        pos.y += state.camera.center.y;
         pos.h = Isometry::setHeight((*it)->getSurface()->h, state.camera);
         pos.w = Isometry::setWidth((*it)->getSurface()->w, state.camera);
         (*it)->setArea(pos);
-        std::cout << pos.x << ", " << pos.y << ", " << pos.h << ", " << pos.w << std::endl;
         if (SDL_RenderCopy(renderer, (*it)->getTmp(), nullptr, &pos) < 0)
             throw GraphicalException("Render copy error", "SDL_RenderCopy");
     }
 }
 
+/*
 void Window::drawPlayer(GameState &state)
 {
     std::vector<Player *> playerList = state.playerList;
@@ -102,6 +103,7 @@ void Window::drawPlayer(GameState &state)
         }
     }
 }
+*/
 
 void Window::clearScreen()
 {

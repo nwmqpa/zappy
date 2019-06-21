@@ -28,11 +28,13 @@ void InputHandler::handle(const Window &window, InputHandler::InputDatas &inputs
             setKeys(event, inputs);
             break;
         case SDL_JOYAXISMOTION:
-            if (event.jbutton.which == 0) {
-                inputs.x = event.jball.xrel;
-                inputs.y = event.jball.yrel;
-            } else {
-                inputs.zoom = event.jball.yrel;
+            if (event.jaxis.value < -3200 || event.jaxis.value > 3200) {
+                if (event.jaxis.axis == 0)
+                    inputs.x = event.jaxis.value / 8192;
+                if (event.jaxis.axis == 1)
+                    inputs.y = event.jaxis.value / 8192;
+                if (event.jaxis.axis == 3)
+                    inputs.zoom = event.jaxis.value / 8192;
             }
             break;
         case SDL_MOUSEMOTION:

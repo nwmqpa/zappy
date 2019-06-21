@@ -14,6 +14,6 @@ GameState::GameState(std::string ip, short int port)
 {
     this->camera.center.x = 0;
     this->camera.center.y = 0;
-    this->camera.scale.x = 2;
-    this->camera.scale.y = 2;
+    this->camera.scale.x = 4;
+    this->camera.scale.y = 4;
 }
