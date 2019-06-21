@@ -28,6 +28,9 @@ public:
     void setPlayerNum(unsigned int num);
     unsigned int getPlayerNum() { return player_num; }
 
+    void setLevel(unsigned int level);
+    unsigned int getLevel() { return level; }
+
     void setOrientation(ORIENTATION orientation);
     ORIENTATION getOrientation() { return orientation; }
 
@@ -43,6 +46,7 @@ private:
     std::vector<unsigned int> inventory;
     unsigned int x;
     unsigned int y;
+    unsigned int level;
     ORIENTATION orientation;
     std::string teamName;
 };

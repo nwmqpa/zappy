@@ -75,11 +75,23 @@ void gotTileContent(GameState &state, Window &window)
     state.tileList.at(pos)->setTileContent(packet->x, packet->y, temp, packet->players);
 }
 
+void gotNewPlayerConnect(GameState &state, Window &window)
+{
+    srv_new_player_connect_t *packet = (srv_new_player_connect_t *) state.lastData;
+    std::string path = REALPATH("blocky.bmp");
+    Player temp(path, window.getRender());
+    temp.setPosition(packet->x, packet->y);
+    temp.setPlayerNum(packet->player_num);
+    temp.setOrientation(packet->orientation);
+    temp.setTeamName(std::string(packet->team_name));
+    state.playerList.push_back(&temp);
+}
+
 static const std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, data_processor_t>> DATA_PROCESSORS = {
 	std::make_tuple(SRV_MAP_SIZE, &gotMapSize),
 	std::make_tuple(SRV_TILE_CONTENT, &gotTileContent),
 	std::make_tuple(SRV_TEAMS_NAMES, nullptr),
-	std::make_tuple(SRV_NEW_PLAYER_CONNECT, nullptr),
+	std::make_tuple(SRV_NEW_PLAYER_CONNECT, &gotNewPlayerConnect),
 	std::make_tuple(SRV_PLAYER_POSITION, nullptr),
 	std::make_tuple(SRV_PLAYER_LEVEL, nullptr),
 	std::make_tuple(SRV_PLAYER_INVENTORY, nullptr),

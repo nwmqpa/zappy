@@ -29,7 +29,7 @@ struct GameState {
     void *lastData;
     Camera camera;
     std::vector<Tile *> tileList;
-    std::vector<Player *> player;
+    std::vector<Player *> playerList;
     srv_map_size_t mapSize;
     bool isActive;
     Protocol protocol;
