@@ -86,7 +86,6 @@ void Window::drawTile(std::vector<Tile *> tileList, int x, int y)
         pos.w = Isometry::setWidth((*it)->getSurface()->w);
         if (SDL_RenderCopy(renderer, (*it)->getTmp(), nullptr, &pos) < 0)
             throw GraphicalException("Render copy error", "SDL_RenderCopy");
-        std::cout << camera.x << " " << camera.y << std::endl;
     }
 }
 

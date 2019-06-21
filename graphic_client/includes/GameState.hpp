@@ -7,6 +7,7 @@
 
 #include "Protocol.hpp"
 #include "Tile.hpp"
+#include "Player.hpp"
 
 struct GameState {
     GameState(std::string ip, short int port);
@@ -14,6 +15,7 @@ struct GameState {
     void *lastData;
 
     std::vector<Tile *> tileList;
+    std::vector<Player *> player;
     srv_map_size_t mapSize;
     bool isActive;
     Protocol protocol;
