@@ -15,33 +15,40 @@ static int calculate_tile(pos_t sender, pos_t client)
 
 static void send_text(void *ptr, const void *data)
 {
-    const server_t *server = (server_t *) data;
-    const char *text = (char *) (data + sizeof(void *));
-    const ia_t *sender = (ia_t *) (data + (sizeof(void *) * 2));
+    const struct {
+        server_t *server;
+        const char *text;
+        ia_t *sender;
+    } *datas = data;
     ia_t *client = (ia_t *) ptr;
     int tile = 0;
 
-    if (client->position.x == sender->position.x &&
-            client->position.y == sender->position.y)
+    if (client->position.x == datas->sender->position.x &&
+            client->position.y == datas->sender->position.y)
         tile = 0;
     else
-        tile = calculate_tile(client->position, sender->position);
-    dprintf(client->id, "message %d, %s", tile, text);
+        tile = calculate_tile(client->position, datas->sender->position);
+    dprintf(client->id, "message %d, %s", tile, datas->text);
 }
 
 static void send_to_clients(server_t *server, const char *text, size_t local_id)
 {
-    const void *data[3] = {0};
     ia_t *client = get_cmp_list(server->clients, client_cmp, &local_id);
+    struct {
+        server_t *server;
+        const char *text;
+        ia_t *sender;
+    } data = {
+        server,
+        text,
+        client
+    };
 
-    data[0] = server;
-    data[1] = text;
-    data[2] = client;
-    map(server->clients, send_text, data);
+    map(server->clients, send_text, &data);
 }
 
 char *broadcast(ia_t *client, server_t *server, const char *text)
 {
-    send_to_clients(server, text, client->id);
+    send_to_clients(server, text + 1, client->id);
     return strdup("ok");
 }
