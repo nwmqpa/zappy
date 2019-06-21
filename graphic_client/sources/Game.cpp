@@ -165,7 +165,7 @@ void Game::life(Window &window)
     srv_map_size_t map {3, 3};
     state.mapSize = &map;
     std::vector<Tile *> tileList;
-    std::string name = "assets/grass.bmp";
+    std::string name = REALPATH("grass.bmp");
 
     srv_tile_content_t tile0 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     srv_tile_content_t tile1 {0, 1, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -177,8 +177,13 @@ void Game::life(Window &window)
     srv_tile_content_t tile7 {2, 1, 0, 0, 0, 0, 0, 0, 0, 0};
     srv_tile_content_t tile8 {2, 2, 0, 0, 0, 0, 0, 0, 0, 0};
 
-    for (int i = 0; i < 9; i += 1)
-        tileList.push_back(new Tile(name, window.getRender()));
+    for (int i = 0; i < 9; i += 1) {
+        try {
+            tileList.push_back(new Tile(name, window.getRender()));
+        } catch (GraphicalException e) {
+            std::cout << e.what() << std::endl;
+        }
+    }
     tileList[0]->setTileContent(&tile0);
     tileList[1]->setTileContent(&tile1);
     tileList[2]->setTileContent(&tile2);
