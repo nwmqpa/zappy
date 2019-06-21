@@ -67,26 +67,18 @@ void Window::drawTile(std::vector<Tile *> tileList, int x, int y)
 
     for (; it != tileList.end(); it++) {
         if ((*it)->getTileInfo() == nullptr)
-            throw GraphicalException("Tile error", "srv_tile_content");
-        /*pos.x = (w / 2 - (mapSize->x / 2)) +
-            ((*it)->getPosX() - (*it)->getPosY()) *
-            ((*it)->getSurface()->w / 2) - ((*it)->getSurface()->w / 2) + camera.x;
-        pos.y = (h / 2 - (mapSize->y / 2)) +
-            ((*it)->getTileInfo()->x + (*it)->getTileInfo()->y) *
-            ((*it)->getSurface()->h / 2) - (((*it)->getTileInfo()->x +
-            (*it)->getTileInfo()->y) * 64) - (mapSize->y / 2 *
-            (*it)->getSurface()->h) + camera.y;
-        pos.w = (*it)->getSurface()->w;
-        pos.h = (*it)->getSurface()->h;*/
-        pos.x = Isometry::setPositionX(w, x, (*it)->getPosX(),
-                (*it)->getPosY(), (*it)->getSurface()->w, camera.x);
-        pos.y = Isometry::setPositionY(h, y, (*it)->getPosX(),
-                (*it)->getPosY(), (*it)->getSurface()->h, camera.y);
+            continue;
+        std::cout << (*it)->getPosX() << ", " << (*it)->getPosY() << std::endl;
+        pos.x = ((*it)->getPosX() * (*it)->getSurface()->w) - ((*it)->getPosY() * (*it)->getSurface()->h);
+        pos.y = (((*it)->getPosX() * (*it)->getSurface()->w) + ((*it)->getPosY() * (*it)->getSurface()->h)) / 2;
+        //pos.x = Isometry::setPositionX(w, x, (*it)->getPosX(), (*it)->getPosY(), (*it)->getSurface()->w, camera.x);
+        //pos.y = Isometry::setPositionY(h, y, (*it)->getPosX(), (*it)->getPosY(), (*it)->getSurface()->h, camera.y);
         pos.h = Isometry::setHeight((*it)->getSurface()->h);
         pos.w = Isometry::setWidth((*it)->getSurface()->w);
+        std::cout << pos.x << ", " << pos.y << ", " << pos.h << ", " << pos.w << std::endl;
         if (SDL_RenderCopy(renderer, (*it)->getTmp(), nullptr, &pos) < 0)
             throw GraphicalException("Render copy error", "SDL_RenderCopy");
-        std::cout << camera.x << " " << camera.y << std::endl;
+        //std::cout << camera.x << " " << camera.y << std::endl;
     }
 }
 
