@@ -21,8 +21,7 @@ int egg_cmp(const void *entry, const void *other)
             egg->can_eclose == new->can_eclose);
 }
 
-
-int add_client_to_team_bis(server_t *server, client_t *client, team_t *team)
+int add_ia_to_team_bis(server_t *server, ia_t *client, team_t *team)
 {
     pos_t pos = { rand() % (server->width - 1), rand() % (server->height - 1) };
     egg_t *egg = get_cmp_list(team->eggs, is_eclosable, NULL);
@@ -47,7 +46,7 @@ int add_client_to_team_bis(server_t *server, client_t *client, team_t *team)
     return (-1);
 }
 
-int add_client_to_team(server_t *server, client_t *client, const char *team)
+int add_ia_to_team(server_t *server, ia_t *client, const char *team)
 {
     char *back = strchr(team, '\n');
     team_t *found_team = 0x0;
@@ -62,18 +61,18 @@ int add_client_to_team(server_t *server, client_t *client, const char *team)
         }
     }
     if (found_team) {
-        return add_client_to_team_bis(server, client, found_team);
+        return add_ia_to_team_bis(server, client, found_team);
     }
     infol("Not such team %s.\n", team);
     return -1;
 }
 
-void remove_client_from_team(team_t *team, client_t *client, server_t *server)
+void remove_client_from_team(team_t *team, ia_t *client, server_t *server)
 {
     pop_cmp_list(team->clients, client_cmp, (void *) &client->id);
 }
 
-team_t *get_client_team(client_t *client, server_t *server)
+team_t *get_ia_team(ia_t *client, server_t *server)
 {
     debugl("Getting client's %d team.\n");
     for (int i = 0; server->teams[i]; ++i) {

@@ -24,7 +24,7 @@ typedef struct egg_s {
 egg_t *egg_create(int x, int y);
 
 /// Create egg eclosion. And return the client_id to connect with.
-client_t *egg_eclose(egg_t *egg, int fd);
+ia_t *egg_eclose(egg_t *egg, int fd);
 
 /// Handle time for egg to eclose.
 void eclosion_handler(void *elem, const void *data);

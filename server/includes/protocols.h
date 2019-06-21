@@ -480,7 +480,7 @@ typedef struct clt_time_unit_request clt_time_unit_request_t;
 ///
 
 struct PACKED srv_time_unit_request {
-    int freq;  
+    int freq;
 };
 
 typedef struct srv_time_unit_request srv_time_unit_request_t;
@@ -493,7 +493,7 @@ typedef struct srv_time_unit_request srv_time_unit_request_t;
 ///
 
 struct PACKED clt_time_unit_change {
-    int freq;  
+    int freq;
 };
 
 typedef struct clt_time_unit_change clt_time_unit_change_t;
@@ -536,7 +536,7 @@ struct PACKED srv_start_incantation {
     unsigned int players[32];
 };
 
-typedef struct srv_start_incantation_msg srv_start_incantation_msg_t;
+typedef struct srv_start_incantation srv_start_incantation_t;
 
 #define SRV_START_INCANTATION_LEN sizeof(struct srv_start_incantation)
 
@@ -550,7 +550,7 @@ struct PACKED srv_end_incantation {
     enum RESULT result;
 };
 
-typedef struct srv_end_incantation_msg srv_end_incantation_msg_t;
+typedef struct srv_end_incantation srv_end_incantation_t;
 
 #define SRV_END_INCANTATION_LEN sizeof(struct srv_end_incantation)
 

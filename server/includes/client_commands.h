@@ -11,8 +11,8 @@
 #include "server.h"
 #include "client.h"
 
-typedef char * (*cmd_func) (client_t *, server_t *);
-typedef char * (*cmd_param_func) (client_t *, server_t *, const char *);
+typedef char * (*cmd_func) (ia_t *, server_t *);
+typedef char * (*cmd_param_func) (ia_t *, server_t *, const char *);
 
 typedef struct command_s {
     char *name;
@@ -28,26 +28,27 @@ typedef struct command_param_s {
     double cooldown;
 } command_param_t;
 
-int prepare_command(client_t *client);
-char *process_command(client_t *client, server_t *server);
-void move_client(client_t *client, server_t *server, pos_t new, pos_t size);
-void kill_player(client_t *client, server_t *server);
+int prepare_special_command(ia_t *client, server_t *server);
+int prepare_command(ia_t *client, server_t *server);
+char *process_command(ia_t *client, server_t *server);
+void move_client(ia_t *client, server_t *server, pos_t new, pos_t size);
+void kill_player(ia_t *client, server_t *server);
 
 /*
 ** Moving command
 **  response:   ok
 **  time limit: 7/f
 */
-char *forward(client_t *client, server_t *server);
-char *left(client_t *client, server_t *server);
-char *right(client_t *client, server_t *server);
+char *forward(ia_t *client, server_t *server);
+char *left(ia_t *client, server_t *server);
+char *right(ia_t *client, server_t *server);
 
 /*
 ** Look command
 **  response:   [player, tile1-content, tile2-content, ...]
 **  time limit: 7/f
 */
-char *look(client_t *client, server_t *server);
+char *look(ia_t *client, server_t *server);
 
 /*
 ** Inventory command
@@ -55,36 +56,36 @@ char *look(client_t *client, server_t *server);
 **      -> where `X` `Y` `Z` number possesed by the player.
 **  time limit: 1/f
 */
-char *inventory(client_t *client, server_t *server);
+char *inventory(ia_t *client, server_t *server);
 
 /*
 ** Broadcast [text] command
 **  response:   ok
 **  time limit: 7/f
 */
-char *broadcast(client_t *client, server_t *server, const char *text);
+char *broadcast(ia_t *client, server_t *server, const char *text);
 
 /*
 ** Fork command
 **  response:   ok
 **  time limit: 42/f
 */
-char *fork_client(client_t *client, server_t *server);
+char *fork_client(ia_t *client, server_t *server);
 
 /*
 ** Eject command
 **  response:   ok/ko
 **  time limit: 7/f
 */
-char *eject(client_t *client, server_t *server);
+char *eject(ia_t *client, server_t *server);
 
 /*
 ** Map interaction command
 **  response:   ok/ko
 **  time limit: 7/f
 */
-char *take(client_t *client, server_t *server, const char *object);
-char *set(client_t *client, server_t *server, const char *object);
+char *take(ia_t *client, server_t *server, const char *object);
+char *set(ia_t *client, server_t *server, const char *object);
 
 /*
 ** Incantation command
@@ -92,7 +93,7 @@ char *set(client_t *client, server_t *server, const char *object);
 **      -> where X is the client->level
 **  time limit: 300/f
 */
-char *incante(client_t *client, server_t *server);
+char *incante(ia_t *client, server_t *server);
 
 /*
 ** Connect nbr command.
@@ -100,4 +101,4 @@ char *incante(client_t *client, server_t *server);
 **      -> The nbr of available slots in client's team.
 **  time limit: 0
 */
-char *connect_nbr(client_t *client, server_t *server);
+char *connect_nbr(ia_t *client, server_t *server);

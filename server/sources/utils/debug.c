@@ -18,7 +18,7 @@ void get_info_eggs(void *entry, const void *nothing)
 
 void get_info_player(void *player, const void *nothing)
 {
-    client_t *client = player;
+    ia_t *client = player;
 
     print_client(client);
 }
@@ -48,7 +48,7 @@ void get_map_status(server_t *server)
 
 void get_teams_status(server_t *server)
 {
-    client_t *client = 0x0;
+    ia_t *client = 0x0;
     int nb_client = 0;
     int value_c = 0;
 

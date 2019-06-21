@@ -14,7 +14,7 @@
 #include "egg.h"
 #include "events.h"
 
-static void handle_cooldown(client_t *client, server_t *server, int elapsed)
+static void handle_cooldown(ia_t *client, server_t *server, int elapsed)
 {
     char *to_send = NULL;
 
@@ -26,7 +26,7 @@ static void handle_cooldown(client_t *client, server_t *server, int elapsed)
         free(client->to_exec);
         client->to_exec = NULL;
     }
-    prepare_command(client);
+    prepare_command(client, server);
 }
 
 static void handle_team_tick(void *data, const void *params)
@@ -38,7 +38,7 @@ static void handle_team_tick(void *data, const void *params)
 static void handle_player_tick(void *data, const void *params)
 {
     const time_server_t *parameters = (time_server_t *) params;
-    client_t *client = data;
+    ia_t *client = data;
     double elapsed_time = parameters->elapsed;
 
     client->cooldown -= elapsed_time;

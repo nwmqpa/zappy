@@ -12,7 +12,7 @@
 #include "egg.h"
 #include "events.h"
 
-int handle_egg_client(client_t *client, server_t *server, const char *team_name)
+int handle_egg_client(ia_t *client, server_t *server, const char *team_name)
 {
     team_t *team = NULL;
     int to_insert = 0;
@@ -33,14 +33,14 @@ int handle_egg_client(client_t *client, server_t *server, const char *team_name)
     return 0;
 }
 
-void handle_protocol(client_t *client, server_t *srv)
+void handle_protocol(ia_t *client, server_t *srv)
 {
     char team_name[100] = {0};
     int slots = -1;
 
     dprintf(client->id, "WELCOME\n");
     read(client->id, &team_name, 100);
-    while ((slots = add_client_to_team(srv, client, team_name)) == -1) {
+    while ((slots = add_ia_to_team(srv, client, team_name)) == -1) {
         dprintf(client->id, "ko\n");
         read(client->id, &team_name, 100);
     }
@@ -56,7 +56,7 @@ void handle_protocol(client_t *client, server_t *srv)
 int on_connect_client(int socket, void *data)
 {
     server_t *server = (server_t *) data;
-    client_t *client = client_create(socket);
+    ia_t *client = client_create(socket);
 
     debugl("Client connect handler.\n");
     client->id = socket;
@@ -68,7 +68,7 @@ int on_connect_client(int socket, void *data)
 int on_delete_client(int socket, void *data)
 {
     server_t *server = (server_t *) data;
-    client_t *client = NULL;
+    ia_t *client = NULL;
 
     debugl("Client delete handler.\n");
     client = get_cmp_list( server->clients, client_cmp, (void *) &socket);
@@ -85,7 +85,7 @@ int on_active_client(int socket, void *data)
 {
     char buffer[1025] = {0};
     size_t bytes_read = read(socket, buffer, 1024);
-    client_t *client = NULL;
+    ia_t *client = NULL;
     server_t *server = (server_t *) data;
 
     if (bytes_read == 0)

@@ -10,9 +10,9 @@
 #include "egg.h"
 #include "events.h"
 
-char *fork_client(client_t *client, server_t *server)
+char *fork_client(ia_t *client, server_t *server)
 {
-    team_t *team = get_client_team(client, server);
+    team_t *team = get_ia_team(client, server);
     egg_t *new;
 
     new = egg_create(client->position.x, client->position.y);
