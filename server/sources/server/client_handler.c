@@ -33,7 +33,7 @@ int handle_egg_client(ia_t *client, server_t *server, const char *team_name)
     return 0;
 }
 
-void handle_protocol(ia_t *client, server_t *srv)
+int handle_protocol(ia_t *client, server_t *srv)
 {
     char team_name[100] = {0};
     int slots = -1;
@@ -42,7 +42,10 @@ void handle_protocol(ia_t *client, server_t *srv)
     read(client->id, &team_name, 100);
     while ((slots = add_ia_to_team(srv, client, team_name)) == -1) {
         dprintf(client->id, "ko\n");
-        read(client->id, &team_name, 100);
+        if (read(client->id, &team_name, 100) == 0) {
+            kill_player(client, srv);
+            return 0;
+        }
     }
     if (slots == 0) {
         dprintf(client->id, "ko\n");
@@ -51,6 +54,7 @@ void handle_protocol(ia_t *client, server_t *srv)
         add_player(get_tile_map(srv->map, client->position.x, client->position.y), client->id);
         dprintf(client->id, "%d\n%d %d\n", slots - 1, srv->width, srv->height);
     }
+    return 1;
 }
 
 int on_connect_client(int socket, void *data)
@@ -60,8 +64,8 @@ int on_connect_client(int socket, void *data)
 
     debugl("Client connect handler.\n");
     client->id = socket;
-    handle_protocol(client, server);
-    insert_head_list(server->clients, (void *) client);
+    if (handle_protocol(client, server))
+        insert_head_list(server->clients, (void *) client);
     return 0;
 }
 
