@@ -59,14 +59,23 @@ void gotMapSize(GameState &state, Window &window)
 void gotTileContent(GameState &state, Window &window)
 {
     srv_tile_content_t *packet = (srv_tile_content_t *) state.lastData;
+    std::vector<int> temp(0);
     std::cout << "Tile: (" << packet->x << ", " << packet->y << ") data" << std::endl;
     std::vector<Tile *>::iterator it = state.tileList.begin();
 
     if (!state.tileList.empty()) {
         for (; it != state.tileList.end(); it++) {
             if (packet != (*it)->getTileInfo() && (*it)->getPosX() == packet->x
-                    && (*it)->getPosY() == packet->y)
-                (*it)->setTileContent(packet);
+                    && (*it)->getPosY() == packet->y) {
+                temp.push_back(packet->q0);
+                temp.push_back(packet->q1);
+                temp.push_back(packet->q2);
+                temp.push_back(packet->q3);
+                temp.push_back(packet->q4);
+                temp.push_back(packet->q5);
+                temp.push_back(packet->q6);
+                (*it)->setTileContent(packet->x, packet->y, temp, packet->players);
+            }
         }
         window.drawTile(state.tileList, state.mapSize);
     }
