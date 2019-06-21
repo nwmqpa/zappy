@@ -44,16 +44,16 @@ bool Window::initSDL(Uint32 sdl)
     return true;
 }
 
+void Window::setCameraSize(int w, int h)
+{
+    camera.w = w;
+    camera.h = h;
+}
+
 void Window::move(float x, float y)
 {
     camera.x += x;
     camera.y += y;
-}
-
-void Window::setCameraSize(int h, int w)
-{
-    camera.h = h;
-    camera.w = w;
 }
 
 void Window::render(GameState &state, int x, int y)
@@ -66,7 +66,6 @@ void Window::render(GameState &state, int x, int y)
     for (auto it = state.tileList.begin(); it != state.tileList.end(); it++) {
         if ((*it)->getTileInfo() == nullptr)
             continue;
-        std::cout << (*it)->getPosX() << ", " << (*it)->getPosY() << std::endl;
         pos.x = (((*it)->getPosX() * (*it)->getSurface()->w) - ((*it)->getPosY() * (*it)->getSurface()->w)) / 2;
         pos.y = (((*it)->getPosX() * (*it)->getSurface()->h) + ((*it)->getPosY() * (*it)->getSurface()->h)) / 3.25;
         pos.x /= state.camera.scale.x;
@@ -76,18 +75,19 @@ void Window::render(GameState &state, int x, int y)
         pos.h = Isometry::setHeight((*it)->getSurface()->h, state.camera);
         pos.w = Isometry::setWidth((*it)->getSurface()->w, state.camera);
         (*it)->setArea(pos);
-        std::cout << pos.x << ", " << pos.y << ", " << pos.h << ", " << pos.w << std::endl;
         if (SDL_RenderCopy(renderer, (*it)->getTmp(), nullptr, &pos) < 0)
             throw GraphicalException("Render copy error", "SDL_RenderCopy");
     }
 }
 
-void Window::drawPlayer(GameState &state)
+void Window::renderPlayer(GameState &state)
 {
     std::vector<Player *> playerList = state.playerList;
     std::vector<Tile *> tileList = state.tileList;
     auto itPlayer = playerList.begin();
     auto itTile = tileList.begin();
+
+    SDL_Rect pos;
 
     for (; itPlayer != playerList.end(); itPlayer++) {
         for (; itTile != tileList.end(); itTile++) {
@@ -97,9 +97,32 @@ void Window::drawPlayer(GameState &state)
                             ((*itPlayer)->getSurface()->w) / 2);
                     pos.y = (((*itPlayer)->getSurface()->h) +
                             ((*itPlayer)->getSurface()->h) / 2);
-                    pos.
+                    pos.x /= state.camera.scale.x;
+                    pos.y /= state.camera.scale.y;
+                    pos.x += ((*itTile)->getArea().w / 2) -
+                        (*itPlayer)->getSurface()->w / 2 /
+                        state.camera.scale.x;
+                    pos.y += ((*itTile)->getArea().h / 2) -
+                        ((*itPlayer)->getSurface()->h / 2) *
+                        (1 / 2 / state.camera.scale.y);
+                    pos.w = Isometry::setHeight((*itPlayer)->getSurface()->w,
+                            state.camera);
+                    pos.h = Isometry::setHeight((*itPlayer)->getSurface()->h,
+                            state.camera);
+                if (SDL_RenderCopy(renderer, (*itPlayer)->getTmp(), nullptr, &pos) < 0)
+                    throw GraphicalException("Render copy error", "SDL_RenderCopy");
             }
         }
+      /*  std::cout << "Player " << (*itPlayer)->getPlayerNum()
+            << " X: " << (*itPlayer)->getX() << std::endl;
+        std::cout << "Player " << (*itPlayer)->getPlayerNum()
+            << " Y: " << (*itPlayer)->getY() << std::endl;
+        std::cout << "Player " << (*itPlayer)->getPlayerNum()
+            << " Level: " << (*itPlayer)->getLevel() << std::endl;
+        std::cout << "Player " << (*itPlayer)->getPlayerNum()
+            << " Orientation: " << (*itPlayer)->getOrientation() << std::endl;
+        std::cout << "Player " << (*itPlayer)->getPlayerNum()
+            << " TeamName: " << (*itPlayer)->getTeamName() << std::endl;*/
     }
 }
 

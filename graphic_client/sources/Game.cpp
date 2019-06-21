@@ -78,13 +78,14 @@ void gotTileContent(GameState &state, Window &window)
 void gotNewPlayerConnect(GameState &state, Window &window)
 {
     srv_new_player_connect_t *packet = (srv_new_player_connect_t *) state.lastData;
-    std::string path = REALPATH("blocky.bmp");
-    Player temp(path, window.getRender());
-    temp.setPosition(packet->x, packet->y);
-    temp.setPlayerNum(packet->player_num);
-    temp.setOrientation(packet->orientation);
-    temp.setTeamName(std::string(packet->team_name));
-    state.playerList.push_back(&temp);
+    std::string path = REALPATH("player.bmp");
+    Player *temp = new Player(path, window.getRender());
+    temp->setPosition(packet->x, packet->y);
+    temp->setPlayerNum(packet->player_num);
+    temp->setOrientation(packet->orientation);
+    temp->setTeamName(std::string(packet->team_name));
+    state.playerList.push_back(temp);
+    std::cout << "Player " << temp->getPlayerNum() << " has been warped !" << std::endl;
 }
 
 static const std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, data_processor_t>> DATA_PROCESSORS = {
@@ -162,6 +163,7 @@ void Game::life(Window &window)
         state.isActive = !inputData.should_quit;
         window.move(inputData.x, inputData.y);
         window.render(state, state.mapSize.x, state.mapSize.y);
+        window.renderPlayer(state);
         window.presentScreen();
         inputData.x = 0;
         inputData.y = 0;

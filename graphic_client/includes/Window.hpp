@@ -38,8 +38,7 @@ class Window {
         Window(std::string &name, int x = 800, int y = 600);
         ~Window();
 
-        void drawPlayer(std::vector<Player *> playerList,
-                std::vector<Tile *> tileList);
+        void renderPlayer(GameState &state);
         void render(GameState &state, int, int);
 
         void move(float, float);
