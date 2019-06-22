@@ -23,6 +23,8 @@ static void send_text(void *ptr, const void *data)
     ia_t *client = (ia_t *) ptr;
     int tile = 0;
 
+    if (client->id == datas->sender->id)
+        return;
     if (client->position.x == datas->sender->position.x &&
             client->position.y == datas->sender->position.y)
         tile = 0;
