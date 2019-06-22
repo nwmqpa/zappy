@@ -34,8 +34,8 @@ char *connect_nbr(ia_t *client, server_t *server)
     debugl("Connect nbr command.\n");
     char *ret = NULL;
     team_t *player_team = get_ia_team(client, server);
+    int value = count_unused_slots(player_team, server->client_per_team);
 
-    asprintf(&ret, "%d",
-            count_unused_slots(player_team, server->client_per_team));
+    asprintf(&ret, "%d", value < 0 ? 0 : value);
     return ret;
 }

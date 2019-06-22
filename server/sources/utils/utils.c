@@ -9,25 +9,18 @@
 #include "client.h"
 #include "egg.h"
 
-int join_str(char *insert, const char **to_join, char join, size_t size)
+int join_str(char *insert, const char **to_join, char *join, size_t size)
 {
-    int offset = 0;
-    int l_len = 0;
+    size_t y = 0;
     size_t i = 0;
-    int y = -1;
 
-    for (i = 0; i < size; ++i) {
-        if (to_join[++y] == NULL) {
-            i--;
-            continue;
+    while (i < size) {
+        if (to_join[y] != NULL) {
+            sprintf(insert, "%s%s%s", insert, (y == 0) ? "" : join, to_join[y]);
+            i++;
         }
-        l_len = strlen(to_join[y]);
-        strncpy(insert + offset, to_join[y], l_len);
-        offset += l_len + 1;
-        if (i + 1 != size)
-            insert[offset - 1] = join;
+        y++;
     }
-    insert[offset] = 0;
     return 0;
 }
 
