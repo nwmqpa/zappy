@@ -30,6 +30,11 @@ private:
     std::string ip;
     int port;
     GameState state;
+    unsigned int endTime;
+    unsigned int startTime;
+    unsigned int delta;
+    short fps;
+    short timePerFrame;
 };
 
 #endif

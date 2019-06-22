@@ -43,6 +43,11 @@ static const std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, std::string>> N
 
 Game::Game(std::string ip, int port)
     : state(ip, port)
+    , endTime(0)
+    , startTime(0)
+    , delta(0)
+    , fps(60)
+    , timePerFrame(16)
 {
     this->state.isActive = true;
 }
@@ -191,31 +196,16 @@ void Game::life(Window& window)
 
 void Game::limitFramerate() noexcept
 {
-    unsigned int startTime = 0;
-    unsigned int endTime = 0;
-    unsigned int delta = 0;
-    short fps = 60;
-    short timePerFrame = 16;
-
     if (!startTime)
         startTime = SDL_GetTicks();
     else
         delta = endTime - startTime;
-
-    if (delta < timePerFrame) {
+    if (delta < timePerFrame)
         SDL_Delay(timePerFrame - delta);
-    }
-
-    // if delta is bigger than 16ms between frames, get the actual fps
-    if (delta > timePerFrame) {
+    if (delta > timePerFrame)
         fps = 1000 / delta;
-    }
-
-    printf("FPS is: %i \n", fps);
-
     startTime = endTime;
     endTime = SDL_GetTicks();
-    SDL_Delay(1000 / maxFPS - SDL_GetTicks() + previousTime);
 }
 
 void Game::updateCamera(InputHandler::InputDatas& inputData)
