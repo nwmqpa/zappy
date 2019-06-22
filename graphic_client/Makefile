@@ -32,7 +32,8 @@ SOURCES		=		Player.cpp 	\
 					main.cpp	\
 					Game.cpp \
 					InputHandler.cpp \
-					GameState.cpp
+					GameState.cpp	\
+					Handlers.cpp
 
 TEST_SOURCES	=	dummy.c
 
