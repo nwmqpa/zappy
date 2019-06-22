@@ -66,26 +66,20 @@ const std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, std::string>> Handlers
 
 void Handlers::gotMapSize(GameState &state, Window &window)
 {
-    if (state.tileList.empty())
-    {
-        std::string path = REALPATH("grass.bmp");
-        auto *packet = (srv_map_size_t *)state.lastData;
-        std::cout << "Map size: (" << packet->x << ", " << packet->y << ")" << std::endl;
-        state.mapSize = *packet;
-        for (auto elem : state.tileList)
-            delete elem;
-        state.tileList = std::vector<Tile *>(0);
-
-        unsigned int count = (packet->x * packet->y);
-        for (unsigned int i = 0; i < count; i += 1)
-            state.tileList.push_back(new Tile(path, window.getRender()));
-        state.protocol.askMapContent();
-    }
+    std::string path = REALPATH("grass.bmp");
+    auto *packet = (srv_map_size_t *) state.lastData;
+    state.mapSize = *packet;
+    for (auto elem : state.tileList)
+        delete elem;
+    state.tileList.clear();
+    for (unsigned int i = 0; i < (packet->x * packet->y); i += 1)
+        state.tileList.push_back(new Tile(path, window.getRender()));
+    state.protocol.askMapContent();
 }
 
 void Handlers::gotDeathPlayer(GameState &state, Window &window)
 {
-    auto *packet = (srv_player_death_t *)state.lastData;
+    auto *packet = (srv_player_death_t *) state.lastData;
 
     state.playerList.erase(
         std::remove_if(state.playerList.begin(), state.playerList.end(), [packet](Player *player) {
@@ -97,11 +91,9 @@ void Handlers::gotDeathPlayer(GameState &state, Window &window)
 
 void Handlers::gotTileContent(GameState& state, Window& window)
 {
-    auto* packet = (srv_tile_content_t*)state.lastData;
+    auto *packet = (srv_tile_content_t *) state.lastData;
     size_t pos = (packet->y * state.mapSize.x) + packet->x;
     std::vector<int> temp(0);
-    std::cout << "Tile: (" << packet->x << ", " << packet->y << ") data" << std::endl;
-
     temp.push_back(packet->q0);
     temp.push_back(packet->q1);
     temp.push_back(packet->q2);
@@ -114,7 +106,7 @@ void Handlers::gotTileContent(GameState& state, Window& window)
 
 void Handlers::gotNewPlayerConnect(GameState& state, Window& window)
 {
-    auto* packet = (srv_new_player_connect_t*)state.lastData;
+    auto *packet = (srv_new_player_connect_t *) state.lastData;
     std::string path = REALPATH("player.bmp");
     Player* temp = new Player(path, window.getRender());
 
@@ -123,14 +115,11 @@ void Handlers::gotNewPlayerConnect(GameState& state, Window& window)
     temp->setOrientation(packet->orientation);
     temp->setTeamName(std::string(packet->team_name));
     state.playerList.push_back(temp);
-    std::cout << "Player connection at (" << packet->x << ", " << packet->y << ")." << std::endl;
 }
 
 void Handlers::gotPlayerPosition(GameState& state, Window& window)
 {
-    auto* packet = (srv_player_pos_t*)state.lastData;
-
-    std::cout << "Placket: " << packet->x << ", " << packet->y << std::endl;
+    auto *packet = (srv_player_pos_t *) state.lastData;
 
     for (auto elem : state.playerList) {
         if (elem->getPlayerNum() == packet->player_num) {
@@ -141,7 +130,7 @@ void Handlers::gotPlayerPosition(GameState& state, Window& window)
 
 void Handlers::gotPlayerLevel(GameState& state, Window& window)
 {
-    auto* packet = (srv_player_level_t*)state.lastData;
+    auto *packet = (srv_player_level_t *) state.lastData;
 
     for (auto elem : state.playerList) {
         if (elem->getPlayerNum() == packet->player_num) {
