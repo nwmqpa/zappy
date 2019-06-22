@@ -42,6 +42,8 @@ char *take(ia_t *client, server_t *server, const char *object)
     } else if (tile->inventory.inv_arr[idx] > 0) {
         tile->inventory.inv_arr[idx] -= 1;
         client->inventory.inv_arr[idx] += 1;
+    } else {
+        return strdup("ko");
     }
     return strdup("ok");
 }
@@ -57,6 +59,8 @@ char *set(ia_t *client, server_t *server, const char *object)
     } else if (client->inventory.inv_arr[idx] > 0) {
         client->inventory.inv_arr[idx] -= 1;
         tile->inventory.inv_arr[idx] += 1;
+    } else {
+        return strdup("ko");
     }
     return strdup("ok");
 }
