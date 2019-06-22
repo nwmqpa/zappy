@@ -17,10 +17,7 @@
 
 typedef int (*disp_func)(int fd, void *data);
 
-///
 /// Dispatcher structure that handle function for sockets.
-///
-///
 typedef struct dispatcher_s {
     int epoll_fd;
     int main_socket;
