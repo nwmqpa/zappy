@@ -31,11 +31,11 @@ void InputHandler::handle(const Window& window, InputHandler::InputDatas& inputs
         case SDL_JOYAXISMOTION:
             if (event.jaxis.value < -3200 || event.jaxis.value > 3200) {
                 if (event.jaxis.axis == 0)
-                    inputs.x = event.jaxis.value / 8192;
+                    inputs.x = -(event.jaxis.value / 2048);
                 if (event.jaxis.axis == 1)
-                    inputs.y = event.jaxis.value / 8192;
+                    inputs.y = -(event.jaxis.value / 2048);
                 if (event.jaxis.axis == 3)
-                    inputs.zoom = event.jaxis.value / 8192;
+                    inputs.zoom = (((float) event.jaxis.value) / 32767) / 4;
             }
             break;
         case SDL_MOUSEMOTION:
@@ -53,22 +53,22 @@ void InputHandler::setKeys(SDL_Event& event, InputHandler::InputDatas& inputs) c
         inputs.should_quit = true;
         break;
     case SDLK_UP:
-        inputs.y = 1.0;
+        inputs.y = 16.0;
         break;
     case SDLK_DOWN:
-        inputs.y = -1.0;
+        inputs.y = -16.0;
         break;
     case SDLK_LEFT:
-        inputs.x = -1.0;
+        inputs.x = 16.0;
         break;
     case SDLK_RIGHT:
-        inputs.x = 1.0;
+        inputs.x = -16.0;
         break;
-    case SDLK_PLUS:
-        inputs.zoom = 1.0;
-        break;
-    case SDLK_MINUS:
+    case SDLK_z:
         inputs.zoom = -1.0;
+        break;
+    case SDLK_s:
+        inputs.zoom = 1.0;
         break;
     default:
         inputs.x = 0;

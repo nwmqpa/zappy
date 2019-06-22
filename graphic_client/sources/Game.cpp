@@ -11,6 +11,7 @@
 #include "Protocol.hpp"
 #include "Utils.hpp"
 #include <tuple>
+#include <algorithm>
 #include <vector>
 
 static const std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, std::string>> NAMES = {
@@ -70,6 +71,18 @@ void gotMapSize(GameState& state, Window& window)
     }
 }
 
+void gotDeathPlayer(GameState &state, Window &window)
+{
+    auto *packet = (srv_player_death_t*) state.lastData;
+
+    state.playerList.erase(
+        std::remove_if(state.playerList.begin(), state.playerList.end(), [packet](Player *player) {
+            return player->getPlayerNum() == packet->player_num;
+        }),
+        state.playerList.end()
+    );
+}
+
 void gotTileContent(GameState& state, Window& window)
 {
     auto* packet = (srv_tile_content_t*)state.lastData;
@@ -98,11 +111,14 @@ void gotNewPlayerConnect(GameState& state, Window& window)
     temp->setOrientation(packet->orientation);
     temp->setTeamName(std::string(packet->team_name));
     state.playerList.push_back(temp);
+    std::cout << "Player connection at (" << packet->x << ", " << packet->y << ")." << std::endl;
 }
 
 void gotPlayerPosition(GameState& state, Window& window)
 {
     auto* packet = (srv_player_pos_t*)state.lastData;
+
+    std::cout << "Placket: " << packet->x << ", " << packet->y << std::endl;
 
     for (auto elem : state.playerList) {
         if (elem->getPlayerNum() == packet->player_num) {
@@ -137,7 +153,7 @@ static const std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, data_processor_
     std::make_tuple(SRV_EGG_LAYING, nullptr),
     std::make_tuple(SRV_RESOURCE_DROP, nullptr),
     std::make_tuple(SRV_RESOURCE_COLLECT, nullptr),
-    std::make_tuple(SRV_PLAYER_DEATH, nullptr),
+    std::make_tuple(SRV_PLAYER_DEATH, &gotDeathPlayer),
     std::make_tuple(SRV_EGG_LAYED, nullptr),
     std::make_tuple(SRV_EGG_HATCHING, nullptr),
     std::make_tuple(SRV_PLAYER_CONNECT_EGG, nullptr),
@@ -186,7 +202,6 @@ void Game::life(Window& window)
         this->updateCamera(inputData);
         state.isActive = !inputData.should_quit;
         window.render(state, state.mapSize.x, state.mapSize.y);
-        window.renderPlayer(state);
         window.presentScreen();
         inputData.x = 0;
         inputData.y = 0;

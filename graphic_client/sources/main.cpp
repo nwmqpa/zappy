@@ -6,9 +6,7 @@
 
 #ifdef __SWITCH__
 #include <switch.h>
-#endif /* __SWITCH__ */
 
-#ifdef __SWITCH__
 static void initNxLink(int& sockNxlinkSock)
 {
     if (R_FAILED(socketInitializeDefault()))
@@ -56,7 +54,7 @@ static void initJoycons(void)
 #ifndef TEST
 int main(int argc, char* argv[])
 {
-    std::string host("192.168.43.129");
+    std::string host("62.4.16.75");
     int port = 13334;
 #ifdef __SWITCH__
     int sockNxlinkSock = -1;
@@ -80,7 +78,7 @@ int main(int argc, char* argv[])
         game.life(window);
     } catch (const GraphicalException& e) {
         std::cout << "Error while initialization: " << e.what() << ". Quitting." << std::endl;
-        return 84;
+        return 0;
     };
 #ifdef __SWITCH__
     SDL_Quit();

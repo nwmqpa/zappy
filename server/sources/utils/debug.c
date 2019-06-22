@@ -35,7 +35,7 @@ void get_map_status(server_t *server)
 {
     tile_t *tile = NULL;
 
-    for (int y = server->height; y >= 0; --y) {
+    for (int y = server->height - 1; y >= 0; --y) {
         printf("%2d | ", y);
         for (unsigned int x = 0; x < server->width; ++x) {
             tile = get_tile_map(server->map, x, y);

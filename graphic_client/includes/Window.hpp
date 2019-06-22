@@ -38,7 +38,6 @@ public:
     Window(std::string& name, int x = 800, int y = 600);
     ~Window();
 
-    void renderPlayer(GameState& state);
     void render(GameState& state, int, int);
 
     void move(float, float);
@@ -56,6 +55,7 @@ private:
     SDL_Rect camera;
 
     bool initSDL(Uint32 SDL = SDL_INIT_EVERYTHING);
+    void renderPlayer(GameState& state, int x, int y);
 };
 
 #endif
