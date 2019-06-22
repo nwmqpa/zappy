@@ -18,7 +18,7 @@ Test(utils, basic) {
     };
     char *joinned = malloc(sizeof(char) * 27);
 
-    join_str(joinned, to_join, ' ', 5);
+    join_str(joinned, to_join, " ", 5);
     cr_assert_str_eq(joinned, "Salut je m'apel Alexandre .");
 }
 
@@ -37,7 +37,7 @@ Test(join_str, with_null) {
     char *new = NULL;
     char *joinned = malloc(sizeof(char) * 28 + 6);
 
-    join_str(joinned, to_join, ',', 6);
+    join_str(joinned, to_join, ",", 6);
     asprintf(&new, "[%s]", joinned);
     cr_assert_str_eq(new, "[123,12.4,42.1,123.0,1235.21,555.5]");
 }
@@ -55,7 +55,7 @@ Test(join_str, with_null_and_empty_string) {
     };
     char *joinned = malloc(sizeof(char) * 23);
 
-    join_str(joinned, to_join, ',', 6);
+    join_str(joinned, to_join, ",", 6);
     cr_assert_str_eq(joinned, "123,12.4,,123.0,,555.5");
 }
 
@@ -68,6 +68,6 @@ Test(join_str, with_all_empty_expect_one) {
     };
     char *joinned = malloc(sizeof(char) * 7);
 
-    join_str(joinned, to_join, ',', 4);
+    join_str(joinned, to_join, ",", 4);
     cr_assert_str_eq(joinned, "123,,,");
 }

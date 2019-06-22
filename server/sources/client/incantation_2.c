@@ -31,6 +31,10 @@ static int are_players_ok(server_t *server, tile_t *tile, unsigned int level)
     for (unsigned int i = 0; i < tile->nb_player; ++i) {
         int id = tile->player_ids[i];
         ia_t *client = get_cmp_list(server->clients, client_cmp, &id);
+        if (client == NULL) {
+            kill_player(client, server);
+            nb_player_level--;
+        }
         if (client->level != level)
             nb_player_level--;
     }

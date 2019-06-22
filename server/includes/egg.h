@@ -36,7 +36,8 @@ void get_info_egg(void *player, const void *nothing);
 /// if their is no team slot for eggs.
 int check_for_eggs(team_t *team, server_t *server);
 
+/// Check if the egg can hatch.
 int is_eclosable(const void *elem, const void *data);
 
-
+/// Count the number of eggs in a team.
 int count_eggs(team_t *team);

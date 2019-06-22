@@ -38,12 +38,12 @@ char *take(ia_t *client, server_t *server, const char *object)
             client->position.y);
 
     if (idx == -1) {
-        return strdup("ko\n");
+        return strdup("ko");
     } else if (tile->inventory.inv_arr[idx] > 0) {
         tile->inventory.inv_arr[idx] -= 1;
         client->inventory.inv_arr[idx] += 1;
     }
-    return strdup("ok\n");
+    return strdup("ok");
 }
 
 char *set(ia_t *client, server_t *server, const char *object)
@@ -53,10 +53,10 @@ char *set(ia_t *client, server_t *server, const char *object)
             client->position.y);
 
     if (idx == -1) {
-        return strdup("ko\n");
+        return strdup("ko");
     } else if (client->inventory.inv_arr[idx] > 0) {
         client->inventory.inv_arr[idx] -= 1;
         tile->inventory.inv_arr[idx] += 1;
     }
-    return strdup("ok\n");
+    return strdup("ok");
 }
