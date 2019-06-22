@@ -44,7 +44,7 @@ static char *get_view_level(int level, pos_t pos, map_t *map,
         return line;
     }
     ret = calloc(sizeof(char), total_len);
-    join_str(ret, stock, ',', idx);
+    join_str(ret, stock, ",", idx);
     return ret;
 }
 
