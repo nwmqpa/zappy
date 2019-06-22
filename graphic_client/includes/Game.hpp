@@ -25,6 +25,8 @@ public:
     void updateCamera(InputHandler::InputDatas& inputData);
 
 private:
+
+    void limitFramerate() noexcept;
     std::string ip;
     int port;
     GameState state;
