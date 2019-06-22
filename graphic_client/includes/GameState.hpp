@@ -5,9 +5,9 @@
 ** GameState
 */
 
+#include "Player.hpp"
 #include "Protocol.hpp"
 #include "Tile.hpp"
-#include "Player.hpp"
 
 #pragma once
 
@@ -26,10 +26,10 @@ struct GameState {
     GameState(std::string ip, short int port);
 
     pkt_header_t lastHeader;
-    void *lastData;
+    void* lastData;
     Camera camera;
-    std::vector<Tile *> tileList;
-    std::vector<Player *> playerList;
+    std::vector<Tile*> tileList;
+    std::vector<Player*> playerList;
     srv_map_size_t mapSize;
     bool isActive;
     Protocol protocol;

@@ -5,11 +5,11 @@
 ** GraphicalClient
 */
 
-#include <iostream>
 #include "Window.hpp"
+#include <iostream>
 
-Window::Window(std::string &name, int x, int y)
-    :name(name)
+Window::Window(std::string& name, int x, int y)
+    : name(name)
 {
 #ifdef __SWITCH__
     if (initSDL(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK)) {
@@ -29,7 +29,7 @@ Window::Window(std::string &name, int x, int y)
         if (renderer == nullptr)
             throw GraphicalException("Renderer error", "SDL_CreateRenderer");
         SDL_SetRenderDrawColor(renderer, 135, 206, 250, 255);
-        camera = {0, 0, 0, 0};
+        camera = { 0, 0, 0, 0 };
         SDL_RenderClear(renderer);
         SDL_RenderPresent(renderer);
     }
@@ -56,7 +56,7 @@ void Window::move(float x, float y)
     camera.y += y;
 }
 
-void Window::render(GameState &state, int x, int y)
+void Window::render(GameState& state, int x, int y)
 {
     int w, h;
     SDL_Rect pos;
@@ -82,11 +82,10 @@ void Window::render(GameState &state, int x, int y)
     }
 }
 
-
-void Window::renderPlayer(GameState &state)
+void Window::renderPlayer(GameState& state)
 {
-    std::vector<Player *> playerList = state.playerList;
-    std::vector<Tile *> tileList = state.tileList;
+    std::vector<Player*> playerList = state.playerList;
+    std::vector<Tile*> tileList = state.tileList;
     auto itPlayer = playerList.begin();
     auto itTile = tileList.begin();
 
@@ -94,29 +93,22 @@ void Window::renderPlayer(GameState &state)
 
     for (; itPlayer != playerList.end(); itPlayer++) {
         for (; itTile != tileList.end(); itTile++) {
-            if ((*itTile)->getPosX() == (*itPlayer)->getX() &&
-                (*itTile)->getPosY() == (*itPlayer)->getY()) {
-                    pos.x = (((*itPlayer)->getSurface()->w) -
-                            ((*itPlayer)->getSurface()->w) / 2);
-                    pos.y = (((*itPlayer)->getSurface()->h) +
-                            ((*itPlayer)->getSurface()->h) / 2);
-                    pos.x /= state.camera.scale.x;
-                    pos.y /= state.camera.scale.y;
-                    pos.x += ((*itTile)->getArea().w / 2) -
-                        (*itPlayer)->getSurface()->w / 2 /
-                        state.camera.scale.x;
-                    pos.y += ((*itTile)->getArea().h / 2) -
-                        ((*itPlayer)->getSurface()->h / 2) *
-                        (1 / 2 / state.camera.scale.y);
-                    pos.w = Isometry::setHeight((*itPlayer)->getSurface()->w,
-                            state.camera);
-                    pos.h = Isometry::setHeight((*itPlayer)->getSurface()->h,
-                            state.camera);
+            if ((*itTile)->getPosX() == (*itPlayer)->getX() && (*itTile)->getPosY() == (*itPlayer)->getY()) {
+                pos.x = (((*itPlayer)->getSurface()->w) - ((*itPlayer)->getSurface()->w) / 2);
+                pos.y = (((*itPlayer)->getSurface()->h) + ((*itPlayer)->getSurface()->h) / 2);
+                pos.x /= state.camera.scale.x;
+                pos.y /= state.camera.scale.y;
+                pos.x += ((*itTile)->getArea().w / 2) - (*itPlayer)->getSurface()->w / 2 / state.camera.scale.x;
+                pos.y += ((*itTile)->getArea().h / 2) - ((*itPlayer)->getSurface()->h / 2) * (1 / 2 / state.camera.scale.y);
+                pos.w = Isometry::setHeight((*itPlayer)->getSurface()->w,
+                    state.camera);
+                pos.h = Isometry::setHeight((*itPlayer)->getSurface()->h,
+                    state.camera);
                 if (SDL_RenderCopy(renderer, (*itPlayer)->getTmp(), nullptr, &pos) < 0)
                     throw GraphicalException("Render copy error", "SDL_RenderCopy");
             }
         }
-      /*  std::cout << "Player " << (*itPlayer)->getPlayerNum()
+        /*  std::cout << "Player " << (*itPlayer)->getPlayerNum()
             << " X: " << (*itPlayer)->getX() << std::endl;
         std::cout << "Player " << (*itPlayer)->getPlayerNum()
             << " Y: " << (*itPlayer)->getY() << std::endl;
@@ -128,7 +120,6 @@ void Window::renderPlayer(GameState &state)
             << " TeamName: " << (*itPlayer)->getTeamName() << std::endl;*/
     }
 }
-
 
 void Window::clearScreen()
 {

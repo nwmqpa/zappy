@@ -13,7 +13,8 @@ Map::Map()
 }
 
 Map::~Map()
-{}
+{
+}
 
 bool Map::getSize()
 {
@@ -33,7 +34,6 @@ bool Map::getSize()
 
 bool Map::getCaseData()
 {
-
 }
 
 void Map::UpdateCaseData()
@@ -65,7 +65,7 @@ void Map::getInfoFromServer(/*struct de demande de donnée(packet)*/)
 
     if (connect(sock, (SOCKADDR*)&sin, sizeof(sin)) != SOCKET_ERROR) {
         printf("Connecté à %s.\nPort: %d.\n", inet_ntoa(sin.sin_addr),
-                htons(sin.sin_port));
+            htons(sin.sin_port));
         if (recv(sock, buffer, 256, 0) != SOCKET_ERROR)
             printf("Reçu: %s.\n", buffer);
     } else

@@ -7,17 +7,15 @@
 
 #include "Player.hpp"
 
-Player::Player(std::string &path, SDL_Renderer *render)
+Player::Player(std::string& path, SDL_Renderer* render)
 {
     sprite = SDL_LoadBMP(path.c_str());
     if (sprite == nullptr)
         throw GraphicalException("BMP loading error on Player", "SDL_LoadBMP Player");
     tmp = SDL_CreateTextureFromSurface(render, sprite);
     if (tmp == nullptr)
-        throw GraphicalException("Buffering texture creation error",
-                "SDL_CreateTextureFromSurface");
-    texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888,
-            SDL_TEXTUREACCESS_TARGET, sprite->w, sprite->h);
+        throw GraphicalException("Buffering texture creation error", "SDL_CreateTextureFromSurface");
+    texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, sprite->w, sprite->h);
     if (texture == nullptr)
         throw GraphicalException("Texture creation error", "SDL_CreateTexture");
 }

@@ -6,7 +6,7 @@
 */
 
 #ifndef PLAYER_HPP_
-    #define PLAYER_HPP_
+#define PLAYER_HPP_
 
 #include "Exception.hpp"
 #include "SDL2/SDL.h"
@@ -15,7 +15,7 @@
 
 class Player {
 public:
-    Player(std::string &name, SDL_Renderer *render);
+    Player(std::string& name, SDL_Renderer* render);
     ~Player() = default;
 
     void setInventoryContent(std::vector<unsigned int> inventory);
@@ -37,13 +37,13 @@ public:
     void setTeamName(std::string teamName);
     std::string getTeamName() { return teamName; }
 
-    SDL_Texture *getTmp() { return tmp; }
-    SDL_Surface *getSurface() { return sprite; }
+    SDL_Texture* getTmp() { return tmp; }
+    SDL_Surface* getSurface() { return sprite; }
 
 private:
-    SDL_Surface *sprite;
-    SDL_Texture *texture;
-    SDL_Texture *tmp;
+    SDL_Surface* sprite;
+    SDL_Texture* texture;
+    SDL_Texture* tmp;
 
     unsigned int player_num;
     std::vector<unsigned int> inventory;

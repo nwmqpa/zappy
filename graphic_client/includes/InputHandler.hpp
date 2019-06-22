@@ -5,9 +5,11 @@
 ** Header file off Input Handler class.
 */
 
+#pragma once
+
+#include "Window.hpp"
 #include <SDL2/SDL.h>
 #include <iostream>
-#include "Window.hpp"
 
 class InputHandler {
 public:
@@ -22,7 +24,8 @@ public:
     InputHandler() = default;
     ~InputHandler() = default;
 
-    void handle(const Window &window, InputDatas &inputs) const noexcept;
+    void handle(const Window& window, InputDatas& inputs) const noexcept;
+
 private:
-    void setKeys(SDL_Event &events, InputHandler::InputDatas &inputs) const noexcept;
+    void setKeys(SDL_Event& events, InputHandler::InputDatas& inputs) const noexcept;
 };

@@ -7,7 +7,8 @@
 
 #include "InputHandler.hpp"
 
-void InputHandler::handle(const Window &window, InputHandler::InputDatas &inputs) const noexcept {
+void InputHandler::handle(const Window& window, InputHandler::InputDatas& inputs) const noexcept
+{
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
@@ -41,38 +42,37 @@ void InputHandler::handle(const Window &window, InputHandler::InputDatas &inputs
             inputs.pos[0] = event.motion.x;
             inputs.pos[1] = event.motion.y;
             break;
-        default:
-            std::cout << "[No input]" << std::endl;
         }
     }
 }
 
-void InputHandler::setKeys(SDL_Event &event, InputHandler::InputDatas &inputs) const noexcept {
+void InputHandler::setKeys(SDL_Event& event, InputHandler::InputDatas& inputs) const noexcept
+{
     switch (event.key.keysym.sym) {
-        case SDLK_ESCAPE:
-            inputs.should_quit = true;
-            break;
-        case SDLK_UP:
-            inputs.y = 1.0;
-            break;
-        case SDLK_DOWN:
-            inputs.y = -1.0;
-            break;
-        case SDLK_LEFT:
-            inputs.x = -1.0;
-            break;
-        case SDLK_RIGHT:
-            inputs.x = 1.0;
-            break;
-        case SDLK_PLUS:
-            inputs.zoom = 1.0;
-            break;
-        case SDLK_MINUS:
-            inputs.zoom = -1.0;
-            break;
-        default:
-            inputs.x = 0;
-            inputs.y = 0;
-            inputs.zoom =0;
+    case SDLK_ESCAPE:
+        inputs.should_quit = true;
+        break;
+    case SDLK_UP:
+        inputs.y = 1.0;
+        break;
+    case SDLK_DOWN:
+        inputs.y = -1.0;
+        break;
+    case SDLK_LEFT:
+        inputs.x = -1.0;
+        break;
+    case SDLK_RIGHT:
+        inputs.x = 1.0;
+        break;
+    case SDLK_PLUS:
+        inputs.zoom = 1.0;
+        break;
+    case SDLK_MINUS:
+        inputs.zoom = -1.0;
+        break;
+    default:
+        inputs.x = 0;
+        inputs.y = 0;
+        inputs.zoom = 0;
     }
 }

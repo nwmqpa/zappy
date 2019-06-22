@@ -1,26 +1,27 @@
-#include "Window.hpp"
-#include "Game.hpp"
-#include "protocols.h"
-#include "Protocol.hpp"
 #include "DataHandler.hpp"
+#include "Game.hpp"
+#include "Protocol.hpp"
+#include "Window.hpp"
+#include "protocols.h"
 
 #ifdef __SWITCH__
-#   include <switch.h>
+#include <switch.h>
 #endif /* __SWITCH__ */
 
 #ifdef __SWITCH__
-static void initNxLink(int &sockNxlinkSock)
+static void initNxLink(int& sockNxlinkSock)
 {
     if (R_FAILED(socketInitializeDefault()))
         return;
     sockNxlinkSock = nxlinkStdio();
     if (sockNxlinkSock >= 0)
-        std::cout << "printf output now goes to nxlink server\n" << std::endl;
+        std::cout << "printf output now goes to nxlink server\n"
+                  << std::endl;
     else
         socketExit();
 }
 
-static void exitNxLink(int &sockNxlinkSock)
+static void exitNxLink(int& sockNxlinkSock)
 {
     if (sockNxlinkSock >= 0) {
         close(sockNxlinkSock);
@@ -29,7 +30,8 @@ static void exitNxLink(int &sockNxlinkSock)
     }
 }
 
-static void initRomFS(void) {
+static void initRomFS(void)
+{
     Result rc = romfsInit();
     if (R_FAILED(rc)) {
         std::cout << "romfsInit: " << rc << std::endl;
@@ -38,8 +40,9 @@ static void initRomFS(void) {
         std::cout << "romfsInit: sucess" << std::endl;
 }
 
-static void initJoycons(void) {
-        for (int i = 0; i < 2; i++) {
+static void initJoycons(void)
+{
+    for (int i = 0; i < 2; i++) {
         if (SDL_JoystickOpen(i) == NULL) {
             std::cout << "SDL_JoystickOpen: " << SDL_GetError() << std::endl;
             exit(0);
@@ -51,7 +54,7 @@ static void initJoycons(void) {
 #endif
 
 #ifndef TEST
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     std::string host("192.168.43.129");
     int port = 13334;
@@ -71,9 +74,14 @@ int main(int argc, char *argv[])
     }
 #endif /* __SWITCH__ */
     auto name = std::string("window");
-    auto window = Window(name, 1280, 720);
-    auto game = Game(host, port);
-    game.life(window);
+    try {
+        auto game = Game(host, port);
+        auto window = Window(name, 1280, 720);
+        game.life(window);
+    } catch (const GraphicalException& e) {
+        std::cout << "Error while initialization: " << e.what() << ". Quitting." << std::endl;
+        return 84;
+    };
 #ifdef __SWITCH__
     SDL_Quit();
     exitNxLink(sockNxlinkSock);

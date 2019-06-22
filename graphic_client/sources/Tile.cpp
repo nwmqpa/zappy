@@ -5,11 +5,11 @@
 ** Graphical Client
 */
 
-#include <iostream>
 #include "Tile.hpp"
+#include <iostream>
 
-Tile::Tile(std::string &imgpath, SDL_Renderer *render)
- : tile(nullptr)
+Tile::Tile(std::string& imgpath, SDL_Renderer* render)
+    : tile(nullptr)
 {
     img = SDL_LoadBMP(imgpath.c_str());
     if (img == nullptr)
@@ -17,9 +17,9 @@ Tile::Tile(std::string &imgpath, SDL_Renderer *render)
     tmp = SDL_CreateTextureFromSurface(render, img);
     if (tmp == nullptr)
         throw GraphicalException("Buffering texture creation error",
-                "SDL_CreateTextureFromSurface");
+            "SDL_CreateTextureFromSurface");
     texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888,
-            SDL_TEXTUREACCESS_TARGET, img->w, img->h);
+        SDL_TEXTUREACCESS_TARGET, img->w, img->h);
     if (texture == nullptr)
         throw GraphicalException("Texture creation error", "SDL_CreateTexture");
 }

@@ -7,18 +7,18 @@
 
 #pragma once
 
-#include <string>
-#include <iostream>
-#include <netdb.h>
 #include "protocols.h"
 #include "socket.hpp"
+#include <iostream>
+#include <netdb.h>
+#include <string>
 
 /// The protocol just ask for something but it's not blocking.
 /// The response will be handled when it is ready in the dispatcher.
 class Protocol {
 public:
     /// Protocol constructor that need a port to connect.
-    Protocol(std::string ip, short int port) noexcept;
+    Protocol(std::string ip, short int port);
 
     /// Removing assignement operator.
     void operator=(Protocol lhs) = delete;
