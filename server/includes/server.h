@@ -18,6 +18,12 @@
 #include "map.h"
 #include "protocols.h"
 
+/// \brief The team struct
+///
+/// The team struct
+/// contain the name
+/// the eggs linked to team
+/// the clients linked to team
 typedef struct team_s {
     char *name;
     list_t *clients;
@@ -26,6 +32,14 @@ typedef struct team_s {
 
 int check_free_space(team_t *team);
 
+/// The main server struct that contain all data needed by the server to run.
+/// list of ia
+/// list of events
+/// list of graphic_client
+/// the map
+/// the handler register
+/// the epoll sockets
+/// the width and height of the server
 typedef struct server_s {
     unsigned int width;
     unsigned int height;
@@ -43,11 +57,11 @@ typedef struct server_s {
     list_t *events;
 } server_t;
 
+/// An data struct to pass through void *
 typedef struct time_server_s {
     double elapsed;
     server_t *server;
 } time_server_t;
-
 
 // Create server and initiliaze it from options.
 server_t *create_server(options_t *options);
@@ -66,6 +80,7 @@ void print_server(server_t *server);
 
 typedef void (*debug_func) (server_t *);
 
+/// Data struct to pass through void *
 struct server_part_s {
     char *name;
     debug_func func;

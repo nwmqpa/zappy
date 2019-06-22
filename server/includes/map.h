@@ -12,10 +12,7 @@
 
 #define TIME_RESPAWN 100
 
-/*
-** Contain an inventory and player's id of those placed on them.
-**
-*/
+/// Contain an inventory and player's id of those placed on them.
 typedef struct tile_s {
     inventory_t inventory;
     int *player_ids;
@@ -26,10 +23,8 @@ void set_tile(tile_t *new);
 void add_player(tile_t *tile, int id);
 void remove_player(tile_t *tile, int id);
 
-/*
-** Contain map dimension.
-** and an array of tile.
-*/
+/// Contain map dimension.
+/// and an array of tile.
 typedef struct map_s {
     unsigned int width;
     unsigned int height;

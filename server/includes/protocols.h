@@ -23,9 +23,7 @@
 extern "C" {
 #endif
 
-///
 /// DANGLING_HANDLER -> Handler function is NULL
-///
 enum HANDLING_ERRORS {
     NO_ERROR                = 0,
     TOO_FEW_PARAMETERS      = 1,
@@ -34,19 +32,13 @@ enum HANDLING_ERRORS {
     DANGLING_HANDLER        = 4
 };
 
-///
 /// Enumeration of all base messages
 /// for the Graphic Protocol
-///
 
 enum GRAPHIC_PACKETS_FROM_CLIENT {
-///
 /// Usable to determine the degree of change of a client.
-///
     CLT_PROTOCOL_ADDONS     = 1,
-///
 /// Base Zappy commands.
-///
     CLT_MAP_SIZE            = 2,
     CLT_TILE_CONTENT        = 3,
     CLT_MAP_CONTENT         = 4,
@@ -56,9 +48,7 @@ enum GRAPHIC_PACKETS_FROM_CLIENT {
     CLT_PLAYER_INVENTORY    = 8,
     CLT_TIME_UNIT_REQUEST   = 9,
     CLT_TIME_UNIT_CHANGE    = 10,
-///
 /// Special commands reserved for addons.
-///
     CLT_CUSTOM              = 11
 };
 

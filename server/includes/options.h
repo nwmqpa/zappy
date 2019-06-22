@@ -15,6 +15,7 @@
 
 #define BREAK(x) (x); break
 
+/// Option struct that handle server parameters.
 typedef struct options_s {
     short port;
     int width;

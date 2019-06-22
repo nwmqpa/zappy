@@ -10,13 +10,11 @@
 
 #ifndef LOG_LEVEL
 
-/*
-** 0 - Only fatal logs.
-** 1 - error logs + previous.
-** 2 - warn logs  + previous.
-** 3 - info logs  + previous.
-** 4 - debug logs + previous.
-*/
+/// 0 - Only fatal logs.
+/// 1 - error logs + previous.
+/// 2 - warn logs  + previous.
+/// 3 - info logs  + previous.
+/// 4 - debug logs + previous.
 #define LOG_LEVEL 2
 
 #endif /* LOG_LEVEL */
