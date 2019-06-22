@@ -32,7 +32,7 @@ void event_new_player(ia_t *client, server_t *server)
     pld->orientation = client->direction;
     memcpy(pld->team_name, team->name, strlen(team->name));
     add_event(server, SRV_NEW_PLAYER_CONNECT, pld);
-    debugl("Adding SRV_NEW_PLAYER_CONNECT_LEN to event queue.\n");
+    debugl("Adding SRV_NEW_PLAYER_CONNECT_LEN to event queue\n");
 }
 
 void event_player_death(ia_t *client, server_t *server)

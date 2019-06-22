@@ -26,6 +26,7 @@ int add_ia_to_team_bis(server_t *server, ia_t *client, team_t *team)
     pos_t pos = { rand() % (server->width - 1), rand() % (server->height - 1) };
     egg_t *egg = get_cmp_list(team->eggs, is_eclosable, NULL);
 
+    client->direction = rand() % 4;
     if (!count_unused_slots(team, server->client_per_team))
         return (-1);
     if (len_list(team->clients) < (size_t) server->client_per_team) {

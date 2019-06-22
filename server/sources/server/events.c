@@ -47,16 +47,19 @@ static int get_packet_size(int id) {
     return 0;
 }
 
-static int send_event(server_t *server, event_t *event)
+static void send_event(void *entry, const void *data)
 {
-    int *gsock = NULL;
-    int packet_size = get_packet_size(event->id);
+    const struct {
+        server_t *server;
+        event_t *event;
+    } *datas = data;
+    int packet_size = get_packet_size(datas->event->id);
     struct {
         pkt_header_t header;
         char payload[1024];
     } send = {
         {
-            .id = event->id,
+            .id = datas->event->id,
             .version = PROTOCOL_VERSION,
             .subid = 0,
             .size = packet_size
@@ -65,21 +68,23 @@ static int send_event(server_t *server, event_t *event)
     };
 
     debugl("Sending %d with size %d.\n", send.header.id, packet_size);
-    memcpy(send.payload, event->payload, packet_size);
-    gsock = get_list(server->graphic_clients, 0);
-    if (gsock)
-        return write(*gsock , &send, packet_size + PKT_HDR_LEN);
-    else
-        return 0;
+    memcpy(send.payload, datas->event->payload, packet_size);
+    write(*(int *) entry, &send, packet_size + PKT_HDR_LEN);
 }
 
 void handle_events(server_t *server)
 {
-    event_t *event = pop_list(server->events, 0);
+    struct {
+        server_t *server;
+        event_t *event;
+    } data = {
+        server,
+        pop_list(server->events, 0)
+    };
 
-    while (event) {
-        if (send_event(server, event) == -1)
-            errorl("Error while writing to graphic client.\n");
-        event = pop_list(server->events, 0);
+    while (data.event) {
+        map(server->graphic_clients, send_event, &data);
+        free(data.event);
+        data.event = pop_list(server->events, 0);
     }
 }

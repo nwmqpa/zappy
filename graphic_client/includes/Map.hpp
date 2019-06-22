@@ -6,30 +6,31 @@
 */
 
 #ifndef MAP_HPP_
-    #define MAP_HPP_
+#define MAP_HPP_
 
 #include <vector>
 
 #include "protocols.h"
 
-#include "SDL2/SDL_image.h"
 #include "SDL2/SDL.h"
+#include "SDL2/SDL_image.h"
 
 #include "Case.hpp"
 
 class Map {
-    public:
-        Map();
-        ~Map();
+public:
+    Map();
+    ~Map();
 
-        void UpdateCaseData();
+    void UpdateCaseData();
 
-        void getSize();
-        void getCaseData();
-        void getInfoFromServer();
-    private:
-        std::vector<Case *> map;
-        srv_map_size_t *map_size;
+    void getSize();
+    void getCaseData();
+    void getInfoFromServer();
+
+private:
+    std::vector<Case*> map;
+    srv_map_size_t* map_size;
 };
 
 #endif

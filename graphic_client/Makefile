@@ -23,13 +23,16 @@ COMPILER_COMMAND = compile_commands.json
 
 MODULES		=
 
-SOURCES		=		Exception.cpp	\
+SOURCES		=		Player.cpp 	\
+					Isometry.cpp	\
+					Exception.cpp	\
 					Tile.cpp	\
-					WindowCreator.cpp	\
+					Window.cpp	\
 					Protocol.cpp \
 					main.cpp	\
 					Game.cpp \
-					InputHandler.cpp
+					InputHandler.cpp \
+					GameState.cpp
 
 TEST_SOURCES	=	dummy.c
 

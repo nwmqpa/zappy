@@ -5,64 +5,42 @@
 ** Graphical Client
 */
 
-#include <iostream>
 #include "Tile.hpp"
+#include <iostream>
 
-Tile::Tile(std::string &IMGpath, SDL_Renderer *render)
-    :scale(1)
+Tile::Tile(std::string& imgpath, SDL_Renderer* render)
+    : tile(nullptr)
 {
-    IMG = SDL_LoadBMP(IMGpath.c_str());
-    if (IMG == NULL)
-        throw GraphicalException("BMP loading error", "SDL_LoadBMP");
-    x = IMG->w + scale;
-    y = IMG->h + scale;
-    tmp = SDL_CreateTextureFromSurface(render, IMG);
-    if (tmp == NULL)
+    img = SDL_LoadBMP(imgpath.c_str());
+    if (img == nullptr)
+        throw GraphicalException("BMP loading error on Tile", "SDL_LoadBMP Tile");
+    tmp = SDL_CreateTextureFromSurface(render, img);
+    if (tmp == nullptr)
         throw GraphicalException("Buffering texture creation error",
-                "SDL_CreateTextureFromSurface");
+            "SDL_CreateTextureFromSurface");
     texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888,
-            SDL_TEXTUREACCESS_TARGET, IMG->w, IMG->h);
-    if (texture == NULL)
+        SDL_TEXTUREACCESS_TARGET, img->w, img->h);
+    if (texture == nullptr)
         throw GraphicalException("Texture creation error", "SDL_CreateTexture");
 }
 
-void Tile::setTileContent(srv_tile_content_t *newtile)
+void Tile::setTileContent(int x, int y, std::vector<int> inventory, int nbplayer)
 {
-    tile = newtile;
-}
-/*
-void Tile::draw(SDL_Renderer *render, SDL_Window *window)
-{
-    int w, h;
-
-    SDL_GetWindowSize(window, &w, &h);
-    if (map == NULL)
-        throw GraphicalException("Map error", "srv_map_size");
-    else if (tile == NULL)
-        throw GraphicalException("Tile error", "srv_tile_content");
-
-    pos.x = (w / 2 - ((map->x * scale) / 2) + x) +
-        (tile->x - tile->y) * (IMG->w / 2);
-    pos.y = (h / 2 - ((map->y * scale) / 2) + y) +
-        (tile->x + tile->y) * (IMG->h / 2);
-    pos.w = IMG->w;
-    pos.h = IMG->h;
-
-    if (SDL_RenderCopy(render, tmp, NULL, &pos) < 0)
-        throw GraphicalException("Render copy error", "SDL_RenderCopy");
-}
-*/
-void Tile::setX(int newX)
-{
-    x = newX;
+    tile = new srv_tile_content_t;
+    std::cout << x << ", " << y << std::endl;
+    tile->x = x;
+    tile->y = y;
+    tile->q0 = inventory.at(0);
+    tile->q1 = inventory.at(1);
+    tile->q2 = inventory.at(2);
+    tile->q3 = inventory.at(3);
+    tile->q4 = inventory.at(4);
+    tile->q5 = inventory.at(5);
+    tile->q6 = inventory.at(6);
+    tile->players = nbplayer;
 }
 
-void Tile::setY(int newY)
+void Tile::setArea(SDL_Rect area)
 {
-    y = newY;
-}
-
-void Tile::setScale(int newScale)
-{
-    scale = newScale;
+    this->area = area;
 }
