@@ -21,8 +21,11 @@ class Handlers {
         static void gotDeathPlayer(GameState &state, Window &window);
         static void gotTileContent(GameState &state, Window &window);
         static void gotNewPlayerConnect(GameState &state, Window &window);
-        static void gotPlayerPosition(GameState& state, Window& window);
-        static void gotPlayerLevel(GameState& state, Window& window);
+        static void gotPlayerPosition(GameState &state, Window &window);
+        static void gotPlayerLevel(GameState &state, Window &window);
+        static void gotEggLayed(GameState &state, Window &window);
+        static void gotEggHatching(GameState &state, Window &window);
+        static void gotTeamsNames(GameState &state, Window &window);
 
         const static std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, data_processor_t>> HANDLERS;
         const static std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, std::string>> NAMES;

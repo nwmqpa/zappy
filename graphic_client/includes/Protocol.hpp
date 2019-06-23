@@ -7,11 +7,14 @@
 
 #pragma once
 
-#include "protocols.h"
-#include "socket.hpp"
+
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
 #include <iostream>
 #include <netdb.h>
 #include <string>
+#include "protocols.h"
 
 /// The protocol just ask for something but it's not blocking.
 /// The response will be handled when it is ready in the dispatcher.

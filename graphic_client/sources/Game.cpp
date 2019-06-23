@@ -47,6 +47,7 @@ void Game::life(Window& window)
         return true;
     });
 
+    state.protocol.askTeamsNames();
     state.protocol.askMapSize();
     InputHandler input;
     InputHandler::InputDatas inputData;
