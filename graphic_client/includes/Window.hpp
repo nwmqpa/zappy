@@ -38,13 +38,10 @@ public:
     Window(std::string& name, int x = 800, int y = 600);
     ~Window();
 
-    void render(GameState& state, int, int);
+    void render(GameState& state, int y);
 
     void move(float, float);
     void setCameraSize(int, int);
-
-    void clearScreen();
-    void presentScreen();
 
     auto* getRender() const { return renderer; }
 
@@ -55,7 +52,10 @@ private:
     SDL_Rect camera;
 
     bool initSDL(Uint32 SDL = SDL_INIT_EVERYTHING);
-    void renderPlayer(GameState& state, int x, int y);
+    void renderTile(GameState &state, int y);
+    void renderPlayer(GameState &state, int y);
+    void renderEgg(GameState &state, int y);
+    void renderIsoTexture(SDL_Texture *texture, int posX, int posY, int width, int height, int mapY, Camera camera);
 };
 
 #endif

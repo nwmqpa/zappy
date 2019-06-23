@@ -89,7 +89,6 @@ void Handlers::gotDeathPlayer(GameState &state, Window &window)
     for (auto player : state.playerList) {
         if (player->getPlayerNum() == packet->player_num) {
             teamName = std::string(player->getTeamName());
-            delete player;
         }
     }
     state.playerList.erase(
@@ -171,9 +170,19 @@ void Handlers::gotPlayerLevel(GameState &state, Window &window)
 void Handlers::gotEggLayed(GameState &state, Window &window)
 {
     auto *packet = (srv_player_egg_layed_t *) state.lastData;
+    std::tuple<SDL_Texture *, SDL_Surface *> res = state.resourcesManager.getResource("egg");
+    SDL_Texture *texture = std::get<0>(res);
+    SDL_Surface *surface = std::get<1>(res);
 
-    
-    state.eggs.push_back(new Egg(packet->egg_num, packet->x, packet->y));
+    std::cout << surface->w << ", " << surface->h << ", " << packet->x << ", " << packet->y << std::endl;   
+    state.eggs.push_back(new Egg(
+        packet->egg_num,
+        packet->x,
+        packet->y,
+        texture,
+        surface->w,
+        surface->h
+    ));
 }
 
 void Handlers::gotEggHatching(GameState &state, Window &window)
