@@ -5,9 +5,10 @@
 ** Utilities
 */
 
+#include <tuple>
 #include <vector>
 
-template<typename T, typename U>
+template <typename T, typename U>
 U getValueForIndex(const T index, const std::vector<std::tuple<T, U>> tuples)
 {
     for (auto tuple : tuples) {
@@ -17,7 +18,7 @@ U getValueForIndex(const T index, const std::vector<std::tuple<T, U>> tuples)
     return std::get<1>(tuples.at(0));
 }
 
-template<typename T, typename U>
+template <typename T, typename U>
 T getIndexForValue(const U index, const std::vector<std::tuple<T, U>> tuples)
 {
     for (auto tuple : tuples) {

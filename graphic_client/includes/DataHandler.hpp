@@ -7,14 +7,14 @@
 
 #pragma once
 
+#include <fcntl.h>
 #include <iostream>
 #include <unistd.h>
-#include <fcntl.h>
 
 template <typename T>
 class DataHandler {
 
-typedef bool (*handler) (int sock, T &data);
+    typedef bool (*handler)(int sock, T& data);
 
 public:
     /// DataHandler constructor that need a function
@@ -27,7 +27,7 @@ public:
         fcntl(sock, F_SETFL, flags | O_NONBLOCK);
     }
 
-    bool handle(T &data) noexcept
+    bool handle(T& data) noexcept
     {
         if (_handlerFunc(_sock, data) == false) {
             cleanupSocket();

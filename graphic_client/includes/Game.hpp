@@ -6,26 +6,35 @@
 */
 
 #ifndef GAME_HPP_
-    #define GAME_HPP_
+#define GAME_HPP_
 
 #include "GameState.hpp"
-#include "WindowCreator.hpp"
+#include "InputHandler.hpp"
+#include "Window.hpp"
 
-typedef void (*data_processor_t)(GameState &, WindowCreator &);
+typedef void (*data_processor_t)(GameState&, Window&);
 
 class Game {
-    public:
-        Game(std::string &ip, int port);
-        ~Game() = default;
+public:
+    Game(std::string ip, int port);
+    ~Game() = default;
 
-        void life(WindowCreator &);
-        void processData(WindowCreator &);
-        void eventLoop(WindowCreator &, std::vector<Tile *>);
+    void life(Window&);
+    void processData(Window&);
+    void eventLoop(Window&, std::vector<Tile*>);
+    void updateCamera(InputHandler::InputDatas& inputData);
 
-    private:
-        std::string ip;
-        int port;
-        GameState state;
+private:
+
+    void limitFramerate() noexcept;
+    std::string ip;
+    int port;
+    GameState state;
+    unsigned int endTime;
+    unsigned int startTime;
+    unsigned int delta;
+    short fps;
+    short timePerFrame;
 };
 
 #endif

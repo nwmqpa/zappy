@@ -6,45 +6,38 @@
 */
 
 #ifndef TILE_HPP_
-    #define TILE_HPP_
+#define TILE_HPP_
 
-#include "Exception.hpp"
 #include "Animation.hpp"
+#include "Exception.hpp"
 #include "SDL2/SDL.h"
 #include "protocols.h"
 #include <vector>
 
 class Tile {
-    public:
-        Tile(std::string &, SDL_Renderer *);
-        ~Tile() = default;
+public:
+    Tile(std::string&, SDL_Renderer*);
+    ~Tile() = default;
 
-        void setTileContent(srv_tile_content_t *);
-        srv_tile_content_t *getTileInfo() { return tile; }
+    void setTileContent(int, int, std::vector<int>, int);
 
-        void setX(int);
-        void setY(int);
-        void setScale(int);
+    srv_tile_content_t* getTileInfo() { return tile; }
+    SDL_Surface* getSurface() { return img; }
+    SDL_Texture* getTmp() { return tmp; }
 
-        int getX() { return x; }
-        int getY() { return y; }
-        int getScale();
+    int getPosX() { return tile->x; }
+    int getPosY() { return tile->y; }
 
-        SDL_Surface *getSurface() { return IMG; }
-        SDL_Texture *getTmp() { return tmp; }
+    SDL_Rect getArea() { return area; }
+    void setArea(SDL_Rect area);
 
-        unsigned int getPosX() { return tile->x; }
-        unsigned int getPosY() { return tile->y; }
+private:
+    SDL_Surface* img;
+    SDL_Texture* texture;
+    SDL_Texture* tmp;
 
-    private:
-        SDL_Surface *IMG;
-        SDL_Texture *texture;
-        SDL_Texture *tmp;
+    SDL_Rect area;
 
-        srv_tile_content_t *tile;
-
-        int scale;
-        int x;
-        int y;
+    srv_tile_content_t* tile;
 };
 #endif
