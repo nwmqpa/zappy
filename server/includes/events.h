@@ -9,6 +9,7 @@
 
 #include "server.h"
 #include "generic_list.h"
+#include "egg.h"
 
 /// events are for graphic client.
 /// It's for things like `new_player` or `player_death`
@@ -29,3 +30,4 @@ void event_end_game(const char *winning_team, server_t *server);
 void event_player_pos(ia_t *client, server_t *server);
 void event_incantation_end(ia_t *client, server_t *server, int result);
 void event_incantation_start(ia_t *client, server_t *server, int *plr, int nb);
+void event_egg_hatching(server_t *server, egg_t *egg);

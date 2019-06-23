@@ -7,12 +7,6 @@
 
 #include "client_commands.h"
 
-static int calculate_tile(pos_t sender, pos_t client)
-{
-    // TODO: Code de thomas (pas opti).
-    return 0;
-}
-
 static void send_text(void *ptr, const void *data)
 {
     const struct {
@@ -28,8 +22,12 @@ static void send_text(void *ptr, const void *data)
     if (client->position.x == datas->sender->position.x &&
             client->position.y == datas->sender->position.y)
         tile = 0;
-    else
-        tile = calculate_tile(client->position, datas->sender->position);
+    else {
+        tile = calculate_tile(datas->server,
+        client->position, datas->sender->position);
+        tile -= (client->direction - 2) * 2;
+        tile %= 9;
+    }
     dprintf(client->id, "message %d, %s", tile, datas->text);
 }
 

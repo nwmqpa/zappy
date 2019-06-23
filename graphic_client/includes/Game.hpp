@@ -12,8 +12,6 @@
 #include "InputHandler.hpp"
 #include "Window.hpp"
 
-typedef void (*data_processor_t)(GameState&, Window&);
-
 class Game {
 public:
     Game(std::string ip, int port);
@@ -23,6 +21,7 @@ public:
     void processData(Window&);
     void eventLoop(Window&, std::vector<Tile*>);
     void updateCamera(InputHandler::InputDatas& inputData);
+    void loadResources(Window &window);
 
 private:
 

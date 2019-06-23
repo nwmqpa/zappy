@@ -7,6 +7,7 @@
 
 #include "egg.h"
 #include "logger.h"
+#include "events.h"
 
 static const int ECLOSION_TIME = 100;
 
@@ -36,8 +37,10 @@ void eclosion_handler(void *elem, const void *data)
     if (egg->can_eclose)
         return;
     egg->time_left -= params->elapsed;
-    if (egg->time_left <= 0)
+    if (egg->time_left <= 0) {
         egg->can_eclose = 1;
+        event_egg_hatching(params->server, egg);
+    }
 }
 
 egg_t *egg_create(int x, int y)
@@ -49,6 +52,7 @@ egg_t *egg_create(int x, int y)
     new->time_left = ECLOSION_TIME;
     new->position.x = x;
     new->position.y = y;
+    new->id = time(NULL);
     return new;
 }
 

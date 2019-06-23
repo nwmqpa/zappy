@@ -5,9 +5,13 @@
 ** GameState
 */
 
+#include <tuple>
 #include "Player.hpp"
 #include "Protocol.hpp"
 #include "Tile.hpp"
+#include "Egg.hpp"
+#include "Team.hpp"
+#include "ResourcesManager.hpp"
 
 #pragma once
 
@@ -28,9 +32,12 @@ struct GameState {
     pkt_header_t lastHeader;
     void* lastData;
     Camera camera;
-    std::vector<Tile*> tileList;
-    std::vector<Player*> playerList;
+    std::vector<Tile *> tileList;
+    std::vector<Player *> playerList;
+    std::vector<Egg *> eggs;
+    std::vector<Team *> teams;
     srv_map_size_t mapSize;
     bool isActive;
     Protocol protocol;
+    ResourcesManager<std::tuple<SDL_Texture *, SDL_Surface *>, SDL_Renderer *> resourcesManager;
 };

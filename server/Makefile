@@ -44,6 +44,7 @@ SOURCES		=	main.c \
 				client/eject.c \
 				client/object.c \
 				client/remove.c \
+				client/calculate_tile.c \
 				utils/dispatcher.c \
 				utils/debug.c \
 				utils/logger_func.c \
@@ -90,7 +91,7 @@ LINK_MODULES	=	$(addprefix -l, $(MODULES))
 
 WARNINGS	=	-Wall -Wextra
 CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) -fdiagnostics-color=always -D _GNU_SOURCE -Wno-unused-parameter -Wno-unknown-pragmas
-LDFLAGS		=	-L $(BUILD_DIR) $(LINK_MODULES)
+LDFLAGS		=	-L $(BUILD_DIR) $(LINK_MODULES) -lm
 
 DEFAULT		=	\e[0m
 WHITE		=	\e[1;97m
