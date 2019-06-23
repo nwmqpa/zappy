@@ -10,8 +10,6 @@
 #include "config.h"
 #include "logger.h"
 
-static const unsigned int MAX_RAND_TILE = 2;
-
 static const char *RESOURCES_NAME[] = {
     "linemate",
     "deraumere",

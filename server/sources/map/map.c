@@ -9,8 +9,6 @@
 #include "map.h"
 #include "logger.h"
 
-static const unsigned int MAX_RAND_FILL = 2;
-
 map_t *create_map(unsigned int width, unsigned int height)
 {
     map_t *new = malloc(sizeof(map_t));

@@ -95,7 +95,7 @@ PATSUBST_MODULS =	$(patsubst  $(SRC_DIR)/%, $(BUILD_DIR)/lib%.a, $(PREFIXED_MODU
 LINK_MODULES	=	$(addprefix -l, $(MODULES))
 
 
-WARNINGS	=	-Wall -Wextra
+WARNINGS	=	-Wall -Wextra -Wno-restrict
 CFLAGS		=	-I $(INCLUDE_DIR) $(WARNINGS) -fdiagnostics-color=always -D _GNU_SOURCE -Wno-unused-parameter -Wno-unknown-pragmas
 LDFLAGS		=	-L $(BUILD_DIR) $(LINK_MODULES) -lm
 

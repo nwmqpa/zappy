@@ -9,7 +9,7 @@
 #include <stdint.h>
 #include "client_commands.h"
 
-float distance(uint32_t sx, uint32_t sy, uint32_t cx, uint32_t cy)
+float distance(int sx, int sy, int cx, int cy)
 {
     return sqrt(pow(abs(cx - cy), 2) + pow(abs(cx - cy), 2));
 }

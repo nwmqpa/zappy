@@ -21,6 +21,7 @@ static int abs_modulo(int data, int num)
             ret -= num;
         return (ret);
     }
+    return (ret);
 }
 
 static void send_text(void *ptr, const void *data)
