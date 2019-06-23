@@ -14,7 +14,6 @@ void get_info_eggs(void *entry, const void *nothing)
     printf("Can eclose: %d\n", ((egg_t *) entry)->can_eclose);
 }
 
-
 void get_info_player(void *player, const void *nothing)
 {
     ia_t *client = player;

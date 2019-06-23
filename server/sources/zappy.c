@@ -13,6 +13,7 @@
 #include "client_commands.h"
 #include "egg.h"
 #include "events.h"
+#include "server.h"
 
 static void handle_cooldown(ia_t *client, server_t *server, int elapsed)
 {
@@ -77,37 +78,15 @@ void tick_system(server_t *server)
     }
 }
 
-static int run_dispatch(dispatcher_t *graphic, dispatcher_t *client,
-        server_t *server)
+int run_dispatch(dispatcher_t *g, dispatcher_t *c, server_t *s)
 {
     while (42) {
-        if (dispatch(graphic, server) == -1 ||
-                dispatch(client, server) == -1) {
+        if (dispatch(g, s) == -1 || dispatch(c, s) == -1) {
             infol("Closing server after an error.\n");
             return -1;
         }
-        tick_system(server);
-        handle_events(server);
+        tick_system(s);
+        handle_events(s);
     }
     return 0;
-}
-
-int zappy_server(server_t *server)
-{
-    dispatcher_t graphic_disp = {
-        .on_active = &on_active_graphic,
-        .on_delete = &on_delete_graphic,
-        .on_connect = &on_connect_graphic,
-        .epoll_fd = server->epoll_fd_graphic,
-        .main_socket = server->socket_graphic
-    };
-    dispatcher_t client_disp = {
-        .on_active = &on_active_client,
-        .on_delete = &on_delete_client,
-        .on_connect = &on_connect_client,
-        .epoll_fd = server->epoll_fd_client,
-        .main_socket = server->socket_client
-    };
-    infol("Launching `Zappy` runtime server.\n");
-    return run_dispatch(&graphic_disp, &client_disp, server);
 }

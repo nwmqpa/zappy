@@ -14,6 +14,7 @@
 #include <netinet/in.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "server.h"
 
 typedef int (*disp_func)(int fd, void *data);
 
@@ -31,5 +32,6 @@ typedef struct dispatcher_s {
 /// all active sockets. (Work with `select` under the hood.)
 ///
 int dispatch(dispatcher_t *this, void *data);
+int run_dispatch(dispatcher_t *g, dispatcher_t *c, server_t *s);
 
 #endif /* TCP_LIB_H_ */
