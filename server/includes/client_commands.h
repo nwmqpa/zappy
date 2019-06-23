@@ -97,3 +97,11 @@ char *incante(ia_t *client, server_t *server);
 ///      -> The nbr of available slots in client's team.
 ///  time limit: 0
 char *connect_nbr(ia_t *client, server_t *server);
+
+
+typedef struct {
+    pos_t pos;
+    float distance;
+} pos_distance_t;
+
+int calculate_tile(server_t *server, pos_t s, pos_t c);
