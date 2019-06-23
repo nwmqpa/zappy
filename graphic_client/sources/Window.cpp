@@ -103,9 +103,90 @@ void Window::renderEgg(GameState &state, int y)
 void Window::renderTile(GameState &state, int y)
 {
     for (auto tile : state.tileList) {
-        if (tile->getTileInfo() != nullptr) {
+        if (tile->getTileInfo() == nullptr)
+            continue;
+        this->renderIsoTexture(
+            tile->getTexture(),
+            tile->getPosX(),
+            tile->getPosY(),
+            tile->getWidth(),
+            tile->getHeight(),
+            y,
+            state.camera
+        );
+    }
+}
+
+void Window::renderResources(GameState &state, int y)
+{
+    auto food = state.resourcesManager.getResource("food");
+    auto deraumere = state.resourcesManager.getResource("deraumere");
+    auto linemate = state.resourcesManager.getResource("linemate");
+    auto mendiane = state.resourcesManager.getResource("mendiane");
+    auto sibur = state.resourcesManager.getResource("sibur");
+    auto thystame = state.resourcesManager.getResource("thystame");
+
+    for (auto tile : state.tileList) {
+        if (tile->getTileInfo() == nullptr)
+            continue;
+        if (tile->hasFood()) {
             this->renderIsoTexture(
-                tile->getTexture(),
+                std::get<0>(food),
+                tile->getPosX(),
+                tile->getPosY(),
+                tile->getWidth(),
+                tile->getHeight(),
+                y,
+                state.camera
+            );
+        }
+        if (tile->hasLinemate()) {
+            this->renderIsoTexture(
+                std::get<0>(linemate),
+                tile->getPosX(),
+                tile->getPosY(),
+                tile->getWidth(),
+                tile->getHeight(),
+                y,
+                state.camera
+            );
+        }
+        if (tile->hasThystame()) {
+            this->renderIsoTexture(
+                std::get<0>(thystame),
+                tile->getPosX(),
+                tile->getPosY(),
+                tile->getWidth(),
+                tile->getHeight(),
+                y,
+                state.camera
+            );
+        }
+        if (tile->hasSibur()) {
+            this->renderIsoTexture(
+                std::get<0>(sibur),
+                tile->getPosX(),
+                tile->getPosY(),
+                tile->getWidth(),
+                tile->getHeight(),
+                y,
+                state.camera
+            );
+        }
+        if (tile->hasDeraumere()) {
+            this->renderIsoTexture(
+                std::get<0>(deraumere),
+                tile->getPosX(),
+                tile->getPosY(),
+                tile->getWidth(),
+                tile->getHeight(),
+                y,
+                state.camera
+            );
+        }
+        if (tile->hasMendiane()) {
+            this->renderIsoTexture(
+                std::get<0>(mendiane),
                 tile->getPosX(),
                 tile->getPosY(),
                 tile->getWidth(),
@@ -117,12 +198,14 @@ void Window::renderTile(GameState &state, int y)
     }
 }
 
+
 void Window::render(GameState& state, int y)
 {
     SDL_RenderClear(renderer);
     this->renderTile(state, y);
     this->renderPlayer(state, y);
     this->renderEgg(state, y);
+    this->renderResources(state, y);
     SDL_RenderPresent(renderer);
 }
 

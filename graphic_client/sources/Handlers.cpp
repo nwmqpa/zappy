@@ -27,7 +27,7 @@ const std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, data_processor_t>> Han
     std::make_tuple(SRV_PLAYER_DEATH, gotDeathPlayer),
     std::make_tuple(SRV_EGG_LAYED, gotEggLayed),
     std::make_tuple(SRV_EGG_HATCHING, gotEggHatching),
-    std::make_tuple(SRV_PLAYER_CONNECT_EGG, nullptr),
+    std::make_tuple(SRV_PLAYER_CONNECT_EGG, gotNewPlayerConnectEgg),
     std::make_tuple(SRV_PLAYER_DEATH_EGG, nullptr),
     std::make_tuple(SRV_TIME_UNIT_REQUEST, nullptr),
     std::make_tuple(SRV_TIME_UNIT_CHANGE, nullptr),
@@ -188,6 +188,19 @@ void Handlers::gotEggLayed(GameState &state, Window &window)
 void Handlers::gotEggHatching(GameState &state, Window &window)
 {
     auto *packet = (srv_player_egg_hatching_t *) state.lastData;
+
+    state.eggs.erase(
+        std::remove_if(state.eggs.begin(), state.eggs.end(), [packet](Egg *egg) {
+            return egg->getEggNum() == packet->egg_num;
+        }),
+        state.eggs.end()
+    );
+}
+
+
+void Handlers::gotNewPlayerConnectEgg(GameState &state, Window &window)
+{
+    auto *packet = (srv_player_egg_connection_t *) state.lastData;
 
     state.eggs.erase(
         std::remove_if(state.eggs.begin(), state.eggs.end(), [packet](Egg *egg) {

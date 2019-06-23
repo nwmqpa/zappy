@@ -55,6 +55,7 @@ private:
     void renderTile(GameState &state, int y);
     void renderPlayer(GameState &state, int y);
     void renderEgg(GameState &state, int y);
+    void renderResources(GameState &state, int y);
     void renderIsoTexture(SDL_Texture *texture, int posX, int posY, int width, int height, int mapY, Camera camera);
 };
 
