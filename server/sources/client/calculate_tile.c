@@ -46,5 +46,5 @@ int calculate_tile(server_t *server, pos_t s, pos_t c)
     if (rs.x == c.x)
         return (rs.y < 0 ? 6 : 1);
     degrees = (atan((c.y - rs.y) / (c.x - rs.x)) * 180.0) / M_PI;
-    return ceil((degrees - 22.5) / 45);
+    return (int) ((degrees - 22.5) / 45);
 }
