@@ -5,11 +5,13 @@
 ** GameState
 */
 
+#include <tuple>
 #include "Player.hpp"
 #include "Protocol.hpp"
 #include "Tile.hpp"
 #include "Egg.hpp"
 #include "Team.hpp"
+#include "ResourcesManager.hpp"
 
 #pragma once
 
@@ -37,4 +39,5 @@ struct GameState {
     srv_map_size_t mapSize;
     bool isActive;
     Protocol protocol;
+    ResourcesManager<std::tuple<SDL_Texture *, SDL_Surface *>, SDL_Renderer *> resourcesManager;
 };

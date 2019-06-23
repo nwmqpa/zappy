@@ -5,6 +5,7 @@
 ** Graphical Client
 */
 
+#include <tuple>
 #include <algorithm>
 #include "Handlers.hpp"
 
@@ -66,14 +67,17 @@ const std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, std::string>> Handlers
 
 void Handlers::gotMapSize(GameState &state, Window &window)
 {
-    std::string path = REALPATH("grass.bmp");
     auto *packet = (srv_map_size_t *) state.lastData;
     state.mapSize = *packet;
     for (auto elem : state.tileList)
         delete elem;
     state.tileList.clear();
-    for (unsigned int i = 0; i < (packet->x * packet->y); i += 1)
-        state.tileList.push_back(new Tile(path, window.getRender()));
+    for (unsigned int i = 0; i < (packet->x * packet->y); i += 1) {
+        auto data = state.resourcesManager.getResource("tile");
+        SDL_Texture *texture = std::get<0>(data);
+        SDL_Surface *surface = std::get<1>(data);
+        state.tileList.push_back(new Tile(texture, surface->h, surface->w));
+    }
     state.protocol.askMapContent();
 }
 
@@ -124,8 +128,11 @@ void Handlers::gotTileContent(GameState &state, Window &window)
 void Handlers::gotNewPlayerConnect(GameState &state, Window &window)
 {
     auto *packet = (srv_new_player_connect_t *) state.lastData;
-    std::string path = REALPATH("player.bmp");
-    Player* temp = new Player(path, window.getRender());
+
+    std::tuple<SDL_Texture *, SDL_Surface *> res = state.resourcesManager.getResource("player");
+    SDL_Texture *texture = std::get<0>(res);
+    SDL_Surface *surface = std::get<1>(res);
+    Player* temp = new Player(texture, surface->h, surface->w);
 
     temp->setPosition(packet->x, packet->y);
     temp->setPlayerNum(packet->player_num);

@@ -15,7 +15,7 @@
 template <typename T, typename U>
 class ResourcesManager {
 
-    typedef T *(*opener) (std::string path, U data);
+    typedef T (*opener) (std::string path, U data);
 
 public:
 
@@ -28,16 +28,16 @@ public:
 
     void addResource(std::string path, std::string name, U data)
     {
-        T *entry = _func(path, data);
+        T entry = _func(path, data);
         _datas.insert({name, entry});
     }
 
-    T *getResource(std::string name)
+    T getResource(std::string name)
     {
         return _datas.at(name);
     }
 
 private:
     opener _func;
-    std::map<std::string, T *> _datas;
+    std::map<std::string, T> _datas;
 };

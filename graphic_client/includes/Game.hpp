@@ -21,6 +21,7 @@ public:
     void processData(Window&);
     void eventLoop(Window&, std::vector<Tile*>);
     void updateCamera(InputHandler::InputDatas& inputData);
+    void loadResources(Window &window);
 
 private:
 

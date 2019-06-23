@@ -52,7 +52,6 @@ bool Protocol::askMapSize() const noexcept
             .subid = 0 },
         { 0 }
     };
-    std::cout << "Asking for map size." << std::endl;
     return write(_sock, &ask, PKT_HDR_LEN + CLT_MAP_SIZE_LEN) == -1;
 }
 

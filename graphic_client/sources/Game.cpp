@@ -26,25 +26,26 @@ Game::Game(std::string ip, int port)
     this->state.isActive = true;
 }
 
+void Game::loadResources(Window &window)
+{
+    try {
+        state.resourcesManager.addResource(REALPATH("grass.bmp"), "tile", window.getRender());
+        state.resourcesManager.addResource(REALPATH("deraumere.bmp"), "deraumere", window.getRender());
+        state.resourcesManager.addResource(REALPATH("egg.bmp"), "egg", window.getRender());
+        state.resourcesManager.addResource(REALPATH("food.bmp"), "food", window.getRender());
+        state.resourcesManager.addResource(REALPATH("linemate.bmp"), "linemate", window.getRender());
+        state.resourcesManager.addResource(REALPATH("mendiane.bmp"), "mendiane", window.getRender());
+        state.resourcesManager.addResource(REALPATH("player.bmp"), "player", window.getRender());
+        state.resourcesManager.addResource(REALPATH("sibur.bmp"), "sibur", window.getRender());
+        state.resourcesManager.addResource(REALPATH("thystame.bmp"), "thystame", window.getRender());
+    } catch (const GraphicalException &e) {
+        std::cerr << "Cannot load resources: " << e.what() << "." << std::endl;
+        exit(0);
+    }
+}
+
 void Game::life(Window& window)
 {
-    ResourcesManager<SDL_Texture, SDL_Renderer *> resources([](std::string path, SDL_Renderer *render) {
-        auto img = SDL_LoadBMP(path.c_str());
-        if (img == nullptr)
-            throw GraphicalException("BMP loading error on Tile", "SDL_LoadBMP Tile");
-        auto tmp = SDL_CreateTextureFromSurface(render, img);
-        if (tmp == nullptr)
-            throw GraphicalException("Buffering texture creation error", "SDL_CreateTextureFromSurface");
-        auto texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, img->w, img->h);
-        if (texture == nullptr)
-            throw GraphicalException("Texture creation error", "SDL_CreateTexture");
-        return texture;
-    });
-
-    resources.addResource(REALPATH("grass.bmp"), "tile", window.getRender());
-
-    std::cout << "SDL_Texture: " << resources.getResource("tile") << "." << std::endl;
-
     auto dataHandler = DataHandler<GameState>(state.protocol.getSocket(), [](int sock, GameState& state) {
         pkt_header_t header;
         free(state.lastData);
@@ -64,8 +65,8 @@ void Game::life(Window& window)
             return false;
         return true;
     });
+    this->loadResources(window);
 
-    state.protocol.askTeamsNames();
     state.protocol.askMapSize();
     InputHandler input;
     InputHandler::InputDatas inputData;
