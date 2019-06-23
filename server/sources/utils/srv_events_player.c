@@ -72,5 +72,5 @@ void event_player_pos(ia_t *client, server_t *server)
     pld->x = client->position.x;
     pld->y = client->position.y;
     add_event(server, SRV_PLAYER_POSITION, pld);
-    debugl("Adding SRV_END_GAME to event queue.\n");
+    debugl("Adding SRV_PLAYER_POS to event queue.\n");
 }
