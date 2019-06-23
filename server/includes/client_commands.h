@@ -28,6 +28,9 @@ typedef struct command_param_s {
     double cooldown;
 } command_param_t;
 
+/// Get cooldown.
+double get_cooldown(const char *cmd);
+
 /// Prepare commands like `Fork` and `Incantation`.
 int prepare_special_command(ia_t *client, server_t *server);
 
