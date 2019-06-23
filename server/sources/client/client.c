@@ -12,10 +12,13 @@
 void move_client(ia_t *client, server_t *server, pos_t new, pos_t size)
 {
     tile_t *new_tile = NULL;
-    tile_t *old_tile = get_tile_map(server->map, client->position.x,
-            client->position.y);
+    tile_t *old_t;
 
-    remove_player(old_tile, client->id);
+    if (client == NULL)
+        return;
+    old_t = get_tile_map(server->map, client->position.x, client->position.y);
+    event_player_pos(client, server);
+    remove_player(old_t, client->id);
     client->position.x += new.x;
     client->position.y += new.y;
     client->position.x %= size.x;

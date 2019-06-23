@@ -73,7 +73,10 @@ TEST_SOURCES	=	client_command.c \
 					arg_parser.c \
 					map.c \
 					utils.c \
-					commands.c
+					commands/eject.c \
+					commands/look.c \
+					client_api.c \
+					commands/prepare.c
 
 PREFIXED_SRCS 	=	$(addprefix $(SRC_DIR)/, $(SOURCES))
 PREFIXED_TEST 	=	$(addprefix $(TEST_DIR)/, $(TEST_SOURCES))
@@ -117,7 +120,7 @@ doc:
 
 $(ROOT)/$(COMPILER_COMMAND): $(PATSUBST_JSON)
 	$(V)printf "$(WHITE)Creating $(BLUE)$(COMPILER_COMMAND)$(WHITE).\n"
-	$(V)sed -e '1s/^/[$\n/' -e '$$s/,$$/$\n]/' $(PATSUBST_JSON) > $(ROOT)/$(COMPILER_COMMAND)
+	$(V)sed -e '1s/^/[\n/' -e '$$s/,$$/\n]/' $(PATSUBST_JSON) > $(ROOT)/$(COMPILER_COMMAND)
 	$(V)printf "$(WHITE)Cleaning $(BLUE)objects $(WHITE)files$(DEFAULT)\n"
 	$(V)rm *.o
 
