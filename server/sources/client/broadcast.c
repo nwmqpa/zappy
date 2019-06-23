@@ -7,6 +7,22 @@
 
 #include "client_commands.h"
 
+static int abs_modulo(int data, int num)
+{
+    int ret = data;
+
+    if (data < 0) {
+        while (ret < 0)
+            ret += num;
+        return (ret);
+    }
+    if (data > num) {
+        while (ret >= num)
+            ret -= num;
+        return (ret);
+    }
+}
+
 static void send_text(void *ptr, const void *data)
 {
     const struct {
@@ -26,7 +42,7 @@ static void send_text(void *ptr, const void *data)
         tile = calculate_tile(datas->server,
         client->position, datas->sender->position);
         tile -= (client->direction - 2) * 2;
-        tile %= 9;
+        tile = abs_modulo(tile, 9);
     }
     dprintf(client->id, "message %d, %s", tile, datas->text);
 }
