@@ -11,10 +11,7 @@
 
 int teams_name(const void *data)
 {
-    const struct {
-        int sock;
-        server_t *server;
-    } *datas = data;
+    const struct { int sock; server_t *server; } *datas = data;
     struct {
         pkt_header_t header;
         srv_teams_names_t payload;
