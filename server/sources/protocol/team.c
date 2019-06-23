@@ -11,17 +11,18 @@
 
 int teams_name(const void *data)
 {
-    const struct { int sock; server_t *server; } *datas = data;
+    const struct {
+        int sock;
+        server_t *server;
+    } *datas = data;
     struct {
         pkt_header_t header;
         srv_teams_names_t payload;
     } response = {
-        {
-            .id = SRV_TEAMS_NAMES,
+        {   .id = SRV_TEAMS_NAMES,
             .subid = 0,
             .version = PROTOCOL_VERSION,
-            .size = SRV_TEAMS_NAMES_LEN
-        }, {{0}}
+            .size = SRV_TEAMS_NAMES_LEN }, {{0}}
     };
 
     for (int i = 0; datas->server->teams[i]; ++i) {

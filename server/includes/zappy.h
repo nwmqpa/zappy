@@ -34,10 +34,12 @@
 ///
 /// To make everything work we work a lot on the server architecture.
 ///
-/// First: The time is handled by getting the time elapsed since the last iteration.
+/// First: The time is handled by getting the time elapsed since
+/// the last iteration.
 /// then multiplied by the frequency and removed from all timed entities.
 ///
-/// Then: The connexion with the two clients are handled by `epoll` more efficient
+/// Then: The connexion with the two clients are handled by `epoll`
+/// more efficient
 /// than `select`. We use a dispatching system with 3 function pointer:
 ///     - on_connect (Handle the behaviour of a client connection.)
 ///     - on_disconect ( // )
@@ -46,7 +48,8 @@
 /// `graphic_dispatcher()` and `client_dispatcher()`
 ///
 /// And:
-/// A generic chained list system (`list_t`) as been built at the begin of the project to
+/// A generic chained list system (`list_t`) as been built at the begin of
+/// the project to
 /// let us use `functional` type of programming when we needed it.
 ///
 /// \subsection Players (IA)
@@ -63,7 +66,8 @@
 ///
 /// The graphic client have two types of events:
 ///     - Request: srv_tile_content... client ask to the server.
-///     - Events: srv_new_player... server send event that the client cannot know.
+///     - Events: srv_new_player... server send event that the client cannot
+///               know.
 ///
 ///
 

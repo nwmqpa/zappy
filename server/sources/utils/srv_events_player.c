@@ -55,15 +55,6 @@ void event_player_connected_egg(ia_t *client, server_t *server)
     debugl("Adding SRV_PLAYER_CONNECT_EGG to event queue.\n");
 }
 
-void event_end_game(const char *winning_team, server_t *server)
-{
-    srv_end_game_t *pld = malloc(sizeof(srv_end_game_t));
-
-    memcpy(pld->winning_team, winning_team, strlen(winning_team));
-    add_event(server, SRV_END_GAME, pld);
-    debugl("Adding SRV_END_GAME to event queue.\n");
-}
-
 void event_player_pos(ia_t *client, server_t *server)
 {
     srv_player_pos_t *pld = malloc(sizeof(srv_player_pos_t));

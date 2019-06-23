@@ -1,3 +1,9 @@
+##
+## EPITECH PROJECT, 2019
+## Makefile
+## File description:
+## Server Makefile
+##
 
 NAME		=	zappy_server
 

@@ -10,7 +10,7 @@
 #include "client.h"
 #include "utils.h"
 
-#define TIME_RESPAWN 200
+static const int TIME_RESPAWN = 200;
 
 /// Contain an inventory and player's id of those placed on them.
 typedef struct tile_s {

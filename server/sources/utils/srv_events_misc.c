@@ -33,6 +33,15 @@ void event_incantation_end(ia_t *client, server_t *server, int result)
     debugl("Adding SRV_INCANTATION_END to event queue.\n");
 }
 
+void event_end_game(const char *winning_team, server_t *server)
+{
+    srv_end_game_t *pld = malloc(sizeof(srv_end_game_t));
+
+    memcpy(pld->winning_team, winning_team, strlen(winning_team));
+    add_event(server, SRV_END_GAME, pld);
+    debugl("Adding SRV_END_GAME to event queue.\n");
+}
+
 void event_egg_hatching(server_t *server, egg_t *egg)
 {
     srv_player_egg_hatching_t *payload =

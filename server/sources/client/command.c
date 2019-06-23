@@ -54,7 +54,7 @@ static char *iter_command(ia_t *client, server_t *server,
         }
     }
     for (int i = 0; COMMANDS[i].name; ++i) {
-        if (strncmp(COMMANDS[i].name ,command, COMMANDS[i].len) == 0) {
+        if (strncmp(COMMANDS[i].name, command, COMMANDS[i].len) == 0) {
             return COMMANDS[i].function(client, server);
         }
     }

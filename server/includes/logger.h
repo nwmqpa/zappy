@@ -19,11 +19,11 @@
 
 #endif /* LOG_LEVEL */
 
-#define FATAL_LOG 0
-#define ERROR_LOG 1
-#define WARN_LOG 2
-#define INFO_LOG 3
-#define DEBUG_LOG 4
+static const char FATAL_LOG = 0;
+static const char ERROR_LOG = 1;
+static const char WARN_LOG = 2;
+static const char INFO_LOG = 3;
+static const char DEBUG_LOG = 4;
 
 #include <stdarg.h>
 #include <stdio.h>

@@ -48,20 +48,21 @@ static char *get_view_level(int level, pos_t pos, map_t *map,
     return ret;
 }
 
-// Get vision use the player level, direction and position to give him what he
-// can see on the tile in front of him.
-// Example for north position and level 3:
-//
-//                   [...]
-// [x - 1,y + 2][x + 0,y + 2][x + 1,y + 2]
-//               [x + 0,y + 1]
-//                    [P]
-//
-// where P is player.
-// x is player x position.
-// y is player y position.
-// /!\ The world is spherical.
-//
+/*
+** Get vision use the player level, direction and position to give him what he
+** can see on the tile in front of him.
+** Example for north position and level 3:
+**
+**                   [...]
+** [x - 1, y + 2][x + 0, y + 2][x + 1, y + 2]
+**               [x + 0, y + 1]
+**                    [P]
+**
+** where P is player.
+** x is player x position.
+** y is player y position.
+** /!\ The world is spherical.
+*/
 static char *get_vision_content(server_t *server, unsigned int level,
         unsigned int direction, pos_t position)
 {

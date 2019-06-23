@@ -1,3 +1,10 @@
+##
+## EPITECH PROJECT, 2019
+## Makefile
+## File description:
+## Root Makefile
+##
+
 DOCKER_CROSS_SWITCH = devkitpro/devkita64
 
 

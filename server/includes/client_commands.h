@@ -44,7 +44,7 @@ char *process_command(ia_t *client, server_t *server);
 void move_client(ia_t *client, server_t *server, pos_t new, pos_t size);
 
 /// Remove player from the server.
-void kill_player(ia_t *client, server_t *server);
+int kill_player(ia_t *client, server_t *server);
 
 /// Moving command
 ///  response:   ok

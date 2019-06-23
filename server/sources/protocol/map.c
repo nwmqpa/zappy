@@ -52,7 +52,10 @@ static void fill_payload(tile_t *tile, srv_tile_content_t *payload,
 
 int map_content(const void *data)
 {
-    const struct { int sock; server_t *server; } *datas = data;
+    const struct {
+        int sock;
+        server_t *server;
+    } *datas = data;
     struct { pkt_header_t header; srv_tile_content_t payload; } response = {
         {   .id = SRV_TILE_CONTENT,
             .subid = 0,

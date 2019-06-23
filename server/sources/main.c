@@ -5,12 +5,15 @@
 ** main file of the zappy server.
 */
 
+#include "dispatcher.h"
+#include "handlers.h"
 #include "options.h"
 #include "zappy.h"
 #include "logger.h"
 #include "server.h"
 
 #ifndef TEST
+
 int main(int argc, char *argv[])
 {
     if (argc == 1) {
@@ -32,4 +35,25 @@ int main(int argc, char *argv[])
     else
         return 84;
 }
+
+int zappy_server(server_t *server)
+{
+    dispatcher_t graphic_disp = {
+        .on_active = &on_active_graphic,
+        .on_delete = &on_delete_graphic,
+        .on_connect = &on_connect_graphic,
+        .epoll_fd = server->epoll_fd_graphic,
+        .main_socket = server->socket_graphic
+    };
+    dispatcher_t client_disp = {
+        .on_active = &on_active_client,
+        .on_delete = &on_delete_client,
+        .on_connect = &on_connect_client,
+        .epoll_fd = server->epoll_fd_client,
+        .main_socket = server->socket_client
+    };
+    infol("Launching `Zappy` runtime server.\n");
+    return run_dispatch(&graphic_disp, &client_disp, server);
+}
+
 #endif /* TEST */

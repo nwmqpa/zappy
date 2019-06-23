@@ -43,15 +43,15 @@ int handle_protocol(ia_t *client, server_t *srv)
     while ((slots = add_ia_to_team(srv, client, team_name)) == -1) {
         dprintf(client->id, "ko\n");
         if (read(client->id, &team_name, 100) == 0) {
-            kill_player(client, srv);
-            return 0;
+            return kill_player(client, srv);
         }
     }
     if (slots == 0) {
         dprintf(client->id, "ko\n");
         close(client->id);
     } else {
-        add_player(get_tile_map(srv->map, client->position.x, client->position.y), client->id);
+        add_player(get_tile_map(srv->map, client->position.x,
+                    client->position.y), client->id);
         dprintf(client->id, "%d\n%d %d\n", slots - 1, srv->width, srv->height);
     }
     return 1;
