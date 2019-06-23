@@ -13,10 +13,10 @@ void event_egg_layed(ia_t *client, server_t *server)
     srv_player_egg_layed_t *payload = malloc(sizeof(srv_player_egg_layed_t));
 
     payload->player_num = client->id;
-    payload->egg_num = time(NULL);
+    payload->egg_num = client->id;
     payload->x = client->position.x;
     payload->y = client->position.y;
-    add_event(server, SRV_EGG_LAYING, payload);
+    add_event(server, SRV_EGG_LAYED, payload);
     debugl("Adding SRV_EGG_LAYING to event queue.\n");
 }
 
