@@ -53,7 +53,7 @@ typedef struct pos_s {
 /// -> inventory: A set of objects that the player have.
 /// -> level: The number of time the player have evolved.
 /// -> direction: Where the player is facing.
-/// -> position: [x, y] position defining on which tile the player is positioned.
+/// -> position: x, y position defining on which tile the player is positioned.
 /// -> cooldown: Time that left to before launching the new incante.
 /// -> to_send: When cooldown is over this will be executed.
 typedef struct client_s {

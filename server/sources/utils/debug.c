@@ -8,7 +8,6 @@
 #include "server.h"
 #include "egg.h"
 
-
 void get_info_eggs(void *entry, const void *nothing)
 {
     printf("Eclose in: %f\n", ((egg_t *) entry)->time_left);

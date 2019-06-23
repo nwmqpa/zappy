@@ -1,9 +1,10 @@
-///
-/// EPITECH PROJECT, 2018
-/// protocols
-/// File description:
-/// protocols
-///
+/*
+** EPITECH PROJECT, 2018
+** protocols
+** File description:
+** protocols
+*/
+
 #pragma once
 
 #include <stdint.h>
@@ -528,7 +529,8 @@ struct PACKED srv_player_resource_dropped {
 
 typedef struct srv_player_resource_dropped srv_player_resource_dropped_t;
 
-#define SRV_PLAYER_RESOURCE_DROPPED_LEN sizeof(struct srv_player_resource_dropped)
+#define SRV_PLAYER_RESOURCE_DROPPED_LEN \
+    sizeof(struct srv_player_resource_dropped)
 
 ///
 /// Server resource collected packet.
@@ -541,7 +543,8 @@ struct PACKED srv_player_resource_collected {
 
 typedef struct srv_player_resource_collected srv_player_resource_collected_t;
 
-#define SRV_PLAYER_RESOURCE_COLLECTED_LEN sizeof(struct srv_player_resource_collected)
+#define SRV_PLAYER_RESOURCE_COLLECTED_LEN \
+    sizeof(struct srv_player_resource_collected)
 
 ///
 /// Server player dead packet.
