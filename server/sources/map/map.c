@@ -5,6 +5,7 @@
 ** Main map file.
 */
 
+#include "config.h"
 #include "map.h"
 #include "logger.h"
 
@@ -26,13 +27,13 @@ map_t *create_map(unsigned int width, unsigned int height)
 
 static void randomise_tile(tile_t *tile)
 {
-    tile->inventory.inv.linemate += rand() % MAX_RAND_FILL;
-    tile->inventory.inv.deraumere += rand() % MAX_RAND_FILL;
-    tile->inventory.inv.sibur += rand() % MAX_RAND_FILL;
-    tile->inventory.inv.mendiane += rand() % MAX_RAND_FILL;
-    tile->inventory.inv.phiras += rand() % MAX_RAND_FILL;
-    tile->inventory.inv.thystame += rand() % MAX_RAND_FILL;
-    tile->inventory.inv.food += rand() % MAX_RAND_FILL;
+    tile->inventory.inv.linemate = rand() % LINEMATE_SPAWN_RATE;
+    tile->inventory.inv.deraumere = rand() % DERAUMERE_SPAWN_RATE;
+    tile->inventory.inv.sibur = rand() % SIBUR_SPAWN_RATE;
+    tile->inventory.inv.mendiane = rand() % MENDIANE_SPAWN_RATE;
+    tile->inventory.inv.phiras = rand() % PHIRAS_SPAWN_RATE;
+    tile->inventory.inv.thystame = rand() % THYSTAME_SPAWN_RATE;
+    tile->inventory.inv.food = rand() % FOOD_SPAWN_RATE;
 }
 
 void respawn_ressources(map_t *map)

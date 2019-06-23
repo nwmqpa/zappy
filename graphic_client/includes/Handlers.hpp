@@ -26,6 +26,7 @@ class Handlers {
         static void gotEggLayed(GameState &state, Window &window);
         static void gotEggHatching(GameState &state, Window &window);
         static void gotTeamsNames(GameState &state, Window &window);
+        static void gotNewPlayerConnectEgg(GameState &state, Window &window);
 
         const static std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, data_processor_t>> HANDLERS;
         const static std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, std::string>> NAMES;

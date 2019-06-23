@@ -74,12 +74,10 @@ void Game::life(Window& window)
     while (this->state.isActive && dataHandler.handle(state)) {
         this->limitFramerate();
         this->processData(window);
-        window.clearScreen();
         input.handle(window, inputData);
         this->updateCamera(inputData);
         state.isActive = !inputData.should_quit;
-        window.render(state, state.mapSize.x, state.mapSize.y);
-        window.presentScreen();
+        window.render(state, state.mapSize.y);
         inputData.x = 0;
         inputData.y = 0;
         inputData.zoom = 0;
