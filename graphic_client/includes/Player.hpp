@@ -15,7 +15,7 @@
 
 class Player {
 public:
-    Player(std::string& name, SDL_Renderer* render);
+    Player(SDL_Texture *texture, int height, int width);
     ~Player() = default;
 
     void setInventoryContent(std::vector<unsigned int> inventory);
@@ -24,6 +24,8 @@ public:
     void setPosition(unsigned int x, unsigned int y);
     unsigned int getX() { return x; }
     unsigned int getY() { return y; }
+    int getHeight() const noexcept { return height; }
+    int getWidth() const noexcept { return width; }
 
     void setPlayerNum(unsigned int num);
     unsigned int getPlayerNum() { return player_num; }
@@ -37,13 +39,10 @@ public:
     void setTeamName(std::string teamName);
     std::string getTeamName() { return teamName; }
 
-    SDL_Texture* getTmp() { return tmp; }
-    SDL_Surface* getSurface() { return sprite; }
+    SDL_Texture* getTmp() { return texture; }
 
 private:
-    SDL_Surface* sprite;
-    SDL_Texture* texture;
-    SDL_Texture* tmp;
+    SDL_Texture *texture;
 
     unsigned int player_num;
     std::vector<unsigned int> inventory;
@@ -52,6 +51,8 @@ private:
     unsigned int level;
     ORIENTATION orientation;
     std::string teamName;
+    int height;
+    int width;
 };
 
 #endif
