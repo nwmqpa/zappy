@@ -72,12 +72,12 @@ void Handlers::gotMapSize(GameState &state, Window &window)
     for (auto elem : state.tileList)
         delete elem;
     state.tileList.clear();
-    for (unsigned int i = 0; i < (packet->x * packet->y); i += 1) {
-        auto data = state.resourcesManager.getResource("tile");
-        SDL_Texture *texture = std::get<0>(data);
-        SDL_Surface *surface = std::get<1>(data);
+
+    auto data = state.resourcesManager.getResource("tile");
+    SDL_Texture *texture = std::get<0>(data);
+    SDL_Surface *surface = std::get<1>(data);
+    for (unsigned int i = 0; i < (packet->x * packet->y); i += 1)
         state.tileList.push_back(new Tile(texture, surface->h, surface->w));
-    }
     state.protocol.askMapContent();
 }
 
