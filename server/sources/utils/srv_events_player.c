@@ -50,6 +50,7 @@ void event_player_connected_egg(ia_t *client, server_t *server)
         malloc(sizeof(srv_player_egg_connection_t));
 
     pld->egg_num = client->id;
+    add_event(server, SRV_NEW_PLAYER_CONNECT, pld);
     add_event(server, SRV_PLAYER_CONNECT_EGG, pld);
     debugl("Adding SRV_PLAYER_CONNECT_EGG to event queue.\n");
 }

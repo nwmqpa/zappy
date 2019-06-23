@@ -18,6 +18,7 @@ typedef struct egg_s {
     double time_left;
     pos_t position;
     int can_eclose;
+    int id;
 } egg_t;
 
 /// Create an egg.
