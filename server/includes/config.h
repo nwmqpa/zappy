@@ -18,7 +18,7 @@ static unsigned int __attribute__((unused)) DEFAULT_LIFE_UNIT = 10;
 
 static unsigned int __attribute__((unused)) FOOD_SPAWN_RATE = 3;
 static unsigned int __attribute__((unused)) LINEMATE_SPAWN_RATE = 2;
-static unsigned int __attribute__((unused)) SIBUR_SPAWN_RATE = 1;
+static unsigned int __attribute__((unused)) SIBUR_SPAWN_RATE = 4;
 static unsigned int __attribute__((unused)) DERAUMERE_SPAWN_RATE = 4;
 static unsigned int __attribute__((unused)) MENDIANE_SPAWN_RATE = 7;
 static unsigned int __attribute__((unused)) THYSTAME_SPAWN_RATE = 2;
