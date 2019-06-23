@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include "map.h"
+#include "config.h"
 #include "logger.h"
 
 static const unsigned int MAX_RAND_TILE = 2;
@@ -24,13 +25,13 @@ static const char *RESOURCES_NAME[] = {
 
 void set_tile(tile_t *new)
 {
-    new->inventory.inv.linemate = rand() % MAX_RAND_TILE;
-    new->inventory.inv.deraumere = rand() % MAX_RAND_TILE;
-    new->inventory.inv.sibur = rand() % MAX_RAND_TILE;
-    new->inventory.inv.mendiane = rand() % MAX_RAND_TILE;
-    new->inventory.inv.phiras = rand() % MAX_RAND_TILE;
-    new->inventory.inv.thystame = rand() % MAX_RAND_TILE;
-    new->inventory.inv.food = rand() % MAX_RAND_TILE;
+    new->inventory.inv.linemate = rand() % LINEMATE_SPAWN_RATE;
+    new->inventory.inv.deraumere = rand() % DERAUMERE_SPAWN_RATE;
+    new->inventory.inv.sibur = rand() % SIBUR_SPAWN_RATE;
+    new->inventory.inv.mendiane = rand() % MENDIANE_SPAWN_RATE;
+    new->inventory.inv.phiras = rand() % PHIRAS_SPAWN_RATE;
+    new->inventory.inv.thystame = rand() % THYSTAME_SPAWN_RATE;
+    new->inventory.inv.food = rand() % FOOD_SPAWN_RATE;
 }
 
 void add_player(tile_t *tile, int id)

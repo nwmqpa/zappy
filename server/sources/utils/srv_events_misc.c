@@ -8,6 +8,7 @@
 #include "logger.h"
 #include "protocols.h"
 #include "events.h"
+#include "egg.h"
 
 void event_incantation_start(ia_t *client, server_t *server, int *plr, int nb)
 {
@@ -39,4 +40,14 @@ void event_end_game(const char *winning_team, server_t *server)
     memcpy(pld->winning_team, winning_team, strlen(winning_team));
     add_event(server, SRV_END_GAME, pld);
     debugl("Adding SRV_END_GAME to event queue.\n");
+}
+
+void event_egg_hatching(server_t *server, egg_t *egg)
+{
+    srv_player_egg_hatching_t *payload =
+        malloc(sizeof(srv_player_egg_hatching_t));
+
+    payload->egg_num = egg->id;
+    add_event(server, SRV_EGG_HATCHING, payload);
+    debugl("Adding SRV_EGG_HATCHING to event queue.\n");
 }
