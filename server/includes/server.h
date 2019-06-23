@@ -95,4 +95,6 @@ void get_teams_status(server_t *server);
 
 int count_unused_slots(team_t *team, int nb_client);
 
+void respawn_ressources(map_t *map, server_t *server);
+
 #endif /* SERVER_H_ */

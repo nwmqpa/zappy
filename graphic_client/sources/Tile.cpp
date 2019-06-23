@@ -20,7 +20,8 @@ Tile::Tile(SDL_Texture *texture, int height, int width)
 
 void Tile::setTileContent(int x, int y, std::vector<int> inventory, int nbplayer)
 {
-    tile = new srv_tile_content_t;
+    if (tile == nullptr)
+        tile = new srv_tile_content_t;
     tile->x = x;
     tile->y = y;
     tile->q0 = inventory.at(0);

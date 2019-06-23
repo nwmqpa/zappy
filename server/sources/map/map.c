@@ -5,8 +5,9 @@
 ** Main map file.
 */
 
+#include "events.h"
 #include "config.h"
-#include "map.h"
+#include "server.h"
 #include "logger.h"
 
 map_t *create_map(unsigned int width, unsigned int height)
@@ -34,7 +35,7 @@ static void randomise_tile(tile_t *tile)
     tile->inventory.inv.food = rand() % FOOD_SPAWN_RATE;
 }
 
-void respawn_ressources(map_t *map)
+void respawn_ressources(map_t *map, server_t *server)
 {
     tile_t *tmp = NULL;
 
@@ -42,6 +43,7 @@ void respawn_ressources(map_t *map)
         for (unsigned int y = 0; y < map->height; ++y) {
             tmp = get_tile_map(map, x, y);
             randomise_tile(tmp);
+            event_tile_content(x, y, server);
         }
     }
 }

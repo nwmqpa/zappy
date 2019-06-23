@@ -27,51 +27,52 @@ COMPILER_COMMAND 	=	compile_commands.json
 
 MODULES		=
 
-SOURCES		=	main.c \
-				zappy.c \
-				server/options.c \
-				server/server.c \
-				server/server_init.c \
-				server/server_debug.c \
-				server/events.c \
-				gen_list/basic.c \
-				gen_list/compare.c \
-				gen_list/filter.c \
-				gen_list/insert.c \
-				gen_list/utils.c \
-				utils/logger.c \
-				client/client.c \
-				client/command.c \
-				client/move.c \
-				client/inventory.c \
-				client/look.c \
-				client/broadcast.c \
-				client/fork.c \
-				client/eject.c \
-				client/object.c \
-				client/remove.c \
+SOURCES		=	main.c 					\
+				zappy.c 				\
+				server/options.c 		\
+				server/server.c 		\
+				server/server_init.c 	\
+				server/server_debug.c 	\
+				server/events.c 		\
+				gen_list/basic.c 		\
+				gen_list/compare.c 		\
+				gen_list/filter.c 		\
+				gen_list/insert.c 		\
+				gen_list/utils.c 		\
+				utils/logger.c 			\
+				client/client.c 		\
+				client/command.c 		\
+				client/move.c 			\
+				client/inventory.c 		\
+				client/look.c 			\
+				client/broadcast.c 		\
+				client/fork.c 			\
+				client/eject.c 			\
+				client/object.c 		\
+				client/remove.c 		\
 				client/calculate_tile.c \
-				utils/dispatcher.c \
-				utils/debug.c \
-				utils/logger_func.c \
+				utils/dispatcher.c 		\
+				utils/debug.c 			\
+				utils/logger_func.c 	\
 				utils/srv_events_player.c \
 				utils/srv_events_misc.c \
+				utils/srv_event_tile.c 	\
 				server/graphic_handler.c \
 				server/client_handler.c \
-				server/teams.c \
-				map/map.c \
-				map/tile.c \
-				utils/utils.c \
-				client/connect_nbr.c \
-				client/incantation.c \
-				client/incantation_2.c \
+				server/teams.c 			\
+				map/map.c 				\
+				map/tile.c 				\
+				utils/utils.c 			\
+				client/connect_nbr.c 	\
+				client/incantation.c 	\
+				client/incantation_2.c 	\
 				client/special_function.c \
-				protocol/protocol.c \
-				protocol/player.c \
-				protocol/team.c \
-				protocol/map.c \
-				protocol/custom.c \
-				protocol/time.c \
+				protocol/protocol.c 	\
+				protocol/player.c 		\
+				protocol/team.c 		\
+				protocol/map.c 			\
+				protocol/custom.c 		\
+				protocol/time.c 		\
 				client/egg.c
 
 TEST_SOURCES	=	client_command.c \

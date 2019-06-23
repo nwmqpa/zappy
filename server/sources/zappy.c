@@ -74,7 +74,7 @@ void tick_system(server_t *server)
     if (server->map->time_respawn <= 0) {
         infol("Respwaning ressources.\n");
         server->map->time_respawn = TIME_RESPAWN;
-        respawn_ressources(server->map);
+        respawn_ressources(server->map, server);
     }
 }
 

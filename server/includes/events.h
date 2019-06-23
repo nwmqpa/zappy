@@ -31,3 +31,4 @@ void event_player_pos(ia_t *client, server_t *server);
 void event_incantation_end(ia_t *client, server_t *server, int result);
 void event_incantation_start(ia_t *client, server_t *server, int *plr, int nb);
 void event_egg_hatching(server_t *server, egg_t *egg);
+void event_tile_content(int x, int y, server_t *server);

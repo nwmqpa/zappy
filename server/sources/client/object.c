@@ -5,6 +5,7 @@
 ** Take an object or put it on the ground.
 */
 
+#include "events.h"
 #include "client_commands.h"
 #include "map.h"
 #include "logger.h"
@@ -42,6 +43,7 @@ char *take(ia_t *client, server_t *server, const char *object)
     } else if (tile->inventory.inv_arr[idx] > 0) {
         tile->inventory.inv_arr[idx] -= 1;
         client->inventory.inv_arr[idx] += 1;
+        event_tile_content(client->position.x, client->position.y, server);
     } else {
         return strdup("ko");
     }
@@ -59,6 +61,7 @@ char *set(ia_t *client, server_t *server, const char *object)
     } else if (client->inventory.inv_arr[idx] > 0) {
         client->inventory.inv_arr[idx] -= 1;
         tile->inventory.inv_arr[idx] += 1;
+        event_tile_content(client->position.x, client->position.y, server);
     } else {
         return strdup("ko");
     }
