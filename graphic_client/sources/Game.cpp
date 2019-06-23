@@ -11,6 +11,7 @@
 #include "Handlers.hpp"
 #include "Protocol.hpp"
 #include "Utils.hpp"
+#include "ResourcesManager.hpp"
 #include <tuple>
 #include <vector>
 
@@ -27,6 +28,23 @@ Game::Game(std::string ip, int port)
 
 void Game::life(Window& window)
 {
+    ResourcesManager<SDL_Texture, SDL_Renderer *> resources([](std::string path, SDL_Renderer *render) {
+        auto img = SDL_LoadBMP(path.c_str());
+        if (img == nullptr)
+            throw GraphicalException("BMP loading error on Tile", "SDL_LoadBMP Tile");
+        auto tmp = SDL_CreateTextureFromSurface(render, img);
+        if (tmp == nullptr)
+            throw GraphicalException("Buffering texture creation error", "SDL_CreateTextureFromSurface");
+        auto texture = SDL_CreateTexture(render, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, img->w, img->h);
+        if (texture == nullptr)
+            throw GraphicalException("Texture creation error", "SDL_CreateTexture");
+        return texture;
+    });
+
+    resources.addResource(REALPATH("grass.bmp"), "tile", window.getRender());
+
+    std::cout << "SDL_Texture: " << resources.getResource("tile") << "." << std::endl;
+
     auto dataHandler = DataHandler<GameState>(state.protocol.getSocket(), [](int sock, GameState& state) {
         pkt_header_t header;
         free(state.lastData);

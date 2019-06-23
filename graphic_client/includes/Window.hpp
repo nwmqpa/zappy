@@ -46,7 +46,7 @@ public:
     void clearScreen();
     void presentScreen();
 
-    auto* getRender() { return renderer; }
+    auto* getRender() const { return renderer; }
 
 private:
     std::string& name;
