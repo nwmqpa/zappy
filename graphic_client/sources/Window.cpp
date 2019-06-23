@@ -67,7 +67,7 @@ void Window::render(GameState& state, int x, int y)
         if (tile->getTileInfo() == nullptr)
             continue;
         pos.x = Isometry::getIsoX(tile->getPosX(), tile->getPosY(), tile->getSurface()->w, tile->getSurface()->h, w, h, state.camera);
-        pos.y = Isometry::getIsoY(tile->getPosX(), tile->getPosY(), tile->getSurface()->w, tile->getSurface()->h, w, h, state.camera);
+        pos.y = Isometry::getIsoY(tile->getPosX(), tile->getPosY(), tile->getSurface()->w, tile->getSurface()->h, w, h, y, state.camera);
         pos.h = Isometry::getIsoHeight(tile->getSurface()->h, state.camera);
         pos.w = Isometry::getIsoWidth(tile->getSurface()->w, state.camera);
         tile->setArea(pos);
@@ -88,7 +88,7 @@ void Window::renderPlayer(GameState& state, int x, int y)
 
     for (auto player: playerList) {
         pos.x = Isometry::getIsoX(player->getX(), player->getY(), player->getSurface()->w, player->getSurface()->h, w, h, state.camera);
-        pos.y = Isometry::getIsoY(player->getX(), player->getY(), player->getSurface()->w, player->getSurface()->h, w, h, state.camera);
+        pos.y = Isometry::getIsoY(player->getX(), player->getY(), player->getSurface()->w, player->getSurface()->h, w, h, y, state.camera);
         pos.h = Isometry::getIsoHeight(player->getSurface()->h, state.camera);
         pos.w = Isometry::getIsoWidth(player->getSurface()->w, state.camera);
         if (SDL_RenderCopy(renderer, player->getTmp(), nullptr, &pos) < 0)

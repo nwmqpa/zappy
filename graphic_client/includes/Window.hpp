@@ -30,7 +30,7 @@ public:
         ~Isometry() = default;
 
         static float getIsoX(int cartX, int cartY, float surfaceWidth, float surfaceHeight, float screenWidth, float screenHeight, Camera camera);
-        static float getIsoY(int cartX, int cartY, float surfaceWidth, float surfaceHeight, float screenWidth, float screenHeight, Camera camera);
+        static float getIsoY(int cartX, int cartY, float surfaceWidth, float surfaceHeight, float screenWidth, float screenHeight, float mapHeight, Camera camera);
         static float getIsoWidth(float surfaceWidth, Camera);
         static float getIsoHeight(float surfaceHeight, Camera);
     };
