@@ -7,22 +7,30 @@
 
 #include "Window.hpp"
 
-float Window::Isometry::setPositionX(float width, float map, float tileX, float tileY, float surface, Camera camera)
+float Window::Isometry::getIsoX(int cartX, int cartY, float surfaceWidth, float surfaceHeight, float screenWidth, float screenHeight, Camera camera)
 {
-    return ((width / 2 - (map / 2)) + (tileX - tileY) * (surface / 2) - (surface / 2) + camera.center.x);
+    float ret = ((cartX * surfaceWidth) - (cartY * surfaceWidth)) / 2;
+    ret += (screenWidth / 2) - (surfaceWidth / 2);
+    ret /= camera.scale.x;
+    ret += camera.center.x;
+    return ret;
 }
 
-float Window::Isometry::setPositionY(float height, float map, float tileX, float tileY, float surface, Camera camera)
+float Window::Isometry::getIsoY(int cartX, int cartY, float surfaceWidth, float surfaceHeight, float screenWidth, float screenHeight, Camera camera)
 {
-    return ((height / 2 - (map / 2)) + (tileX + tileY) * (surface / 2) - ((surface + tileY) * 64) - (map / 2 * surface) + camera.center.y);
+    float ret = ((cartX * surfaceHeight) + (cartY * surfaceHeight)) / 4;
+    ret += (screenHeight / 2) - (surfaceHeight / 2) * (screenHeight / 2);
+    ret /= camera.scale.y;
+    ret += camera.center.y;
+    return ret;
 }
 
-float Window::Isometry::setWidth(float value, Camera camera)
+float Window::Isometry::getIsoWidth(float value, Camera camera)
 {
     return (value / camera.scale.x);
 }
 
-float Window::Isometry::setHeight(float value, Camera camera)
+float Window::Isometry::getIsoHeight(float value, Camera camera)
 {
     return (value / camera.scale.y);
 }
