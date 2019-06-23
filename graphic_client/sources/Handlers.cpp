@@ -11,7 +11,7 @@
 const std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, data_processor_t>> Handlers::HANDLERS = {
     std::make_tuple(SRV_MAP_SIZE, gotMapSize),
     std::make_tuple(SRV_TILE_CONTENT, gotTileContent),
-    std::make_tuple(SRV_TEAMS_NAMES, nullptr),
+    std::make_tuple(SRV_TEAMS_NAMES, gotTeamsNames),
     std::make_tuple(SRV_NEW_PLAYER_CONNECT, gotNewPlayerConnect),
     std::make_tuple(SRV_PLAYER_POSITION, gotPlayerPosition),
     std::make_tuple(SRV_PLAYER_LEVEL, gotPlayerLevel),
@@ -24,8 +24,8 @@ const std::vector<std::tuple<GRAPHIC_PACKETS_FROM_SERVER, data_processor_t>> Han
     std::make_tuple(SRV_RESOURCE_DROP, nullptr),
     std::make_tuple(SRV_RESOURCE_COLLECT, nullptr),
     std::make_tuple(SRV_PLAYER_DEATH, gotDeathPlayer),
-    std::make_tuple(SRV_EGG_LAYED, nullptr),
-    std::make_tuple(SRV_EGG_HATCHING, nullptr),
+    std::make_tuple(SRV_EGG_LAYED, gotEggLayed),
+    std::make_tuple(SRV_EGG_HATCHING, gotEggHatching),
     std::make_tuple(SRV_PLAYER_CONNECT_EGG, nullptr),
     std::make_tuple(SRV_PLAYER_DEATH_EGG, nullptr),
     std::make_tuple(SRV_TIME_UNIT_REQUEST, nullptr),
@@ -80,16 +80,33 @@ void Handlers::gotMapSize(GameState &state, Window &window)
 void Handlers::gotDeathPlayer(GameState &state, Window &window)
 {
     auto *packet = (srv_player_death_t *) state.lastData;
+    std::string teamName("");
 
+    for (auto player : state.playerList) {
+        if (player->getPlayerNum() == packet->player_num) {
+            teamName = std::string(player->getTeamName());
+            delete player;
+        }
+    }
     state.playerList.erase(
         std::remove_if(state.playerList.begin(), state.playerList.end(), [packet](Player *player) {
             return player->getPlayerNum() == packet->player_num;
         }),
         state.playerList.end()
     );
+    for (auto team : state.teams) {
+        if (team->getName() == teamName) {
+            team->getPlayers().erase(
+                std::remove_if(team->getPlayers().begin(), team->getPlayers().end(), [packet](Player *player) {
+                    return player->getPlayerNum() == packet->player_num;
+                }),
+                team->getPlayers().end()
+            );
+        }
+    }
 }
 
-void Handlers::gotTileContent(GameState& state, Window& window)
+void Handlers::gotTileContent(GameState &state, Window &window)
 {
     auto *packet = (srv_tile_content_t *) state.lastData;
     size_t pos = (packet->y * state.mapSize.x) + packet->x;
@@ -104,7 +121,7 @@ void Handlers::gotTileContent(GameState& state, Window& window)
     state.tileList.at(pos)->setTileContent(packet->x, packet->y, temp, packet->players);
 }
 
-void Handlers::gotNewPlayerConnect(GameState& state, Window& window)
+void Handlers::gotNewPlayerConnect(GameState &state, Window &window)
 {
     auto *packet = (srv_new_player_connect_t *) state.lastData;
     std::string path = REALPATH("player.bmp");
@@ -114,10 +131,15 @@ void Handlers::gotNewPlayerConnect(GameState& state, Window& window)
     temp->setPlayerNum(packet->player_num);
     temp->setOrientation(packet->orientation);
     temp->setTeamName(std::string(packet->team_name));
+    for (auto team : state.teams) {
+        if (team->getName() == std::string(packet->team_name)) {
+            team->getPlayers().push_back(temp);
+        }
+    }
     state.playerList.push_back(temp);
 }
 
-void Handlers::gotPlayerPosition(GameState& state, Window& window)
+void Handlers::gotPlayerPosition(GameState &state, Window &window)
 {
     auto *packet = (srv_player_pos_t *) state.lastData;
 
@@ -128,7 +150,7 @@ void Handlers::gotPlayerPosition(GameState& state, Window& window)
     }
 }
 
-void Handlers::gotPlayerLevel(GameState& state, Window& window)
+void Handlers::gotPlayerLevel(GameState &state, Window &window)
 {
     auto *packet = (srv_player_level_t *) state.lastData;
 
@@ -137,4 +159,31 @@ void Handlers::gotPlayerLevel(GameState& state, Window& window)
             elem->setLevel(packet->level);
         }
     }
+}
+
+void Handlers::gotEggLayed(GameState &state, Window &window)
+{
+    auto *packet = (srv_player_egg_layed_t *) state.lastData;
+
+    
+    state.eggs.push_back(new Egg(packet->egg_num, packet->x, packet->y));
+}
+
+void Handlers::gotEggHatching(GameState &state, Window &window)
+{
+    auto *packet = (srv_player_egg_hatching_t *) state.lastData;
+
+    state.eggs.erase(
+        std::remove_if(state.eggs.begin(), state.eggs.end(), [packet](Egg *egg) {
+            return egg->getEggNum() == packet->egg_num;
+        }),
+        state.eggs.end()
+    );
+}
+
+void Handlers::gotTeamsNames(GameState &state, Window &window)
+{
+    auto *packet = (srv_teams_names_t *) state.lastData;
+
+    state.teams.push_back(new Team(packet->team_name));
 }

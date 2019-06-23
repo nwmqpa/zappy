@@ -29,10 +29,10 @@ public:
         Isometry() = default;
         ~Isometry() = default;
 
-        static float setPositionX(float, float, float, float, float, Camera);
-        static float setPositionY(float, float, float, float, float, Camera);
-        static float setWidth(float, Camera);
-        static float setHeight(float, Camera);
+        static float getIsoX(int cartX, int cartY, float surfaceWidth, float surfaceHeight, float screenWidth, float screenHeight, Camera camera);
+        static float getIsoY(int cartX, int cartY, float surfaceWidth, float surfaceHeight, float screenWidth, float screenHeight, Camera camera);
+        static float getIsoWidth(float surfaceWidth, Camera);
+        static float getIsoHeight(float surfaceHeight, Camera);
     };
 
     Window(std::string& name, int x = 800, int y = 600);

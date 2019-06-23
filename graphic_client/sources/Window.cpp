@@ -66,16 +66,10 @@ void Window::render(GameState& state, int x, int y)
     for (auto tile: state.tileList) {
         if (tile->getTileInfo() == nullptr)
             continue;
-        pos.x = ((tile->getPosY() * tile->getSurface()->w) - (tile->getPosX() * tile->getSurface()->w)) / 2;
-        pos.y = ((tile->getPosY() * tile->getSurface()->h) + (tile->getPosX() * tile->getSurface()->h)) / 4;
-        pos.x += (w / 2) - (tile->getSurface()->w / 2);
-        pos.y += (h / 2) - (tile->getSurface()->h / 2) * (y / 2);
-        pos.x /= state.camera.scale.x;
-        pos.y /= state.camera.scale.y;
-        pos.x += state.camera.center.x;
-        pos.y += state.camera.center.y;
-        pos.h = Isometry::setHeight(tile->getSurface()->h, state.camera);
-        pos.w = Isometry::setWidth(tile->getSurface()->w, state.camera);
+        pos.x = Isometry::getIsoX(tile->getPosX(), tile->getPosY(), tile->getSurface()->w, tile->getSurface()->h, w, h, state.camera);
+        pos.y = Isometry::getIsoY(tile->getPosX(), tile->getPosY(), tile->getSurface()->w, tile->getSurface()->h, w, h, state.camera);
+        pos.h = Isometry::getIsoHeight(tile->getSurface()->h, state.camera);
+        pos.w = Isometry::getIsoWidth(tile->getSurface()->w, state.camera);
         tile->setArea(pos);
         if (SDL_RenderCopy(renderer, tile->getTmp(), nullptr, &pos) < 0)
             throw GraphicalException("Render copy error", "SDL_RenderCopy");
@@ -93,18 +87,10 @@ void Window::renderPlayer(GameState& state, int x, int y)
     SDL_Rect pos;
 
     for (auto player: playerList) {
-        int realX = player->getY();
-        int realY = player->getX();
-        pos.x = ((realX * player->getSurface()->w) - (realY * player->getSurface()->w)) / 2;
-        pos.y = ((realX * player->getSurface()->h) + (realY * player->getSurface()->h)) / 4;
-        pos.x += (w / 2) - (player->getSurface()->w / 2);
-        pos.y += (h / 2) - (player->getSurface()->h / 2)  * (y / 2);
-        pos.x /= state.camera.scale.x;
-        pos.y /= state.camera.scale.y;
-        pos.x += state.camera.center.x;
-        pos.y += state.camera.center.y;
-        pos.h = Isometry::setHeight(player->getSurface()->h, state.camera);
-        pos.w = Isometry::setWidth(player->getSurface()->w, state.camera);
+        pos.x = Isometry::getIsoX(player->getX(), player->getY(), player->getSurface()->w, player->getSurface()->h, w, h, state.camera);
+        pos.y = Isometry::getIsoY(player->getX(), player->getY(), player->getSurface()->w, player->getSurface()->h, w, h, state.camera);
+        pos.h = Isometry::getIsoHeight(player->getSurface()->h, state.camera);
+        pos.w = Isometry::getIsoWidth(player->getSurface()->w, state.camera);
         if (SDL_RenderCopy(renderer, player->getTmp(), nullptr, &pos) < 0)
             throw GraphicalException("Render copy error", "SDL_RenderCopy");
     }
