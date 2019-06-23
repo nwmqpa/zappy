@@ -68,6 +68,8 @@ static char *iter_command(ia_t *client, server_t *server,
 
 double get_cooldown(const char *cmd)
 {
+    if (cmd == NULL)
+        return -1;
     for (int i = 0; COMMANDS_PARAM[i].name; ++i)
         if (strncmp(COMMANDS_PARAM[i].name, cmd, COMMANDS_PARAM[i].len) == 0)
             return COMMANDS_PARAM[i].cooldown;
@@ -87,6 +89,8 @@ int prepare_command(ia_t *client, server_t *server)
         client->cooldown = get_cooldown(client->to_exec);
     if (client->cooldown == -1) {
         errorl("Cannot find cooldown of %s.\n", client->to_exec);
+        free(client->to_exec);
+        client->to_exec = NULL;
         return -1;
     }
     return 0;
